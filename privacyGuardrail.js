@@ -46,20 +46,4 @@ class PrivacyGuardrailAgent {
     }
 }
 
-// Example Usage
-const userPrefs = { privacyLevel: PrivacyLevel.STRICT };
-const pga = new PrivacyGuardrailAgent(userPrefs);
-
-const rawRequest = {
-    item: 'summer dress',
-    email: 'user@example.com',
-    location: '123 Maple St, New York, NY',
-    budget: 200
-};
-
-const safeRequest = pga.validateRequest('DiscoveryAgent', rawRequest);
-console.log('Safe Request:', JSON.stringify(safeRequest, null, 2));
-
-if (!pga.checkCompliance('share_with_third_party')) {
-    console.warn('Action "share_with_third_party" is BLOCKED by Privacy Guardrail.');
-}
+module.exports = { PrivacyGuardrailAgent, PrivacyLevel };

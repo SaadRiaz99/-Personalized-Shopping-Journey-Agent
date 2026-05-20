@@ -9,11 +9,8 @@ The system is designed as a multi-agent orchestration to provide a high-end, per
 3.  **Discovery Agent:** Finds products across the web.
 4.  **Privacy Guardrail Agent:** Ensures compliance and protects user data.
 
-## Privacy Guardrail Agent (PGA)
-The PGA acts as a middleware between the user's private data and the external world (Retailers/LLMs).
-
-### Core Responsibilities
-- **Data Minimization:** Only pass the necessary attributes to external APIs.
-- **Consent Management:** Verify consent before accessing sensitive data (e.g., location, biometric data).
-- **Compliance:** Implement GDPR/CCPA logic (Right to Access, Right to Erasure).
-- **Anonymization:** Strip PII from outbound requests.
+## Implementation Progress
+- [x] **Privacy Guardrail Agent:** Functional with support for multiple privacy levels.
+- [x] **Style Profiler Agent:** Implemented with scoring logic and profile management.
+- [x] **Boutique Orchestrator:** Integrated demo showing end-to-end flow.
+- [x] **Discovery Agent:** Implemented with keyword and budget filtering logic.

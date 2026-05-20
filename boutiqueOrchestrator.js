@@ -1,10 +1,12 @@
 const { PrivacyGuardrailAgent, PrivacyLevel } = require('./privacyGuardrail');
 const StyleProfilerAgent = require('./styleProfiler');
+const DiscoveryAgent = require('./discoveryAgent');
 
 class BoutiqueOrchestrator {
     constructor(userConfig) {
         this.privacyAgent = new PrivacyGuardrailAgent(userConfig.privacy);
         this.styleAgent = new StyleProfilerAgent();
+        this.discoveryAgent = new DiscoveryAgent();
         this.styleAgent.updateProfile(userConfig.stylePreferences);
     }
 
@@ -19,15 +21,12 @@ class BoutiqueOrchestrator {
         
         console.log('Privacy Check: Request Anonymized/Filtered.');
 
-        // 2. Mock Discovery (This would normally call an API)
-        const mockResults = [
-            { id: 1, name: 'Minimalist White Linen Shirt', brand: 'Everlane', color: 'white', price: 65 },
-            { id: 2, name: 'Boho Floral Dress', brand: 'Anthropologie', color: 'multi', price: 140 },
-            { id: 3, name: 'Classic Navy Blazer', brand: 'J.Crew', color: 'navy', price: 198 }
-        ];
+        // 2. Discover Products
+        const discoveredItems = await this.discoveryAgent.search(safeQuery);
+        console.log(`Discovery Check: Found ${discoveredItems.length} potential items.`);
 
         // 3. Score Results using Style Profiler
-        const recommendations = mockResults.map(item => ({
+        const recommendations = discoveredItems.map(item => ({
             ...item,
             matchScore: (this.styleAgent.scoreProduct(item) * 100).toFixed(1) + '%'
         })).sort((a, b) => parseFloat(b.matchScore) - parseFloat(a.matchScore));

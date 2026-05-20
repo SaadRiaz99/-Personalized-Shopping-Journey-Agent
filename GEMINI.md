@@ -10,7 +10,7 @@ The system is designed as a multi-agent orchestration to provide a high-end, per
 4.  **Privacy Guardrail Agent:** Ensures compliance and protects user data.
 
 ## Implementation Progress
-- [x] **Privacy Guardrail Agent:** Functional with support for multiple privacy levels.
-- [x] **Style Profiler Agent:** Implemented with scoring logic and profile management.
+- [x] **Privacy Guardrail Agent:** Added GDPR "Right to Erasure" and granular consent management.
+- [x] **Style Profiler Agent:** Added "Negative Preferences" (dislikes) to the scoring engine.
 - [x] **Boutique Orchestrator:** Integrated demo showing end-to-end flow.
 - [x] **Discovery Agent:** Implemented with keyword and budget filtering logic.

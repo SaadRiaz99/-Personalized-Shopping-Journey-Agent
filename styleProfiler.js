@@ -8,7 +8,12 @@ class StyleProfilerAgent {
         this.profile = {
             preferredColors: [],
             preferredBrands: [],
-            styles: [], // e.g., 'minimalist', 'vintage'
+            styles: [],
+            negativePreferences: {
+                colors: [],
+                brands: [],
+                materials: []
+            },
             budgetRange: { min: 0, max: 1000 },
             sizePreferences: {}
         };
@@ -19,7 +24,11 @@ class StyleProfilerAgent {
      */
     updateProfile(updates) {
         Object.keys(updates).forEach(key => {
-            if (Array.isArray(this.profile[key])) {
+            if (key === 'negativePreferences') {
+                Object.keys(updates[key]).forEach(subKey => {
+                    this.profile.negativePreferences[subKey] = [...new Set([...this.profile.negativePreferences[subKey], ...updates[key][subKey]])];
+                });
+            } else if (Array.isArray(this.profile[key])) {
                 this.profile[key] = [...new Set([...this.profile[key], ...updates[key]])];
             } else if (typeof this.profile[key] === 'object') {
                 this.profile[key] = { ...this.profile[key], ...updates[key] };
@@ -35,6 +44,11 @@ class StyleProfilerAgent {
      * @returns {number} Score from 0 to 1
      */
     scoreProduct(product) {
+        // Immediate Disqualifiers (Negative Preferences)
+        if (this.profile.negativePreferences.colors.includes(product.color)) return 0;
+        if (this.profile.negativePreferences.brands.includes(product.brand)) return 0;
+        if (product.material && this.profile.negativePreferences.materials.includes(product.material)) return 0;
+
         let score = 0;
         let totalWeights = 0;
 

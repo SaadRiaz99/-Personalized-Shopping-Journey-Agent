@@ -37,10 +37,17 @@ class BoutiqueOrchestrator {
 
 // Demo
 const userConfig = {
-    privacy: { privacyLevel: PrivacyLevel.BALANCED },
+    privacy: { 
+        privacyLevel: PrivacyLevel.BALANCED,
+        consents: { marketing: false, thirdPartySharing: true }
+    },
     stylePreferences: {
         preferredColors: ['white', 'navy'],
         preferredBrands: ['Everlane', 'J.Crew'],
+        negativePreferences: {
+            colors: ['yellow'], // User hates yellow
+            brands: ['ASOS']    // User dislikes ASOS
+        },
         styles: ['minimalist', 'classic'],
         budgetRange: { min: 50, max: 250 }
     }
@@ -48,8 +55,23 @@ const userConfig = {
 
 const orchestrator = new BoutiqueOrchestrator(userConfig);
 
-orchestrator.recommendItems('I need something for a summer lunch.')
-    .then(recs => {
-        console.log('Top Recommendations for you:');
-        recs.forEach(r => console.log(`- ${r.name} (${r.brand}) - Match: ${r.matchScore}`));
+async function runDemo() {
+    // 1. Regular Recommendation
+    const recs = await orchestrator.recommendItems('I need something for a summer lunch.');
+    console.log('Top Recommendations for you:');
+    recs.forEach(r => {
+        const status = parseFloat(r.matchScore) === 0 ? '[REJECTED BY STYLE GUARD]' : `Match: ${r.matchScore}`;
+        console.log(`- ${r.name} (${r.brand}) - ${status}`);
     });
+
+    // 2. Compliance Check
+    console.log('\n--- Compliance Check ---');
+    const canSendEmail = orchestrator.privacyAgent.checkCompliance('marketing_email');
+    console.log(`Can send marketing email? ${canSendEmail ? 'YES' : 'NO (Blocked by Privacy Agent)'}`);
+
+    // 3. GDPR Forget Me
+    console.log('\n--- GDPR Action ---');
+    orchestrator.privacyAgent.forgetUser();
+}
+
+runDemo();

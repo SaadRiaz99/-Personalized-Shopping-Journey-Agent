@@ -1,0 +1,57 @@
+import json
+from agents import function_tool
+
+from agent.products import load_products
+
+CATALOGUE = [
+    {"id": 1, "title": "Dune", "tags": ["sci-fi", "epic"], "rating": 4.8, "category": "Book"},
+    {"id": 2, "title": "The Martian", "tags": ["sci-fi", "survival"], "rating": 4.5, "category": "Book"},
+    {"id": 3, "title": "Atomic Habits", "tags": ["self-help", "productivity"], "rating": 4.7, "category": "Book"},
+    {"id": 4, "title": "Deep Work", "tags": ["self-help", "focus"], "rating": 4.6, "category": "Book"},
+    {"id": 5, "title": "Inception", "tags": ["sci-fi", "thriller"], "rating": 4.9, "category": "Movie"},
+    {"id": 6, "title": "The Dark Knight", "tags": ["action", "drama"], "rating": 4.8, "category": "Movie"},
+    {"id": 7, "title": "Parasite", "tags": ["drama", "thriller"], "rating": 4.7, "category": "Movie"},
+    {"id": 8, "title": "Sony WH-1000XM5", "tags": ["headphones", "audio"], "rating": 4.6, "category": "Electronics"},
+    {"id": 9, "title": "MacBook Air M3", "tags": ["laptop", "productivity"], "rating": 4.8, "category": "Electronics"},
+    {"id": 10, "title": "Kindle Paperwhite", "tags": ["e-reader", "books"], "rating": 4.5, "category": "Electronics"},
+    {"id": 11, "title": "Ergonomic Chair", "tags": ["furniture", "office"], "rating": 4.4, "category": "Home"},
+    {"id": 12, "title": "Philips Hue Lights", "tags": ["smart-home", "lighting"], "rating": 4.3, "category": "Home"},
+]
+
+
+def _all_items() -> list[dict]:
+    return CATALOGUE + load_products()
+
+
+_MAX_RESULTS = 20
+
+
+def search_items_fn(query: str) -> str:
+    """Full-text search across item titles and categories."""
+    q = query.lower()
+    results = [
+        item for item in _all_items()
+        if q in item["title"].lower() or q in item["category"].lower()
+    ]
+    return json.dumps(results[:_MAX_RESULTS])
+
+
+def filter_by_tag_fn(tag: str, min_rating: float | None = None) -> str:
+    """Filter items by tag and optional minimum rating."""
+    results = [item for item in _all_items() if tag in item["tags"]]
+    if min_rating is not None:
+        results = [item for item in results if item["rating"] >= min_rating]
+    return json.dumps(results[:_MAX_RESULTS])
+
+
+def get_item_details_fn(item_id: int) -> str:
+    """Retrieve full details for a specific item by ID."""
+    for item in _all_items():
+        if item["id"] == item_id:
+            return json.dumps(item)
+    return f"No item found with id {item_id}"
+
+
+search_items = function_tool(search_items_fn, name_override="search_items", strict_mode=False)
+filter_by_tag = function_tool(filter_by_tag_fn, name_override="filter_by_tag", strict_mode=False)
+get_item_details = function_tool(get_item_details_fn, name_override="get_item_details", strict_mode=False)

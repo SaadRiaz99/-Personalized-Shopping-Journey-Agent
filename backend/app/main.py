@@ -3,7 +3,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import agents, intent, products, preferences, ws
+from app.routes import agents, intent, preferences, privacy, products, ws
 
 load_dotenv(dotenv_path=Path(__file__).parents[2] / ".env")
 
@@ -19,8 +19,9 @@ app.add_middleware(
 
 app.include_router(agents.router)
 app.include_router(intent.router)
-app.include_router(products.router)
 app.include_router(preferences.router)
+app.include_router(privacy.router)
+app.include_router(products.router)
 app.include_router(ws.router)
 
 

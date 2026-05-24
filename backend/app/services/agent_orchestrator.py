@@ -1,5 +1,6 @@
 from app.models import Agent, AgentStatus, QueryIntent, Task, TaskStatus
 from app.services.intent_parser import parse_intent
+from app.services.privacy_guardrail import privacy_guardrail
 from app.services.recommendation import get_recommendations, search_products
 from datetime import datetime
 from typing import Optional
@@ -56,7 +57,7 @@ class AgentOrchestrator:
     def list_tasks(self) -> list[Task]:
         return list(self.tasks.values())
 
-    async def run_agent(self, agent_id: str) -> Optional[dict]:
+    async def run_agent(self, agent_id: str, user_id: str = "default") -> Optional[dict]:
         agent = self.agents.get(agent_id)
         if not agent:
             return None
@@ -65,13 +66,38 @@ class AgentOrchestrator:
         await self._notify("agent_update", agent.model_dump())
 
         query = agent.task or ""
-        intent = await parse_intent(query) if query else QueryIntent(raw_query="")
 
+        guardrail_result = await privacy_guardrail.check_input(query, user_id)
+        await self._notify("guardrail_input", guardrail_result.model_dump())
+        safe_query = guardrail_result.sanitized_text or query
+
+        agent_access = await privacy_guardrail.check_agent_access(
+            agent.name,
+            ["query", "preferences", "browsing_history"],
+            user_id,
+        )
+        await self._notify("guardrail_access", agent_access.model_dump())
+        if agent_access.action.value == "blocked":
+            result = {
+                "agent_id": agent_id,
+                "status": "blocked",
+                "message": f"Agent {agent.name} access blocked by privacy guardrail",
+                "intent": None,
+                "products": [],
+                "guardrail": agent_access.model_dump(),
+            }
+            agent.status = AgentStatus.error
+            agent.updated_at = datetime.now()
+            await self._notify("agent_update", agent.model_dump())
+            await self._notify("agent_result", result)
+            return result
+
+        intent = await parse_intent(safe_query) if safe_query else QueryIntent(raw_query="")
         await self._notify("intent_parsed", intent.model_dump())
 
         await asyncio.sleep(2)
 
-        products = search_products(query) if query else []
+        products = search_products(safe_query) if safe_query else []
         if not products and intent.category:
             from app.models import UserPreferences
             category_map = {
@@ -95,12 +121,21 @@ class AgentOrchestrator:
                     prefs.price_min = intent.budget * 0.3
                 products = get_recommendations(prefs)
 
+        product_dicts = [p.model_dump() for p in products]
+        output_check = await privacy_guardrail.check_output(product_dicts, user_id)
+        await self._notify("guardrail_output", output_check.model_dump())
+
         result = {
             "agent_id": agent_id,
             "status": "completed",
             "message": f"Shopping analysis complete for {agent.name}",
             "intent": intent.model_dump(),
-            "products": [p.model_dump() for p in products],
+            "products": product_dicts,
+            "guardrail": {
+                "input": guardrail_result.model_dump(),
+                "access": agent_access.model_dump(),
+                "output": output_check.model_dump(),
+            },
         }
 
         agent.status = AgentStatus.completed

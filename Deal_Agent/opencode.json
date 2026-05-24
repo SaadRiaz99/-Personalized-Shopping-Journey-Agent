@@ -1,0 +1,15 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "openai/gpt-4o-mini",
+  "agents": {
+    "deal-agent": {
+      "description": "Finds best deals, promotions and applies optimal discounts for shoppers",
+      "type": "subagent",
+      "model": "openai/gpt-4o-mini",
+      "permissions": {
+        "read": true,
+        "glob": true
+      }
+    }
+  }
+}

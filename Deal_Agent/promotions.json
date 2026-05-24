@@ -1,0 +1,392 @@
+{
+  "promotions": [
+    {
+      "promo_id": "P001",
+      "code": "SAVE5",
+      "type": "percentage",
+      "value": 5,
+      "min_order": 0,
+      "category": "all",
+      "description": "5% off on all orders",
+      "stackable": true,
+      "expiry": "2026-12-31"
+    },
+    {
+      "promo_id": "P002",
+      "code": "SAVE10",
+      "type": "percentage",
+      "value": 10,
+      "min_order": 500,
+      "category": "all",
+      "description": "10% off on orders above Rs. 500",
+      "stackable": true,
+      "expiry": "2026-12-31"
+    },
+    {
+      "promo_id": "P003",
+      "code": "SAVE15",
+      "type": "percentage",
+      "value": 15,
+      "min_order": 1000,
+      "category": "all",
+      "description": "15% off on orders above Rs. 1000",
+      "stackable": false,
+      "expiry": "2026-12-31"
+    },
+    {
+      "promo_id": "P004",
+      "code": "SAVE20",
+      "type": "percentage",
+      "value": 20,
+      "min_order": 1500,
+      "category": "all",
+      "description": "20% off on orders above Rs. 1500",
+      "stackable": false,
+      "expiry": "2026-12-31"
+    },
+    {
+      "promo_id": "P005",
+      "code": "SAVE25",
+      "type": "percentage",
+      "value": 25,
+      "min_order": 2000,
+      "category": "all",
+      "description": "25% off on orders above Rs. 2000",
+      "stackable": false,
+      "expiry": "2026-12-31"
+    },
+    {
+      "promo_id": "P006",
+      "code": "SAVE30",
+      "type": "percentage",
+      "value": 30,
+      "min_order": 3000,
+      "category": "all",
+      "description": "30% off on orders above Rs. 3000",
+      "stackable": false,
+      "expiry": "2026-12-31"
+    },
+    {
+      "promo_id": "P007",
+      "code": "FLAT100",
+      "type": "fixed",
+      "value": 100,
+      "min_order": 500,
+      "category": "all",
+      "description": "Rs. 100 off on orders above Rs. 500",
+      "stackable": true,
+      "expiry": "2026-12-31"
+    },
+    {
+      "promo_id": "P008",
+      "code": "FLAT200",
+      "type": "fixed",
+      "value": 200,
+      "min_order": 1000,
+      "category": "all",
+      "description": "Rs. 200 off on orders above Rs. 1000",
+      "stackable": true,
+      "expiry": "2026-12-31"
+    },
+    {
+      "promo_id": "P009",
+      "code": "FLAT500",
+      "type": "fixed",
+      "value": 500,
+      "min_order": 2500,
+      "category": "all",
+      "description": "Rs. 500 off on orders above Rs. 2500",
+      "stackable": true,
+      "expiry": "2026-12-31"
+    },
+    {
+      "promo_id": "P010",
+      "code": "FLAT1000",
+      "type": "fixed",
+      "value": 1000,
+      "min_order": 5000,
+      "category": "all",
+      "description": "Rs. 1000 off on orders above Rs. 5000",
+      "stackable": true,
+      "expiry": "2026-12-31"
+    },
+    {
+      "promo_id": "P011",
+      "code": "TECH10",
+      "type": "percentage",
+      "value": 10,
+      "min_order": 500,
+      "category": "electronics",
+      "description": "10% off on Electronics",
+      "stackable": false,
+      "expiry": "2026-12-31"
+    },
+    {
+      "promo_id": "P012",
+      "code": "FASHION20",
+      "type": "percentage",
+      "value": 20,
+      "min_order": 300,
+      "category": "fashion",
+      "description": "20% off on Fashion",
+      "stackable": false,
+      "expiry": "2026-12-31"
+    },
+    {
+      "promo_id": "P013",
+      "code": "BOOK15",
+      "type": "percentage",
+      "value": 15,
+      "min_order": 200,
+      "category": "books",
+      "description": "15% off on Books",
+      "stackable": false,
+      "expiry": "2026-12-31"
+    },
+    {
+      "promo_id": "P014",
+      "code": "HOME12",
+      "type": "percentage",
+      "value": 12,
+      "min_order": 800,
+      "category": "home",
+      "description": "12% off on Home items",
+      "stackable": false,
+      "expiry": "2026-12-31"
+    },
+    {
+      "promo_id": "P015",
+      "code": "SPORT18",
+      "type": "percentage",
+      "value": 18,
+      "min_order": 600,
+      "category": "sports",
+      "description": "18% off on Sports",
+      "stackable": false,
+      "expiry": "2026-12-31"
+    },
+    {
+      "promo_id": "P016",
+      "code": "BEAUTY25",
+      "type": "percentage",
+      "value": 25,
+      "min_order": 400,
+      "category": "beauty",
+      "description": "25% off on Beauty",
+      "stackable": false,
+      "expiry": "2026-12-31"
+    },
+    {
+      "promo_id": "P017",
+      "code": "FOOD8",
+      "type": "percentage",
+      "value": 8,
+      "min_order": 300,
+      "category": "groceries",
+      "description": "8% off on Groceries",
+      "stackable": false,
+      "expiry": "2026-12-31"
+    },
+    {
+      "promo_id": "P018",
+      "code": "BUNDLE10",
+      "type": "bundle",
+      "value": 10,
+      "min_order": 0,
+      "category": "all",
+      "description": "10% off when buying 2+ items",
+      "stackable": true,
+      "expiry": "2026-12-31"
+    },
+    {
+      "promo_id": "P019",
+      "code": "BUNDLE15",
+      "type": "bundle",
+      "value": 15,
+      "min_order": 0,
+      "category": "all",
+      "description": "15% off when buying 3+ items",
+      "stackable": true,
+      "expiry": "2026-12-31"
+    },
+    {
+      "promo_id": "P020",
+      "code": "BUNDLE20",
+      "type": "bundle",
+      "value": 20,
+      "min_order": 0,
+      "category": "all",
+      "description": "20% off when buying 4+ items",
+      "stackable": true,
+      "expiry": "2026-12-31"
+    }
+  ],
+  "loyalty_tiers": {
+    "bronze": {
+      "min_points": 0,
+      "max_points": 999,
+      "points_per_rupee": 1,
+      "value_per_point": 0.25
+    },
+    "silver": {
+      "min_points": 1000,
+      "max_points": 4999,
+      "points_per_rupee": 2,
+      "value_per_point": 0.5
+    },
+    "gold": {
+      "min_points": 5000,
+      "max_points": 19999,
+      "points_per_rupee": 3,
+      "value_per_point": 0.75
+    },
+    "platinum": {
+      "min_points": 20000,
+      "max_points": 999999,
+      "points_per_rupee": 5,
+      "value_per_point": 1.0
+    }
+  },
+  "users": [
+    {
+      "user_id": "U001",
+      "name": "Customer 1",
+      "tier": "bronze",
+      "points": 25,
+      "value_per_point": 0.25
+    },
+    {
+      "user_id": "U002",
+      "name": "Customer 2",
+      "tier": "gold",
+      "points": 7006,
+      "value_per_point": 0.75
+    },
+    {
+      "user_id": "U003",
+      "name": "Customer 3",
+      "tier": "silver",
+      "points": 1571,
+      "value_per_point": 0.5
+    },
+    {
+      "user_id": "U004",
+      "name": "Customer 4",
+      "tier": "bronze",
+      "points": 692,
+      "value_per_point": 0.25
+    },
+    {
+      "user_id": "U005",
+      "name": "Customer 5",
+      "tier": "bronze",
+      "points": 604,
+      "value_per_point": 0.25
+    },
+    {
+      "user_id": "U006",
+      "name": "Customer 6",
+      "tier": "platinum",
+      "points": 20260,
+      "value_per_point": 1.0
+    },
+    {
+      "user_id": "U007",
+      "name": "Customer 7",
+      "tier": "bronze",
+      "points": 95,
+      "value_per_point": 0.25
+    },
+    {
+      "user_id": "U008",
+      "name": "Customer 8",
+      "tier": "silver",
+      "points": 1952,
+      "value_per_point": 0.5
+    },
+    {
+      "user_id": "U009",
+      "name": "Customer 9",
+      "tier": "bronze",
+      "points": 574,
+      "value_per_point": 0.25
+    },
+    {
+      "user_id": "U010",
+      "name": "Customer 10",
+      "tier": "silver",
+      "points": 3932,
+      "value_per_point": 0.5
+    },
+    {
+      "user_id": "U011",
+      "name": "Customer 11",
+      "tier": "platinum",
+      "points": 21805,
+      "value_per_point": 1.0
+    },
+    {
+      "user_id": "U012",
+      "name": "Customer 12",
+      "tier": "platinum",
+      "points": 24827,
+      "value_per_point": 1.0
+    },
+    {
+      "user_id": "U013",
+      "name": "Customer 13",
+      "tier": "gold",
+      "points": 5053,
+      "value_per_point": 0.75
+    },
+    {
+      "user_id": "U014",
+      "name": "Customer 14",
+      "tier": "silver",
+      "points": 3859,
+      "value_per_point": 0.5
+    },
+    {
+      "user_id": "U015",
+      "name": "Customer 15",
+      "tier": "platinum",
+      "points": 22787,
+      "value_per_point": 1.0
+    },
+    {
+      "user_id": "U016",
+      "name": "Customer 16",
+      "tier": "gold",
+      "points": 6273,
+      "value_per_point": 0.75
+    },
+    {
+      "user_id": "U017",
+      "name": "Customer 17",
+      "tier": "silver",
+      "points": 4920,
+      "value_per_point": 0.5
+    },
+    {
+      "user_id": "U018",
+      "name": "Customer 18",
+      "tier": "gold",
+      "points": 5837,
+      "value_per_point": 0.75
+    },
+    {
+      "user_id": "U019",
+      "name": "Customer 19",
+      "tier": "bronze",
+      "points": 389,
+      "value_per_point": 0.25
+    },
+    {
+      "user_id": "U020",
+      "name": "Customer 20",
+      "tier": "bronze",
+      "points": 367,
+      "value_per_point": 0.25
+    }
+  ]
+}

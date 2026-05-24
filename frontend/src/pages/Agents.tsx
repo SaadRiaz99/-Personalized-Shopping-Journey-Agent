@@ -104,9 +104,37 @@ export default function Agents() {
         )}
       </div>
 
-      <div className="grid">
+      <div className="section-header" style={{ marginBottom: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h2 style={{ margin: 0 }}>Active Agents</h2>
+        <span className="page-subtitle">{agents.length} Agents configured</span>
+      </div>
+
+      <div className="agent-list-container">
         {agents.map(a => (
-          <AgentCard key={a.id} agent={a} onRun={handleRun} onDelete={handleDelete} />
+          <div key={a.id} className="agent-row animate-in">
+            <div className="agent-info">
+              <div className="agent-name">{a.name}</div>
+              <div className="agent-task">{a.task || 'No task assigned'}</div>
+            </div>
+            <div className="agent-meta">
+              <div className={`status status-${a.status}`}>
+                <span className="status-dot"></span>
+                {a.status}
+              </div>
+              <div className="card-actions" style={{ padding: 0, marginTop: 0 }}>
+                <button 
+                  className="btn btn-primary" 
+                  onClick={() => handleRun(a.id)}
+                  disabled={a.status === 'running'}
+                >
+                  {a.status === 'running' ? 'Running...' : '▶ Run'}
+                </button>
+                <button className="btn btn-danger" onClick={() => handleDelete(a.id)}>
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
         ))}
       </div>
       {agents.length === 0 && (

@@ -9,35 +9,107 @@
 }
 
 :root {
-  --bg: #0a0b12;
-  --bg-gradient: linear-gradient(135deg, #0a0b12 0%, #0f111e 50%, #0a0b12 100%);
-  --surface: #141624;
-  --surface2: #1c1e30;
-  --surface3: #242740;
-  --border: #252840;
-  --border-light: #2e3252;
-  --text: #eef0f8;
-  --text2: #8b90b0;
-  --text3: #5c6190;
-  --primary: #6569f0;
-  --primary-hover: #7f83f5;
-  --primary-glow: rgba(101, 105, 240, 0.15);
-  --primary-subtle: rgba(101, 105, 240, 0.08);
-  --danger: #ef5566;
-  --danger-hover: #f06a7a;
-  --success: #2bd47c;
-  --warning: #f0b34b;
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.4);
-  --shadow-glow: 0 0 24px rgba(101, 105, 240, 0.1);
-  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --bg: #05060b;
+  --bg-gradient: linear-gradient(135deg, #05060b 0%, #0d0f1a 100%);
+  --surface: #0f111e;
+  --surface2: #16192c;
+  --surface3: #1e223d;
+  --border: #1e223d;
+  --border-light: #2a2f52;
+  --text: #f8fafc;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --primary: #818cf8;
+  --primary-hover: #a5b4fc;
+  --primary-glow: rgba(129, 140, 248, 0.15);
+  --primary-subtle: rgba(129, 140, 248, 0.08);
+  --danger: #f43f5e;
+  --danger-hover: #fb7185;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.5);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+  --shadow-lg: 0 12px 48px rgba(0,0,0,0.6);
+  --shadow-glow: 0 0 32px rgba(129, 140, 248, 0.05);
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   color-scheme: dark;
+}
+
+[data-theme='light'] {
+  --bg: #f8fafc;
+  --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  --surface: #ffffff;
+  --surface2: #f1f5f9;
+  --surface3: #e2e8f0;
+  --border: #e2e8f0;
+  --border-light: #cbd5e1;
+  --text: #0f172a;
+  --text2: #475569;
+  --text3: #64748b;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-glow: rgba(79, 70, 229, 0.1);
+  --primary-subtle: rgba(79, 70, 229, 0.05);
+  --danger: #e11d48;
+  --danger-hover: #be123c;
+  --success: #059669;
+  --warning: #d97706;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  color-scheme: light;
+}
+
+/* Agent List Styles */
+.agent-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.agent-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+}
+
+.agent-row:hover {
+  background: var(--surface2);
+  border-color: var(--border-light);
+  transform: translateX(4px);
+}
+
+.agent-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.agent-name {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.agent-task {
+  font-size: 0.85rem;
+  color: var(--text2);
+}
+
+.agent-meta {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
 }
 
 html {
@@ -53,51 +125,19 @@ body {
   line-height: 1.6;
 }
 
-::selection {
-  background: var(--primary);
-  color: #fff;
-}
-
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border-light);
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text3);
-}
-
-input, select, button, textarea {
-  font-family: inherit;
-  font-size: 0.9rem;
-}
-
-input:focus, select:focus, textarea:focus {
-  outline: none;
-}
-
 .layout {
   display: flex;
   min-height: 100vh;
 }
 
 .sidebar {
-  width: 240px;
+  width: 260px;
   background: var(--surface);
   border-right: 1px solid var(--border);
-  padding: 1.5rem 1rem;
+  padding: 2rem 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 2.5rem;
   position: sticky;
   top: 0;
   height: 100vh;
@@ -105,71 +145,39 @@ input:focus, select:focus, textarea:focus {
 }
 
 .sidebar .logo {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 800;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.75rem;
   padding: 0 0.5rem;
   color: var(--text);
 }
 
 .sidebar .logo-icon {
-  width: 32px;
-  height: 32px;
-  background: linear-gradient(135deg, var(--primary), #a78bfa);
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--primary), #a5b4fc);
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
-  flex-shrink: 0;
-}
-
-.sidebar .logo span {
-  background: linear-gradient(135deg, var(--text), var(--text2));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.sidebar .nav-label {
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text3);
-  padding: 0 0.75rem;
-  margin-bottom: 0.25rem;
-}
-
-.sidebar ul {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 12px rgba(129, 140, 248, 0.2);
 }
 
 .sidebar a {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.6rem 0.75rem;
-  border-radius: var(--radius-sm);
+  gap: 0.85rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
   color: var(--text2);
   text-decoration: none;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   font-weight: 500;
   transition: var(--transition);
-  position: relative;
-}
-
-.sidebar a .nav-icon {
-  width: 20px;
-  text-align: center;
-  flex-shrink: 0;
-  font-size: 1rem;
 }
 
 .sidebar a:hover {
@@ -181,18 +189,7 @@ input:focus, select:focus, textarea:focus {
   background: var(--primary-subtle);
   color: var(--primary);
   font-weight: 600;
-}
-
-.sidebar a.active::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3px;
-  height: 20px;
-  background: var(--primary);
-  border-radius: 0 3px 3px 0;
+  box-shadow: inset 0 0 0 1px var(--primary-glow);
 }
 
 .sidebar-footer {

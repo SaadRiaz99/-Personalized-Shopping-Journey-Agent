@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 
 const links = [
   { to: '/', label: 'Dashboard', icon: '◉' },
@@ -10,6 +11,14 @@ const links = [
 ]
 
 export default function Layout() {
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark')
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+  }, [theme])
+
+  const toggleTheme = () => setTheme(t => t === 'light' ? 'dark' : 'light')
+
   return (
     <div className="layout">
       <nav className="sidebar">
@@ -30,7 +39,15 @@ export default function Layout() {
             ))}
           </ul>
         </div>
-        <div className="sidebar-footer">
+
+        <div style={{ marginTop: 'auto' }}>
+          <button className="btn btn-ghost" onClick={toggleTheme} style={{ width: '100%', justifyContent: 'flex-start', padding: '0.75rem 1rem' }}>
+            <span className="nav-icon">{theme === 'light' ? '🌙' : '☀️'}</span>
+            {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+          </button>
+        </div>
+
+        <div className="sidebar-footer" style={{ borderTop: 'none', paddingTop: 0 }}>
           <p>Personalized Shopping Agent</p>
         </div>
       </nav>

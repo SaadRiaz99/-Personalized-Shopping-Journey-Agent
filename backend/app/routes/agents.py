@@ -36,3 +36,12 @@ async def run_agent(agent_id: str):
         raise HTTPException(404, "Agent not found")
     result = await orchestrator.run_agent(agent_id)
     return {"status": "started", "agent_id": agent_id}
+
+
+@router.post("/collaboration")
+async def run_collaborative_agent(body: dict):
+    query = body.get("query")
+    if not query:
+        raise HTTPException(400, "Query is required")
+    result = await orchestrator.run_collaborative_task(query)
+    return result

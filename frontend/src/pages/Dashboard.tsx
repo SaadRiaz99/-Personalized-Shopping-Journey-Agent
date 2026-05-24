@@ -1,71 +1,75 @@
-import { useEffect, useState } from 'react'
-import { getAgents, getProducts } from '../services/api'
-import type { Agent, Product } from '../types'
+import { useState } from 'react'
+import { runCollaboration } from '../services/api'
+import ProductCard from '../components/ProductCard'
 
 export default function Dashboard() {
-  const [agents, setAgents] = useState<Agent[]>([])
-  const [products, setProducts] = useState<Product[]>([])
+  const [query, setQuery] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [result, setResult] = useState<any>(null)
 
-  useEffect(() => {
-    getAgents().then(setAgents)
-    getProducts({ max_price: 100 }).then(setProducts)
-  }, [])
-
-  const running = agents.filter(a => a.status === 'running').length
-  const completed = agents.filter(a => a.status === 'completed').length
+  const handleCollaboration = async () => {
+    if (!query.trim()) return
+    setLoading(true)
+    try {
+      const data = await runCollaboration(query)
+      setResult(data)
+    } catch (err) {
+      console.error(err)
+    }
+    setLoading(false)
+  }
 
   return (
-    <div>
+    <div className="animate-in">
       <div className="page-header">
         <div className="page-header-left">
-          <h1 className="page-title">Dashboard</h1>
-          <p className="page-subtitle">Overview of your shopping agents and products</p>
+          <h1 className="page-title">Collaboration Council</h1>
+          <p className="page-subtitle">Trigger specialized agents to work together on your task</p>
         </div>
       </div>
 
-      <div className="stats">
-        <div className="stat-card animate-in">
-          <div className="stat-icon">◆</div>
-          <strong>{agents.length}</strong>
-          <span className="stat-label">Total Agents</span>
-        </div>
-        <div className="stat-card animate-in">
-          <div className="stat-icon">▶</div>
-          <strong>{running}</strong>
-          <span className="stat-label">Running</span>
-        </div>
-        <div className="stat-card animate-in">
-          <div className="stat-icon">✓</div>
-          <strong>{completed}</strong>
-          <span className="stat-label">Completed</span>
-        </div>
-        <div className="stat-card animate-in">
-          <div className="stat-icon">✦</div>
-          <strong>{products.length}</strong>
-          <span className="stat-label">Products Found</span>
+      <div className="card" style={{ marginBottom: '2rem' }}>
+        <p className="section-title">Initiate Collaborative Search</p>
+        <div className="form-row">
+          <input 
+            className="input" 
+            placeholder="What are you looking for? (e.g. 'find a high-end laptop')" 
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            style={{ flex: 1 }}
+          />
+          <button 
+            className="btn btn-primary" 
+            onClick={handleCollaboration} 
+            disabled={loading}
+            style={{ height: 40 }}
+          >
+            {loading ? 'Council is deliberating...' : 'Ask the Council'}
+          </button>
         </div>
       </div>
 
-      <h3>Recent Agents</h3>
-      <div className="grid">
-        {agents.slice(-4).reverse().map(a => (
-          <div key={a.id} className="card animate-in">
-            <div className="card-header">
-              <h4>{a.name}</h4>
-              <span className={`status status-${a.status}`}>
-                <span className="status-dot" />
-                {a.status}
-              </span>
-            </div>
+      {result && (
+        <div className="animate-in">
+          <div className="card" style={{ marginBottom: '1.5rem', background: 'var(--primary-subtle)', borderColor: 'var(--primary)' }}>
+            <h3 style={{ color: 'var(--primary)', marginBottom: '0.5rem' }}>Council Summary</h3>
+            <p className="task-text" style={{ fontSize: '1rem', color: 'var(--text)' }}>{result.summary}</p>
           </div>
-        ))}
-        {agents.length === 0 && (
-          <div className="empty-state">
-            <div className="empty-icon">◆</div>
-            <p>No agents yet. Create one from the Agents page.</p>
+
+          <div className="grid">
+            {result.products.map((p: any) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
+      {!result && !loading && (
+        <div className="empty-state">
+          <div className="empty-icon">◈</div>
+          <p>Ask the Council a question to start the collaborative multi-agent workflow.</p>
+        </div>
+      )}
     </div>
   )
 }

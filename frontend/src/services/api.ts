@@ -9,6 +9,7 @@ export const createAgent = (name: string, task?: string) =>
 export const getAgent = (id: string) => api.get<Agent>(`/agents/${id}`).then(r => r.data)
 export const deleteAgent = (id: string) => api.delete(`/agents/${id}`)
 export const runAgent = (id: string) => api.post(`/agents/${id}/run`).then(r => r.data)
+export const runCollaboration = (query: string) => api.post('/agents/collaboration', { query }).then(r => r.data)
 
 export const getProducts = (params?: { category?: string; search?: string; min_price?: number; max_price?: number }) =>
   api.get<Product[]>('/products', { params }).then(r => r.data)

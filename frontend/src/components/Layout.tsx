@@ -3,6 +3,7 @@ import { NavLink, Outlet } from 'react-router-dom'
 const links = [
   { to: '/', label: 'Dashboard', icon: '◉' },
   { to: '/agents', label: 'Agents', icon: '◆' },
+  { to: '/deals', label: 'Deals', icon: '💰' },
   { to: '/products', label: 'Products', icon: '✦' },
   { to: '/preferences', label: 'Preferences', icon: '⚙' },
 ]

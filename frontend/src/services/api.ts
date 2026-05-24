@@ -22,4 +22,13 @@ export const getTasks = () => api.get<Task[]>('/tasks').then(r => r.data)
 export const decodeIntent = (query: string) =>
   api.post<{ intent: QueryIntent }>('/intent', { query }).then(r => r.data.intent)
 
+export const getPromotions = () =>
+  api.get<Promotion[]>('/deals/promotions').then(r => r.data)
+
+export const optimizeCart = (body: DealSessionRequest) =>
+  api.post<DealResult>('/deals/optimize', body).then(r => r.data)
+
+export const applyDealStack = (stackId: string) =>
+  api.post(`/deals/apply/${stackId}`).then(r => r.data)
+
 export const WS_URL = 'ws://localhost:8000/ws/agents'

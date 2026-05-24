@@ -50,3 +50,53 @@ export interface WSEvent {
   event: string
   data: Record<string, unknown>
 }
+
+export interface CartItem {
+  product_id: string
+  sku: string
+  name: string
+  price: number
+  quantity: number
+  category: string
+}
+
+export interface DealSessionRequest {
+  user_id: string
+  items: CartItem[]
+  loyalty_tier: 'bronze' | 'silver' | 'gold' | 'platinum'
+  budget?: number
+  opted_out?: boolean
+}
+
+export interface AppliedDiscount {
+  promotion_id: string
+  promotion_name: string
+  discount_type: string
+  discount_amount: number
+  description: string
+}
+
+export interface DealResult {
+  user_id: string
+  message: string
+  subtotal: number
+  final_total: number
+  total_savings: number
+  applied_discounts: AppliedDiscount[]
+  savings_breakdown: string
+}
+
+export interface Promotion {
+  id: string
+  name: string
+  description: string
+  type: string
+  value: number
+  stackable: boolean
+  min_purchase: number | null
+  max_discount: number | null
+  applicable_categories: string[]
+  min_loyalty_tier: string
+  requires_opt_in: boolean
+  active: boolean
+}

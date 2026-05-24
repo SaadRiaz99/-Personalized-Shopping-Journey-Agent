@@ -1,6 +1,7 @@
 from app.models import Agent, AgentStatus, QueryIntent, Task, TaskStatus
 from app.services.intent_parser import parse_intent
-from app.services.recommendation import get_recommendations, search_products
+from app.services.price_match import price_match_agent as pm_agent
+from app.services.recommendation import get_recommendations, search_products, SAMPLE_PRODUCTS
 from datetime import datetime
 from typing import Optional
 import asyncio
@@ -101,6 +102,53 @@ class AgentOrchestrator:
             "message": f"Shopping analysis complete for {agent.name}",
             "intent": intent.model_dump(),
             "products": [p.model_dump() for p in products],
+        }
+
+        agent.status = AgentStatus.completed
+        agent.updated_at = datetime.now()
+        await self._notify("agent_update", agent.model_dump())
+        await self._notify("agent_result", result)
+
+        return result
+
+    async def run_price_match(self, agent_id: str, product_id: str, sku: str) -> Optional[dict]:
+        agent = self.agents.get(agent_id)
+        if not agent:
+            return None
+
+        agent.status = AgentStatus.running
+        agent.updated_at = datetime.now()
+        await self._notify("agent_update", agent.model_dump())
+
+        product = next((p for p in SAMPLE_PRODUCTS if p.id == product_id), None)
+        if not product:
+            result = {"agent_id": agent_id, "status": "error", "message": f"Product {product_id} not found"}
+            agent.status = AgentStatus.error
+            agent.updated_at = datetime.now()
+            await self._notify("agent_update", agent.model_dump())
+            await self._notify("agent_result", result)
+            return result
+
+        await asyncio.sleep(1)
+
+        discount = pm_agent.check_price(sku, product.price, product_id, agent_id)
+
+        await self._notify("price_check", {
+            "product_id": product_id,
+            "sku": sku,
+            "store_price": product.price,
+            "competitor_store": discount.competitor_store,
+            "competitor_price": discount.competitor_price,
+            "discount_amount": discount.discount_amount,
+            "status": discount.status.value,
+        })
+
+        result = {
+            "agent_id": agent_id,
+            "status": "completed",
+            "message": f"Price match check complete for {product.name}",
+            "product": product.model_dump(),
+            "discount": discount.model_dump(),
         }
 
         agent.status = AgentStatus.completed

@@ -36,6 +36,7 @@ class Product(BaseModel):
     image_url: Optional[str] = None
     rating: float = 0.0
     tags: list[str] = []
+    sku: Optional[str] = None
 
 
 class UserPreferences(BaseModel):
@@ -66,6 +67,33 @@ class QueryIntent(BaseModel):
     raw_query: str = ""
 
 
+class DiscountStatus(str, Enum):
+    pending = "pending"
+    approved = "approved"
+    applied = "applied"
+    declined = "declined"
+
+
+class Discount(BaseModel):
+    id: str
+    agent_id: str
+    product_id: str
+    sku: str
+    store_price: float
+    competitor_store: str
+    competitor_price: float
+    discount_amount: float
+    new_price: float
+    status: DiscountStatus = DiscountStatus.pending
+    created_at: datetime = Field(default_factory=datetime.now)
+
+
+class PriceMatchRequest(BaseModel):
+    product_id: str
+    sku: str
+    current_price: float
+
+
 class AgentCreate(BaseModel):
     name: str
     task: Optional[str] = None
@@ -74,3 +102,125 @@ class AgentCreate(BaseModel):
 class TaskCreate(BaseModel):
     agent_id: str
     type: str
+
+
+class LoyaltyTier(str, Enum):
+    bronze = "bronze"
+    silver = "silver"
+    gold = "gold"
+    platinum = "platinum"
+
+
+class CartItem(BaseModel):
+    product_id: str
+    sku: str
+    name: str
+    price: float
+    quantity: int = 1
+    category: str = ""
+
+
+class CartSession(BaseModel):
+    user_id: str
+    items: list[CartItem] = []
+    loyalty_tier: LoyaltyTier = LoyaltyTier.bronze
+    budget: Optional[float] = None
+    opted_out: bool = False
+
+    @property
+    def subtotal(self) -> float:
+        return round(sum(i.price * i.quantity for i in self.items), 2)
+
+
+class DiscountType(str, Enum):
+    percentage = "percentage"
+    fixed = "fixed"
+    bogo = "bogo"
+    category_markdown = "category_markdown"
+
+
+class Promotion(BaseModel):
+    id: str
+    name: str
+    description: str
+    type: DiscountType
+    value: float
+    stackable: bool = False
+    min_purchase: Optional[float] = None
+    max_discount: Optional[float] = None
+    applicable_categories: list[str] = []
+    min_loyalty_tier: LoyaltyTier = LoyaltyTier.bronze
+    requires_opt_in: bool = False
+    active: bool = True
+
+    def is_applicable(self, cart: CartSession) -> bool:
+        if not self.active:
+            return False
+        if self.requires_opt_in and cart.opted_out:
+            return False
+        tier_order = [LoyaltyTier.bronze, LoyaltyTier.silver, LoyaltyTier.gold, LoyaltyTier.platinum]
+        if tier_order.index(cart.loyalty_tier) < tier_order.index(self.min_loyalty_tier):
+            return False
+        if self.min_purchase and cart.subtotal < self.min_purchase:
+            return False
+        if self.applicable_categories:
+            cart_cats = {i.category for i in cart.items}
+            if not cart_cats.intersection(self.applicable_categories):
+                return False
+        return True
+
+    def apply_to(self, cart: CartSession) -> dict:
+        if self.type == DiscountType.fixed:
+            discount = self.value
+            if self.max_discount:
+                discount = min(discount, self.max_discount)
+            return {"discount": round(discount, 2), "new_total": round(max(cart.subtotal - discount, 0), 2)}
+
+        if self.type == DiscountType.percentage:
+            discount = round(cart.subtotal * self.value / 100, 2)
+            if self.max_discount:
+                discount = min(discount, self.max_discount)
+            return {"discount": round(discount, 2), "new_total": round(max(cart.subtotal - discount, 0), 2)}
+
+        if self.type == DiscountType.category_markdown:
+            affected_total = sum(i.price * i.quantity for i in cart.items if i.category in self.applicable_categories)
+            discount = round(affected_total * self.value / 100, 2)
+            if self.max_discount:
+                discount = min(discount, self.max_discount)
+            return {"discount": round(discount, 2), "new_total": round(max(cart.subtotal - discount, 0), 2)}
+
+        if self.type == DiscountType.bogo:
+            sorted_items = sorted(cart.items, key=lambda i: i.price, reverse=True)
+            if len(sorted_items) >= 2:
+                discount = round(sorted_items[-1].price, 2)
+                return {"discount": discount, "new_total": round(max(cart.subtotal - discount, 0), 2)}
+            return {"discount": 0.0, "new_total": cart.subtotal}
+
+        return {"discount": 0.0, "new_total": cart.subtotal}
+
+
+class AppliedDiscount(BaseModel):
+    promotion_id: str
+    promotion_name: str
+    discount_type: DiscountType
+    discount_amount: float
+    description: str
+
+
+class DiscountStack(BaseModel):
+    id: str
+    user_id: str
+    original_total: float
+    final_total: float
+    total_savings: float
+    applied_discounts: list[AppliedDiscount] = []
+    savings_breakdown: str = ""
+    created_at: datetime = Field(default_factory=datetime.now)
+
+
+class DealSessionRequest(BaseModel):
+    user_id: str
+    items: list[CartItem]
+    loyalty_tier: LoyaltyTier = LoyaltyTier.bronze
+    budget: Optional[float] = None
+    opted_out: bool = False

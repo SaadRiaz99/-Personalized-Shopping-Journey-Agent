@@ -22,6 +22,18 @@ export const getTasks = () => api.get<Task[]>('/tasks').then(r => r.data)
 export const decodeIntent = (query: string) =>
   api.post<{ intent: QueryIntent }>('/intent', { query }).then(r => r.data.intent)
 
+export const catalogSearch = (params: {
+  query?: string; category?: string; max_price?: number; min_price?: number;
+  min_rating?: number; sort_by?: string; page?: number; page_size?: number
+}) =>
+  api.get<CatalogSearchResult>('/catalog/search', { params }).then(r => r.data)
+
+export const getCatalogProduct = (id: number) =>
+  api.get<CatalogProduct>(`/catalog/products/${id}`).then(r => r.data)
+
+export const getCatalogCategories = () =>
+  api.get<{ categories: string[]; total: number }>('/catalog/categories').then(r => r.data)
+
 export const getPromotions = () =>
   api.get<Promotion[]>('/deals/promotions').then(r => r.data)
 

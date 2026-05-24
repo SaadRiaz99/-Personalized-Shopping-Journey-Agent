@@ -100,3 +100,23 @@ export interface Promotion {
   requires_opt_in: boolean
   active: boolean
 }
+
+export interface CatalogProduct {
+  id: number
+  name: string
+  category: string
+  price: number
+  rating: number
+  stock: number
+  description: string
+}
+
+export interface CatalogSearchResult {
+  total: number
+  page: number
+  page_size: number
+  total_pages: number
+  products: CatalogProduct[]
+  query: string
+  category: string | null
+}

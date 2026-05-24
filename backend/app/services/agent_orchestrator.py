@@ -3,6 +3,7 @@ from app.services.intent_parser import parse_intent
 from app.services.price_match import price_match_agent as pm_agent
 from app.services.privacy_guardrail import privacy_guardrail
 from app.services.recommendation import get_recommendations, search_products, SAMPLE_PRODUCTS
+from app.services.catalog_search import search_products as catalog_search_products, get_product as catalog_get_product, list_categories as catalog_list_categories
 from datetime import datetime
 from typing import Optional
 import asyncio
@@ -192,6 +193,96 @@ class AgentOrchestrator:
         await self._notify("agent_result", result)
 
         return result
+
+    async def run_catalog_search(self, agent_id: str, user_id: str = "default") -> Optional[dict]:
+        agent = self.agents.get(agent_id)
+        if not agent:
+            return None
+
+        agent.status = AgentStatus.running
+        agent.updated_at = datetime.now()
+        await self._notify("agent_update", agent.model_dump())
+
+        query = agent.task or ""
+
+        guardrail_result = await privacy_guardrail.check_input(query, user_id)
+        await self._notify("guardrail_input", guardrail_result.model_dump())
+        safe_query = guardrail_result.sanitized_text or query
+
+        agent_access = await privacy_guardrail.check_agent_access(
+            agent.name,
+            ["query", "preferences"],
+            user_id,
+        )
+        await self._notify("guardrail_access", agent_access.model_dump())
+        if agent_access.action.value == "blocked":
+            result = {
+                "agent_id": agent_id,
+                "status": "blocked",
+                "message": f"Agent {agent.name} access blocked by privacy guardrail",
+                "products": [],
+                "guardrail": agent_access.model_dump(),
+            }
+            agent.status = AgentStatus.error
+            agent.updated_at = datetime.now()
+            await self._notify("agent_update", agent.model_dump())
+            await self._notify("agent_result", result)
+            return result
+
+        intent = await parse_intent(safe_query) if safe_query else None
+        await self._notify("intent_parsed", intent.model_dump() if intent else {})
+
+        await asyncio.sleep(1)
+
+        cat = intent.category if intent else None
+        budget = intent.budget if intent else None
+        category_map = {
+            "clothing": "Clothing", "footwear": "Clothing",
+            "electronics": "Electronics", "home": "Home & Kitchen",
+            "sports": "Sports & Fitness", "fitness": "Sports & Fitness",
+            "beauty": "Beauty & Personal Care", "books": "Books",
+            "automotive": "Automotive", "furniture": "Furniture",
+            "grocery": "Groceries", "food": "Groceries",
+            "accessories": "Clothing",
+        }
+        mapped_cat = category_map.get(cat.lower()) if cat else None
+
+        if safe_query:
+            result = catalog_search_products(query=safe_query, category=mapped_cat, max_price=budget)
+        elif mapped_cat:
+            result = catalog_search_products(category=mapped_cat, max_price=budget, sort_by="rating")
+        else:
+            result = catalog_search_products(sort_by="rating", page_size=10)
+
+        product_dicts = result["products"]
+        output_check = await privacy_guardrail.check_output(product_dicts, user_id)
+        await self._notify("guardrail_output", output_check.model_dump())
+
+        response = {
+            "agent_id": agent_id,
+            "status": "completed",
+            "message": f"Catalog search complete for {agent.name}",
+            "intent": intent.model_dump() if intent else None,
+            "products": product_dicts,
+            "catalog_meta": {
+                "total": result["total"],
+                "page": result["page"],
+                "total_pages": result["total_pages"],
+                "categories": catalog_list_categories(),
+            },
+            "guardrail": {
+                "input": guardrail_result.model_dump(),
+                "access": agent_access.model_dump(),
+                "output": output_check.model_dump(),
+            },
+        }
+
+        agent.status = AgentStatus.completed
+        agent.updated_at = datetime.now()
+        await self._notify("agent_update", agent.model_dump())
+        await self._notify("agent_result", response)
+
+        return response
 
 
 orchestrator = AgentOrchestrator()

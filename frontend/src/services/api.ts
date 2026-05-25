@@ -44,4 +44,4 @@ export const optimizeCart = (body: DealSessionRequest) =>
 export const applyDealStack = (stackId: string) =>
   api.post(`/deals/apply/${stackId}`).then(r => r.data)
 
-export const WS_URL = 'ws://localhost:8000/ws/agents'
+export const WS_URL = 'ws://192.168.0.34:8000/ws/agents'

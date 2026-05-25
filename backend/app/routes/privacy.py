@@ -10,6 +10,7 @@ from app.models import (
     UserPrivacyProfile,
 )
 from app.services.privacy_guardrail import privacy_guardrail
+from app.services.safety_guardrail import check_safety
 
 router = APIRouter(prefix="/api/privacy", tags=["privacy"])
 
@@ -54,6 +55,13 @@ class ForgetResponse(BaseModel):
 class ExportResponse(BaseModel):
     data: Optional[dict] = None
     status: str
+
+
+@router.post("/check-safety")
+async def check_safety_route(body: SanitizeRequest):
+    profile = privacy_guardrail.get_or_create_profile(body.user_id)
+    result = await check_safety(body.text, profile.region)
+    return result
 
 
 @router.get("/profile/{user_id}", response_model=UserPrivacyProfile)

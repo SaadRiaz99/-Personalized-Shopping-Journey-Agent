@@ -1,8 +1,9 @@
-from app.models import Agent, AgentStatus, QueryIntent, Task, TaskStatus
+from app.models import Agent, AgentStatus, PrivacyRegion, QueryIntent, Task, TaskStatus
 from app.services.intent_parser import parse_intent
 from app.services.price_match import price_match_agent as pm_agent
 from app.services.privacy_guardrail import privacy_guardrail
 from app.services.recommendation import get_recommendations, search_products, SAMPLE_PRODUCTS
+from app.services.safety_guardrail import check_safety as check_safety_guardrail
 from app.services.catalog_search import search_products as catalog_search_products, get_product as catalog_get_product, list_categories as catalog_list_categories
 from datetime import datetime
 from typing import Optional
@@ -72,6 +73,24 @@ class AgentOrchestrator:
         guardrail_result = await privacy_guardrail.check_input(query, user_id)
         await self._notify("guardrail_input", guardrail_result.model_dump())
         safe_query = guardrail_result.sanitized_text or query
+
+        profile = privacy_guardrail.get_or_create_profile(user_id)
+        safety_check = await check_safety_guardrail(safe_query, profile.region)
+        await self._notify("guardrail_safety", safety_check.model_dump())
+        if not safety_check.allowed:
+            result = {
+                "agent_id": agent_id,
+                "status": "blocked",
+                "message": safety_check.blocked_reason,
+                "intent": None,
+                "products": [],
+                "guardrail": {"safety": safety_check.model_dump()},
+            }
+            agent.status = AgentStatus.error
+            agent.updated_at = datetime.now()
+            await self._notify("agent_update", agent.model_dump())
+            await self._notify("agent_result", result)
+            return result
 
         agent_access = await privacy_guardrail.check_agent_access(
             agent.name,
@@ -197,6 +216,20 @@ class AgentOrchestrator:
     async def run_collaborative_task(self, query: str, user_id: str = "default") -> dict:
         collaboration_id = str(uuid.uuid4())[:8]
         await self._notify("collaboration_started", {"id": collaboration_id, "query": query})
+
+        profile = privacy_guardrail.get_or_create_profile(user_id)
+        safety_check = await check_safety_guardrail(query, profile.region)
+        await self._notify("guardrail_safety", safety_check.model_dump())
+        if not safety_check.allowed:
+            return {
+                "collaboration_id": collaboration_id,
+                "status": "blocked",
+                "query": query,
+                "message": safety_check.blocked_reason,
+                "intent": None,
+                "products": [],
+                "guardrail": {"safety": safety_check.model_dump()},
+            }
 
         # 1. Researcher Agent: Parse Intent & Search Catalog
         researcher = self.create_agent(f"Researcher-{collaboration_id}", task=query)

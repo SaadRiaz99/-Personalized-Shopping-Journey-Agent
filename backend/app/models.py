@@ -175,6 +175,13 @@ class CartSession(BaseModel):
         return round(sum(i.price * i.quantity for i in self.items), 2)
 
 
+class SafetyCheckResult(BaseModel):
+    allowed: bool = True
+    blocked_category: Optional[str] = None
+    blocked_reason: str = ""
+    suggested_safe_query: Optional[str] = None
+
+
 class DiscountType(str, Enum):
     percentage = "percentage"
     fixed = "fixed"

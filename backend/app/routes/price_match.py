@@ -1,14 +1,50 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Header, Query
 from app.models import Agent, Discount, PriceMatchRequest
 from app.services.agent_orchestrator import orchestrator
-from app.services.price_match import price_match_agent
+from app.services.price_match import price_match_agent, get_price_history, get_price_drop_alerts
+from app.services.price_guardrail import price_guardrail
 from app.services.recommendation import SAMPLE_PRODUCTS
 
 router = APIRouter(prefix="/api/price-match", tags=["price_match"])
 
 
+@router.get("/products", response_model=list[dict])
+async def list_price_match_products():
+    products = []
+    for p in SAMPLE_PRODUCTS:
+        if p.sku:
+            from app.services.price_match import fetch_competitor_price
+            comp = fetch_competitor_price(p.sku)
+            products.append({
+                "id": p.id,
+                "name": p.name,
+                "category": p.category,
+                "store_price": p.price,
+                "rating": p.rating,
+                "sku": p.sku,
+                "tags": p.tags,
+                "description": p.description,
+                "competitor": comp if "error" not in comp else None,
+                "history": get_price_history(p.sku),
+                "alerts": get_price_drop_alerts(p.sku),
+            })
+    return products
+
+
 @router.post("/check", response_model=dict)
-async def check_price_match(body: PriceMatchRequest):
+async def check_price_match(body: PriceMatchRequest, x_user_id: str = Header("default")):
+    input_check = price_guardrail.validate_input(body.sku, body.current_price)
+    if not input_check.allowed:
+        return {"error": True, "guardrail": input_check.__dict__, "discount": None}
+
+    fraud_check = price_guardrail.detect_fraud(body.current_price, 0)
+    if not fraud_check.allowed:
+        return {"error": True, "guardrail": fraud_check.__dict__, "discount": None}
+
+    rate_check = price_guardrail.check_rate_limit(x_user_id)
+    if not rate_check.allowed:
+        return {"error": True, "guardrail": rate_check.__dict__, "discount": None}
+
     product = next((p for p in SAMPLE_PRODUCTS if p.id == body.product_id), None)
     if not product:
         raise HTTPException(404, "Product not found")
@@ -20,9 +56,16 @@ async def check_price_match(body: PriceMatchRequest):
 
     discount = price_match_agent.check_price(body.sku, body.current_price, body.product_id, agent.id)
 
+    abuse_check = price_guardrail.check_abuse(x_user_id, discount.discount_amount)
+    if not abuse_check.allowed:
+        return {"error": True, "guardrail": abuse_check.__dict__, "discount": None}
+
+    price_guardrail.record_discount(x_user_id, discount.discount_amount)
+
     return {
         "agent": agent.model_dump(),
         "discount": discount.model_dump(),
+        "guardrail": {"input": input_check.__dict__, "rate": rate_check.__dict__},
     }
 
 
@@ -68,3 +111,19 @@ async def get_competitor_prices(sku: str, store: str = None):
     if "error" in result:
         raise HTTPException(404, result["error"])
     return result
+
+
+@router.get("/history/{sku}", response_model=dict)
+async def price_history(sku: str):
+    return {"sku": sku, "history": get_price_history(sku), "alerts": get_price_drop_alerts(sku)}
+
+
+@router.get("/alerts", response_model=list[dict])
+async def price_alerts(threshold: float = Query(5.0, description="Minimum price drop % to alert")):
+    alerts = []
+    for p in SAMPLE_PRODUCTS:
+        if p.sku:
+            pa = get_price_drop_alerts(p.sku, threshold)
+            if pa:
+                alerts.append({"product_id": p.id, "product_name": p.name, "sku": p.sku, "alerts": pa})
+    return alerts

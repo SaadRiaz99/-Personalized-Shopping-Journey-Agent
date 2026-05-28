@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { getAgents, createAgent, deleteAgent, runAgent, decodeIntent } from '../services/api'
-import AgentCard from '../components/AgentCard'
 import type { Agent, QueryIntent } from '../types'
 
 export default function Agents() {

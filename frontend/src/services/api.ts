@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { Agent, Product, QueryIntent, UserPreferences, Task } from '../types'
+import type { Agent, Product, QueryIntent, UserPreferences, Task, CatalogSearchResult, CatalogProduct, Promotion, DealSessionRequest, DealResult, PriceMatchProduct, PriceCheckResponse, PriceHistoryPoint, PriceDropAlert, DiscountResult } from '../types'
 
 const api = axios.create({ baseURL: 'http://localhost:8000/api' })
 
@@ -43,5 +43,25 @@ export const optimizeCart = (body: DealSessionRequest) =>
 
 export const applyDealStack = (stackId: string) =>
   api.post(`/deals/apply/${stackId}`).then(r => r.data)
+
+export const getPriceMatchProducts = () =>
+  api.get<PriceMatchProduct[]>('/price-match/products').then(r => r.data)
+
+export const checkPriceMatch = (productId: string, sku: string, currentPrice: number, userId?: string) =>
+  api.post<PriceCheckResponse>('/price-match/check', { product_id: productId, sku, current_price: currentPrice },
+    userId ? { headers: { 'x-user-id': userId } } : undefined
+  ).then(r => r.data)
+
+export const getPriceHistory = (sku: string) =>
+  api.get<{ sku: string; history: PriceHistoryPoint[]; alerts: PriceDropAlert[] }>(`/price-match/history/${sku}`).then(r => r.data)
+
+export const getPriceAlerts = (threshold?: number) =>
+  api.get<{ product_id: string; product_name: string; sku: string; alerts: PriceDropAlert[] }[]>('/price-match/alerts', { params: { threshold } }).then(r => r.data)
+
+export const listDiscounts = () =>
+  api.get<DiscountResult[]>('/price-match/discounts').then(r => r.data)
+
+export const applyDiscount = (discountId: string) =>
+  api.post<DiscountResult>(`/price-match/discounts/${discountId}/apply`).then(r => r.data)
 
 export const WS_URL = 'ws://192.168.0.34:8000/ws/agents'

@@ -120,3 +120,59 @@ export interface CatalogSearchResult {
   query: string
   category: string | null
 }
+
+export interface CompetitorPrice {
+  sku: string
+  store: string
+  price: number
+  all_prices: Record<string, number>
+}
+
+export interface PriceHistoryPoint {
+  date: string
+  price: number
+}
+
+export interface PriceDropAlert {
+  date: string
+  from: number
+  to: number
+  drop_pct: number
+}
+
+export interface PriceMatchProduct {
+  id: string
+  name: string
+  category: string
+  store_price: number
+  rating: number
+  sku: string
+  tags: string[]
+  description: string
+  competitor: CompetitorPrice | null
+  history: PriceHistoryPoint[]
+  alerts: PriceDropAlert[]
+}
+
+export interface DiscountResult {
+  id: string
+  agent_id: string
+  product_id: string
+  sku: string
+  store_price: number
+  competitor_store: string
+  competitor_price: number
+  discount_amount: number
+  new_price: number
+  status: 'pending' | 'approved' | 'applied' | 'declined'
+  created_at: string
+}
+
+export interface PriceCheckResponse {
+  agent: Agent
+  discount: DiscountResult
+  guardrail?: {
+    input: { allowed: boolean; reason: string; category: string | null }
+    rate: { allowed: boolean; reason: string; category: string | null }
+  }
+}

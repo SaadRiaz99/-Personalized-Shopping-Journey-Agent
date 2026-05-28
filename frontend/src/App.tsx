@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard'
 import Agents from './pages/Agents'
 import CatalogSearch from './pages/CatalogSearch'
 import Deals from './pages/Deals'
+import PriceMatch from './pages/PriceMatch'
 import Products from './pages/Products'
 import Preferences from './pages/Preferences'
 
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="agents" element={<Agents />} />
           <Route path="catalog" element={<CatalogSearch />} />
           <Route path="deals" element={<Deals />} />
+          <Route path="price-match" element={<PriceMatch />} />
           <Route path="products" element={<Products />} />
           <Route path="preferences" element={<Preferences />} />
         </Route>

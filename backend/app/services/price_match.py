@@ -1,5 +1,7 @@
 from app.models import Discount, DiscountStatus
 from typing import Optional
+from datetime import datetime, timedelta
+import random
 import uuid
 
 COMPETITOR_STORES = ["Amazon", "BestBuy", "Walmart", "Target", "eBay"]
@@ -14,6 +16,50 @@ COMPETITOR_PRICES: dict[str, dict[str, float]] = {
     "SKU-BS001": {"Amazon": 54.99, "BestBuy": 49.99, "Walmart": 52.99, "Target": 57.99, "eBay": 45.00},
     "SKU-DL001": {"Amazon": 44.99, "BestBuy": 47.99, "Walmart": 39.99, "Target": 49.99, "eBay": 42.00},
 }
+
+PRICE_HISTORY: dict[str, list[dict]] = {}
+
+def _build_history(sku: str, base: float):
+    if sku in PRICE_HISTORY:
+        return
+    now = datetime.now()
+    history = []
+    for i in range(14, -1, -1):
+        day = now - timedelta(days=i)
+        variance = random.uniform(-0.08, 0.08)
+        price = round(base * (1 + variance), 2)
+        history.append({"date": day.strftime("%Y-%m-%d"), "price": price})
+    PRICE_HISTORY[sku] = history
+
+def get_price_history(sku: str) -> list[dict]:
+    prices = COMPETITOR_PRICES.get(sku)
+    if prices:
+        avg = sum(prices.values()) / len(prices)
+        _build_history(sku, avg)
+    else:
+        _build_history(sku, 100.0)
+    return PRICE_HISTORY.get(sku, [])
+
+def get_price_drop_alerts(sku: str, threshold_pct: float = 5.0) -> list[dict]:
+    history = get_price_history(sku)
+    if len(history) < 2:
+        return []
+    recent = history[-7:]
+    alerts = []
+    for i in range(1, len(recent)):
+        prev_entry = recent[i - 1]
+        curr_entry = recent[i]
+        prev = prev_entry["price"]
+        curr = curr_entry["price"]
+        drop_pct = round((prev - curr) / prev * 100, 2)
+        if drop_pct >= threshold_pct:
+            alerts.append({
+                "date": curr_entry["date"],
+                "from": prev,
+                "to": curr,
+                "drop_pct": drop_pct,
+            })
+    return alerts
 
 SIMULATED_LOWER_PRICE_SKUS = {"SKU-LJ001", "SKU-YM001"}
 

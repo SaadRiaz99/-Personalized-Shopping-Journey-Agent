@@ -1,8 +1,9 @@
-import json
-from agents import function_tool
+import json                           # Convert tool results to JSON strings
+from agents import function_tool       # Decorator to turn a function into an LLM tool
 
-from agent.products import load_products
+from agent.products import load_products  # Loader for the 1M products from JSON
 
+# ── Hardcoded high-quality catalogue (always available) ────────────────────────
 CATALOGUE = [
     {"id": 1, "title": "Dune", "tags": ["sci-fi", "epic"], "rating": 4.8, "category": "Book"},
     {"id": 2, "title": "The Martian", "tags": ["sci-fi", "survival"], "rating": 4.5, "category": "Book"},
@@ -20,20 +21,23 @@ CATALOGUE = [
 
 
 def _all_items() -> list[dict]:
+    """Return hardcoded catalogue + JSON file products merged together."""
     return CATALOGUE + load_products()
 
 
-_MAX_RESULTS = 20
+_MAX_RESULTS = 20  # Cap on how many items any tool returns at once
 
 
 def search_items_fn(query: str) -> str:
-    """Full-text search across item titles and categories."""
+    """Full-text search across item titles, categories, and tags."""
     q = query.lower()
     results = [
         item for item in _all_items()
-        if q in item["title"].lower() or q in item["category"].lower()
+        if q in item["title"].lower()          # Match in title
+        or q in item["category"].lower()        # Match in category name
+        or any(q in t for t in item["tags"])    # Match in any tag
     ]
-    return json.dumps(results[:_MAX_RESULTS])
+    return json.dumps(results[:_MAX_RESULTS])   # Return as JSON, capped at 20
 
 
 def filter_by_tag_fn(tag: str, min_rating: float | None = None) -> str:
@@ -48,10 +52,11 @@ def get_item_details_fn(item_id: int) -> str:
     """Retrieve full details for a specific item by ID."""
     for item in _all_items():
         if item["id"] == item_id:
-            return json.dumps(item)
-    return f"No item found with id {item_id}"
+            return json.dumps(item)             # Return product as JSON
+    return f"No item found with id {item_id}"   # Plain-text error if missing
 
 
-search_items = function_tool(search_items_fn, name_override="search_items", strict_mode=False)
-filter_by_tag = function_tool(filter_by_tag_fn, name_override="filter_by_tag", strict_mode=False)
+# ── Register functions as LLM-callable tools ──────────────────────────────────
+search_items     = function_tool(search_items_fn,     name_override="search_items",     strict_mode=False)
+filter_by_tag    = function_tool(filter_by_tag_fn,    name_override="filter_by_tag",    strict_mode=False)
 get_item_details = function_tool(get_item_details_fn, name_override="get_item_details", strict_mode=False)

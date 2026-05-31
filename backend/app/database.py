@@ -6,11 +6,16 @@ from typing import Optional
 
 from app.models import (
     Agent,
+    AuthUser,
     Discount,
     DiscountStack,
     AppliedDiscount,
+    LoginHistoryEntry,
+    PriceAlertEvent,
     Task,
     UserPrivacyProfile,
+    UserSession,
+    WishlistItem,
 )
 
 DB_PATH = Path(__file__).parents[1] / "agent_store.db"
@@ -80,6 +85,67 @@ def init_db():
                 applied_discounts TEXT NOT NULL,
                 savings_breakdown TEXT NOT NULL DEFAULT '',
                 created_at TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS wishlist_items (
+                id TEXT PRIMARY KEY,
+                user_id TEXT NOT NULL,
+                product_id INTEGER NOT NULL,
+                product_name TEXT NOT NULL,
+                product_price REAL NOT NULL,
+                product_category TEXT NOT NULL,
+                product_image TEXT,
+                note TEXT,
+                price_alert_threshold REAL,
+                created_at TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS price_alerts (
+                id TEXT PRIMARY KEY,
+                wishlist_item_id TEXT NOT NULL,
+                product_id INTEGER NOT NULL,
+                product_name TEXT NOT NULL,
+                current_price REAL NOT NULL,
+                target_price REAL NOT NULL,
+                triggered_at TEXT NOT NULL,
+                notified INTEGER NOT NULL DEFAULT 0
+            );
+
+            CREATE TABLE IF NOT EXISTS users (
+                id TEXT PRIMARY KEY,
+                username TEXT UNIQUE NOT NULL,
+                email TEXT UNIQUE NOT NULL,
+                hashed_password TEXT NOT NULL,
+                role TEXT NOT NULL DEFAULT 'user',
+                disabled INTEGER NOT NULL DEFAULT 0,
+                email_verified INTEGER NOT NULL DEFAULT 0,
+                twofa_enabled INTEGER NOT NULL DEFAULT 0,
+                twofa_secret TEXT,
+                failed_login_attempts INTEGER NOT NULL DEFAULT 0,
+                locked_until TEXT,
+                created_at TEXT NOT NULL,
+                last_login TEXT
+            );
+
+            CREATE TABLE IF NOT EXISTS login_history (
+                id TEXT PRIMARY KEY,
+                user_id TEXT NOT NULL,
+                ip_address TEXT NOT NULL DEFAULT '',
+                device_info TEXT NOT NULL DEFAULT '',
+                success INTEGER NOT NULL DEFAULT 1,
+                fail_reason TEXT,
+                timestamp TEXT NOT NULL
+            );
+
+            CREATE TABLE IF NOT EXISTS user_sessions (
+                id TEXT PRIMARY KEY,
+                user_id TEXT NOT NULL,
+                refresh_token_hash TEXT NOT NULL,
+                device_info TEXT NOT NULL DEFAULT '',
+                ip_address TEXT NOT NULL DEFAULT '',
+                created_at TEXT NOT NULL,
+                last_activity TEXT NOT NULL,
+                is_active INTEGER NOT NULL DEFAULT 1
             );
         """)
 
@@ -284,3 +350,233 @@ def list_stacks(conn) -> list[DiscountStack]:
         )
         for r in rows
     ]
+
+
+# ── Wishlist CRUD ───────────────────────────────────────────
+
+def create_wishlist_item(conn, item: WishlistItem) -> None:
+    conn.execute(
+        "INSERT INTO wishlist_items (id, user_id, product_id, product_name, product_price, product_category, product_image, note, price_alert_threshold, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        (item.id, item.user_id, item.product_id, item.product_name,
+         item.product_price, item.product_category, item.product_image,
+         item.note, item.price_alert_threshold, item.created_at),
+    )
+
+
+def get_wishlist(conn, user_id: str) -> list[WishlistItem]:
+    rows = conn.execute(
+        "SELECT * FROM wishlist_items WHERE user_id = ? ORDER BY created_at DESC", (user_id,)
+    ).fetchall()
+    return [
+        WishlistItem(
+            id=r["id"], user_id=r["user_id"],
+            product_id=r["product_id"], product_name=r["product_name"],
+            product_price=r["product_price"], product_category=r["product_category"],
+            product_image=r["product_image"], note=r["note"],
+            price_alert_threshold=r["price_alert_threshold"],
+            created_at=r["created_at"],
+        )
+        for r in rows
+    ]
+
+
+def delete_wishlist_item(conn, item_id: str) -> bool:
+    cursor = conn.execute("DELETE FROM wishlist_items WHERE id = ?", (item_id,))
+    return cursor.rowcount > 0
+
+
+def update_wishlist_item(conn, item: WishlistItem) -> None:
+    conn.execute(
+        "UPDATE wishlist_items SET note=?, price_alert_threshold=? WHERE id=?",
+        (item.note, item.price_alert_threshold, item.id),
+    )
+
+
+def get_wishlist_item(conn, item_id: str) -> Optional[WishlistItem]:
+    row = conn.execute("SELECT * FROM wishlist_items WHERE id = ?", (item_id,)).fetchone()
+    if row is None:
+        return None
+    return WishlistItem(
+        id=row["id"], user_id=row["user_id"],
+        product_id=row["product_id"], product_name=row["product_name"],
+        product_price=row["product_price"], product_category=row["product_category"],
+        product_image=row["product_image"], note=row["note"],
+        price_alert_threshold=row["price_alert_threshold"],
+        created_at=row["created_at"],
+    )
+
+
+# ── Price Alert CRUD ────────────────────────────────────────
+
+def create_price_alert(conn, alert: PriceAlertEvent) -> None:
+    conn.execute(
+        "INSERT INTO price_alerts (id, wishlist_item_id, product_id, product_name, current_price, target_price, triggered_at, notified) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        (alert.id, alert.wishlist_item_id, alert.product_id,
+         alert.product_name, alert.current_price, alert.target_price,
+         alert.triggered_at, 1 if alert.notified else 0),
+    )
+
+
+def list_price_alerts(conn, user_id: str) -> list[PriceAlertEvent]:
+    rows = conn.execute(
+        """SELECT a.* FROM price_alerts a
+           JOIN wishlist_items w ON a.wishlist_item_id = w.id
+           WHERE w.user_id = ? ORDER BY a.triggered_at DESC""",
+        (user_id,),
+    ).fetchall()
+    return [
+        PriceAlertEvent(
+            id=r["id"], wishlist_item_id=r["wishlist_item_id"],
+            product_id=r["product_id"], product_name=r["product_name"],
+            current_price=r["current_price"], target_price=r["target_price"],
+            triggered_at=r["triggered_at"], notified=bool(r["notified"]),
+        )
+        for r in rows
+    ]
+
+
+# ── Auth CRUD ────────────────────────────────────────────────
+
+def create_user(conn, user: AuthUser) -> None:
+    conn.execute(
+        "INSERT INTO users (id, username, email, hashed_password, role, disabled, email_verified, twofa_enabled, twofa_secret, failed_login_attempts, locked_until, created_at, last_login) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        (user.id, user.username, user.email, user.hashed_password,
+         user.role.value, 1 if user.disabled else 0,
+         1 if user.email_verified else 0, 1 if user.twofa_enabled else 0,
+         user.twofa_secret, user.failed_login_attempts,
+         user.locked_until, user.created_at, user.last_login),
+    )
+
+
+def get_user_by_username(conn, username: str) -> Optional[AuthUser]:
+    row = conn.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
+    if row is None:
+        return None
+    return _row_to_auth_user(row)
+
+
+def get_user_by_id(conn, user_id: str) -> Optional[AuthUser]:
+    row = conn.execute("SELECT * FROM users WHERE id = ?", (user_id,)).fetchone()
+    if row is None:
+        return None
+    return _row_to_auth_user(row)
+
+
+def get_user_by_email(conn, email: str) -> Optional[AuthUser]:
+    row = conn.execute("SELECT * FROM users WHERE email = ?", (email,)).fetchone()
+    if row is None:
+        return None
+    return _row_to_auth_user(row)
+
+
+def _row_to_auth_user(row) -> AuthUser:
+    return AuthUser(
+        id=row["id"], username=row["username"], email=row["email"],
+        hashed_password=row["hashed_password"], role=row["role"],
+        disabled=bool(row["disabled"]),
+        email_verified=bool(row["email_verified"]),
+        twofa_enabled=bool(row["twofa_enabled"]),
+        twofa_secret=row["twofa_secret"],
+        failed_login_attempts=row["failed_login_attempts"],
+        locked_until=row["locked_until"],
+        created_at=row["created_at"], last_login=row["last_login"],
+    )
+
+
+def update_user(conn, user: AuthUser) -> None:
+    conn.execute(
+        "UPDATE users SET hashed_password=?, role=?, disabled=?, email_verified=?, twofa_enabled=?, twofa_secret=?, failed_login_attempts=?, locked_until=?, last_login=? WHERE id=?",
+        (user.hashed_password, user.role.value, 1 if user.disabled else 0,
+         1 if user.email_verified else 0, 1 if user.twofa_enabled else 0,
+         user.twofa_secret, user.failed_login_attempts, user.locked_until,
+         user.last_login, user.id),
+    )
+
+
+def list_users(conn) -> list[AuthUser]:
+    rows = conn.execute("SELECT * FROM users ORDER BY created_at DESC").fetchall()
+    return [_row_to_auth_user(r) for r in rows]
+
+
+# ── Login History CRUD ───────────────────────────────────────
+
+def create_login_history(conn, entry: LoginHistoryEntry) -> None:
+    conn.execute(
+        "INSERT INTO login_history (id, user_id, ip_address, device_info, success, fail_reason, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        (entry.id, entry.user_id, entry.ip_address, entry.device_info,
+         1 if entry.success else 0, entry.fail_reason, entry.timestamp),
+    )
+
+
+def get_login_history(conn, user_id: str, limit: int = 50) -> list[LoginHistoryEntry]:
+    rows = conn.execute(
+        "SELECT * FROM login_history WHERE user_id = ? ORDER BY timestamp DESC LIMIT ?",
+        (user_id, limit),
+    ).fetchall()
+    return [
+        LoginHistoryEntry(
+            id=r["id"], user_id=r["user_id"],
+            ip_address=r["ip_address"], device_info=r["device_info"],
+            success=bool(r["success"]), fail_reason=r["fail_reason"],
+            timestamp=r["timestamp"],
+        )
+        for r in rows
+    ]
+
+
+# ── Session CRUD ─────────────────────────────────────────────
+
+def create_session(conn, session: UserSession) -> None:
+    conn.execute(
+        "INSERT INTO user_sessions (id, user_id, refresh_token_hash, device_info, ip_address, created_at, last_activity, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        (session.id, session.user_id, session.refresh_token_hash,
+         session.device_info, session.ip_address,
+         session.created_at, session.last_activity,
+         1 if session.is_active else 0),
+    )
+
+
+def get_user_sessions(conn, user_id: str) -> list[UserSession]:
+    rows = conn.execute(
+        "SELECT * FROM user_sessions WHERE user_id = ? AND is_active = 1 ORDER BY last_activity DESC",
+        (user_id,),
+    ).fetchall()
+    return [
+        UserSession(
+            id=r["id"], user_id=r["user_id"],
+            refresh_token_hash=r["refresh_token_hash"],
+            device_info=r["device_info"], ip_address=r["ip_address"],
+            created_at=r["created_at"], last_activity=r["last_activity"],
+            is_active=bool(r["is_active"]),
+        )
+        for r in rows
+    ]
+
+
+def get_session_by_refresh_hash(conn, hash_val: str) -> Optional[UserSession]:
+    row = conn.execute(
+        "SELECT * FROM user_sessions WHERE refresh_token_hash = ? AND is_active = 1",
+        (hash_val,),
+    ).fetchone()
+    if row is None:
+        return None
+    return UserSession(
+        id=row["id"], user_id=row["user_id"],
+        refresh_token_hash=row["refresh_token_hash"],
+        device_info=row["device_info"], ip_address=row["ip_address"],
+        created_at=row["created_at"], last_activity=row["last_activity"],
+        is_active=bool(row["is_active"]),
+    )
+
+
+def deactivate_session(conn, session_id: str) -> bool:
+    cursor = conn.execute(
+        "UPDATE user_sessions SET is_active = 0 WHERE id = ?", (session_id,)
+    )
+    return cursor.rowcount > 0
+
+
+def deactivate_all_user_sessions(conn, user_id: str) -> None:
+    conn.execute(
+        "UPDATE user_sessions SET is_active = 0 WHERE user_id = ?", (user_id,)
+    )

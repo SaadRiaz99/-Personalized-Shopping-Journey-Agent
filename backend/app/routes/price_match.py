@@ -3,7 +3,7 @@ from app.models import Agent, Discount, PriceMatchRequest
 from app.services.agent_orchestrator import orchestrator
 from app.services.price_match import price_match_agent, get_price_history, get_price_drop_alerts
 from app.services.price_guardrail import price_guardrail
-from app.services.recommendation import SAMPLE_PRODUCTS
+from shared.products import ALL_PRODUCTS as CATALOG_PRODUCTS
 
 router = APIRouter(prefix="/api/price-match", tags=["price_match"])
 
@@ -11,23 +11,23 @@ router = APIRouter(prefix="/api/price-match", tags=["price_match"])
 @router.get("/products", response_model=list[dict])
 async def list_price_match_products():
     products = []
-    for p in SAMPLE_PRODUCTS:
-        if p.sku:
-            from app.services.price_match import fetch_competitor_price
-            comp = fetch_competitor_price(p.sku)
-            products.append({
-                "id": p.id,
-                "name": p.name,
-                "category": p.category,
-                "store_price": p.price,
-                "rating": p.rating,
-                "sku": p.sku,
-                "tags": p.tags,
-                "description": p.description,
-                "competitor": comp if "error" not in comp else None,
-                "history": get_price_history(p.sku),
-                "alerts": get_price_drop_alerts(p.sku),
-            })
+    for p in CATALOG_PRODUCTS[:20]:
+        sku = f"SKU-{p['id']:04d}"
+        from app.services.price_match import fetch_competitor_price
+        comp = fetch_competitor_price(sku)
+        products.append({
+            "id": str(p["id"]),
+            "name": p["name"],
+            "category": p["category"],
+            "store_price": p["price"],
+            "rating": p.get("rating", 0),
+            "sku": sku,
+            "tags": [p["category"].lower()],
+            "description": p.get("description", ""),
+            "competitor": comp if "error" not in comp else None,
+            "history": get_price_history(sku),
+            "alerts": get_price_drop_alerts(sku),
+        })
     return products
 
 
@@ -45,13 +45,13 @@ async def check_price_match(body: PriceMatchRequest, x_user_id: str = Header("de
     if not rate_check.allowed:
         return {"error": True, "guardrail": rate_check.__dict__, "discount": None}
 
-    product = next((p for p in SAMPLE_PRODUCTS if p.id == body.product_id), None)
+    product = next((p for p in CATALOG_PRODUCTS if str(p["id"]) == body.product_id), None)
     if not product:
         raise HTTPException(404, "Product not found")
 
     agent = orchestrator.create_agent(
         name="PriceMatchAgent",
-        task=f"Check competitor prices for {product.name} ({body.sku})",
+        task=f"Check competitor prices for {product['name']} ({body.sku})",
     )
 
     discount = price_match_agent.check_price(body.sku, body.current_price, body.product_id, agent.id)
@@ -121,9 +121,9 @@ async def price_history(sku: str):
 @router.get("/alerts", response_model=list[dict])
 async def price_alerts(threshold: float = Query(5.0, description="Minimum price drop % to alert")):
     alerts = []
-    for p in SAMPLE_PRODUCTS:
-        if p.sku:
-            pa = get_price_drop_alerts(p.sku, threshold)
-            if pa:
-                alerts.append({"product_id": p.id, "product_name": p.name, "sku": p.sku, "alerts": pa})
+    for p in CATALOG_PRODUCTS[:20]:
+        sku = f"SKU-{p['id']:04d}"
+        pa = get_price_drop_alerts(sku, threshold)
+        if pa:
+            alerts.append({"product_id": str(p["id"]), "product_name": p["name"], "sku": sku, "alerts": pa})
     return alerts

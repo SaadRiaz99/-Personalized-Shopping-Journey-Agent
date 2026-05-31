@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Query
 from app.models import Product
-from app.services.recommendation import get_recommendations, search_products, SAMPLE_PRODUCTS
+from app.services.recommendation import search_products, SAMPLE_PRODUCTS
+from shared.products import search_products as catalog_search
 
 router = APIRouter(prefix="/api/products", tags=["products"])
 

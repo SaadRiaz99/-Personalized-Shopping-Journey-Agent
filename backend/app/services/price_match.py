@@ -1,3 +1,10 @@
+from app.database import (
+    create_discount as db_create_discount,
+    get_db,
+    get_discount as db_get_discount,
+    list_discounts as db_list_discounts,
+    update_discount as db_update_discount,
+)
 from app.models import Discount, DiscountStatus
 from typing import Optional
 from datetime import datetime, timedelta
@@ -6,15 +13,16 @@ import uuid
 
 COMPETITOR_STORES = ["Amazon", "BestBuy", "Walmart", "Target", "eBay"]
 
+from shared.products import ALL_PRODUCTS
+
+_COMPETITOR_SKUS = [f"SKU-{p['id']:04d}" for p in ALL_PRODUCTS[:20]]
+
 COMPETITOR_PRICES: dict[str, dict[str, float]] = {
-    "SKU-WH001": {"Amazon": 239.99, "BestBuy": 219.99, "Walmart": 229.99, "Target": 244.99, "eBay": 210.00},
-    "SKU-RS001": {"Amazon": 119.99, "BestBuy": 124.99, "Walmart": 109.99, "Target": 129.99, "eBay": 115.00},
-    "SKU-CM001": {"Amazon": 74.99, "BestBuy": 69.99, "Walmart": 64.99, "Target": 79.99, "eBay": 60.00},
-    "SKU-SW001": {"Amazon": 189.99, "BestBuy": 179.99, "Walmart": 199.99, "Target": 194.99, "eBay": 175.00},
-    "SKU-LJ001": {"Amazon": 329.99, "BestBuy": 349.99, "Walmart": 319.99, "Target": 339.99, "eBay": 300.00},
-    "SKU-YM001": {"Amazon": 34.99, "BestBuy": 39.99, "Walmart": 29.99, "Target": 36.99, "eBay": 25.00},
-    "SKU-BS001": {"Amazon": 54.99, "BestBuy": 49.99, "Walmart": 52.99, "Target": 57.99, "eBay": 45.00},
-    "SKU-DL001": {"Amazon": 44.99, "BestBuy": 47.99, "Walmart": 39.99, "Target": 49.99, "eBay": 42.00},
+    sku: {
+        store: round(base * (1 + random.uniform(-0.15, 0.05)), 2)
+        for store in ["Amazon", "BestBuy", "Walmart", "Target", "eBay"]
+    }
+    for sku, base in zip(_COMPETITOR_SKUS, [p["price"] for p in ALL_PRODUCTS[:20]])
 }
 
 PRICE_HISTORY: dict[str, list[dict]] = {}
@@ -61,7 +69,7 @@ def get_price_drop_alerts(sku: str, threshold_pct: float = 5.0) -> list[dict]:
             })
     return alerts
 
-SIMULATED_LOWER_PRICE_SKUS = {"SKU-LJ001", "SKU-YM001"}
+SIMULATED_LOWER_PRICE_SKUS = set(_COMPETITOR_SKUS[:5])
 
 
 def fetch_competitor_price(sku: str, store: Optional[str] = None) -> dict:
@@ -114,12 +122,12 @@ def authorize_price_match(current_price: float, competitor_price: float) -> dict
 
 class PriceMatchAgent:
     def __init__(self):
-        self.discounts: dict[str, Discount] = {}
+        pass
 
     def check_price(self, sku: str, current_price: float, product_id: str, agent_id: str) -> Discount:
         comp_result = fetch_competitor_price(sku)
         if "error" in comp_result:
-            return Discount(
+            discount = Discount(
                 id=str(uuid.uuid4())[:8],
                 agent_id=agent_id,
                 product_id=product_id,
@@ -131,6 +139,9 @@ class PriceMatchAgent:
                 new_price=current_price,
                 status=DiscountStatus.declined,
             )
+            with get_db() as conn:
+                db_create_discount(conn, discount)
+            return discount
 
         auth_result = authorize_price_match(current_price, comp_result["price"])
 
@@ -147,21 +158,26 @@ class PriceMatchAgent:
             new_price=auth_result.get("new_price", current_price),
             status=status,
         )
-        self.discounts[discount.id] = discount
+        with get_db() as conn:
+            db_create_discount(conn, discount)
         return discount
 
     def get_discount(self, discount_id: str) -> Optional[Discount]:
-        return self.discounts.get(discount_id)
+        with get_db() as conn:
+            return db_get_discount(conn, discount_id)
 
     def list_discounts(self) -> list[Discount]:
-        return list(self.discounts.values())
+        with get_db() as conn:
+            return db_list_discounts(conn)
 
     def apply_discount(self, discount_id: str) -> Optional[Discount]:
-        discount = self.discounts.get(discount_id)
-        if discount and discount.status == DiscountStatus.approved:
-            discount.status = DiscountStatus.applied
-            return discount
-        return None
+        with get_db() as conn:
+            discount = db_get_discount(conn, discount_id)
+            if discount and discount.status == DiscountStatus.approved:
+                discount.status = DiscountStatus.applied
+                db_update_discount(conn, discount)
+                return discount
+            return None
 
 
 price_match_agent = PriceMatchAgent()

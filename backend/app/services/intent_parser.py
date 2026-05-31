@@ -80,7 +80,7 @@ def _rule_based_fallback(query: str) -> QueryIntent:
     q = query.lower()
 
     categories = {
-        "electronics": ["electronics", "gadget", "phone", "laptop", "computer", "tablet", "headphone", "speaker", "tv", "camera", "smartwatch"],
+        "electronics": ["electronics", "gadget", "phone", "laptop", "computer", "tablet", "headphone", "speaker", "tv", "camera", "smartwatch", "monitor", "keyboard", "mouse", "printer", "router"],
         "clothing": ["clothing", "clothes", "dress", "shirt", "pants", "jeans", "jacket", "coat", "sweater", "hoodie", "t-shirt", "outfit", "wear", "apparel", "fashion"],
         "footwear": ["shoes", "sneakers", "boots", "sandals", "footwear"],
         "accessories": ["accessories", "watch", "belt", "bag", "wallet", "jewelry", "necklace", "ring", "bracelet", "earrings", "sunglasses"],

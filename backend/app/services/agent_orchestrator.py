@@ -266,13 +266,31 @@ class AgentOrchestrator:
         await self._notify("agent_update", researcher.model_dump())
         
         intent = await parse_intent(query)
+        # Extract key search terms from the query (remove filler words and price terms)
+        filler = {"find", "me", "a", "an", "the", "for", "under", "good", "nice", "need", "i", "want", "some", "with", "and", "or", "budget", "around", "about", "get", "please", "can", "you", "help", "looking"}
+        search_terms = " ".join(
+            w for w in query.lower().split()
+            if w not in filler
+            and not w.startswith("$")
+            and not w.replace(".","").replace(",","").isdigit()
+        )
         cat_search = catalog_search_products(
-            query=query, 
+            query=search_terms, 
             category=intent.category, 
             max_price=intent.budget,
             page_size=5
         )
         products = cat_search["products"]
+        # Fallback: if text search yields nothing, search by category only
+        if not products and intent.category:
+            cat_search = catalog_search_products(
+                query="",
+                category=intent.category,
+                max_price=intent.budget,
+                sort_by="rating",
+                page_size=5
+            )
+            products = cat_search["products"]
         researcher.status = AgentStatus.completed
         with get_db() as conn:
             db_update_agent(conn, researcher)

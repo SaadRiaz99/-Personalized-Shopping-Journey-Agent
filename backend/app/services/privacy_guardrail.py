@@ -5,6 +5,12 @@ from typing import Optional
 
 import httpx
 
+from app.database import (
+    delete_privacy_profile,
+    get_db,
+    get_privacy_profile,
+    upsert_privacy_profile,
+)
 from app.models import (
     GuardrailAction,
     GuardrailResult,
@@ -170,29 +176,35 @@ def _rule_based_agent_access(agent_name: str, data_fields: list[str], profile: U
 
 class PrivacyGuardrailService:
     def __init__(self):
-        self._profiles: dict[str, UserPrivacyProfile] = {}
+        pass
 
     def get_or_create_profile(self, user_id: str) -> UserPrivacyProfile:
-        if user_id not in self._profiles:
-            self._profiles[user_id] = UserPrivacyProfile()
-        return self._profiles[user_id]
+        with get_db() as conn:
+            profile = get_privacy_profile(conn, user_id)
+            if profile is None:
+                profile = UserPrivacyProfile()
+                upsert_privacy_profile(conn, user_id, profile)
+            return profile
 
     def update_profile(self, user_id: str, profile: UserPrivacyProfile) -> UserPrivacyProfile:
-        self._profiles[user_id] = profile
-        return self._profiles[user_id]
+        with get_db() as conn:
+            upsert_privacy_profile(conn, user_id, profile)
+            return profile
 
     def delete_profile(self, user_id: str) -> bool:
-        return bool(self._profiles.pop(user_id, None))
+        with get_db() as conn:
+            return delete_privacy_profile(conn, user_id)
 
     def export_profile(self, user_id: str) -> Optional[dict]:
-        profile = self._profiles.get(user_id)
-        if not profile:
-            return None
-        return {
-            "user_id": user_id,
-            "profile": profile.model_dump(),
-            "exported_at": __import__("datetime").datetime.now().isoformat(),
-        }
+        with get_db() as conn:
+            profile = get_privacy_profile(conn, user_id)
+            if not profile:
+                return None
+            return {
+                "user_id": user_id,
+                "profile": profile.model_dump(),
+                "exported_at": __import__("datetime").datetime.now().isoformat(),
+            }
 
     async def check_input(self, text: str, user_id: str = "default") -> GuardrailResult:
         if not GUARDRAIL_ENABLED:
@@ -334,19 +346,23 @@ class PrivacyGuardrailService:
         return self.delete_profile(user_id)
 
     def update_consent(self, user_id: str, consents: PrivacyConsent) -> Optional[UserPrivacyProfile]:
-        profile = self._profiles.get(user_id)
-        if not profile:
-            return None
-        profile.consents = consents
-        return profile
+        with get_db() as conn:
+            profile = get_privacy_profile(conn, user_id)
+            if not profile:
+                return None
+            profile.consents = consents
+            upsert_privacy_profile(conn, user_id, profile)
+            return profile
 
     def opt_out_of_sale(self, user_id: str) -> Optional[UserPrivacyProfile]:
-        profile = self._profiles.get(user_id)
-        if not profile:
-            return None
-        profile.opted_out_of_sale = True
-        profile.consents.third_party_sharing = False
-        return profile
+        with get_db() as conn:
+            profile = get_privacy_profile(conn, user_id)
+            if not profile:
+                return None
+            profile.opted_out_of_sale = True
+            profile.consents.third_party_sharing = False
+            upsert_privacy_profile(conn, user_id, profile)
+            return profile
 
 
 privacy_guardrail = PrivacyGuardrailService()

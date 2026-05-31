@@ -2,6 +2,12 @@ import uuid
 from datetime import datetime
 from typing import Optional
 
+from app.database import (
+    create_stack as db_create_stack,
+    get_db,
+    get_stack as db_get_stack,
+    list_stacks as db_list_stacks,
+)
 from app.models import (
     AppliedDiscount,
     CartSession,
@@ -143,7 +149,6 @@ def _seed_promotions() -> list[Promotion]:
 class DealAgent:
     def __init__(self):
         self.promotions: list[Promotion] = _seed_promotions()
-        self.applied_stacks: dict[str, DiscountStack] = {}
 
     def get_active_promotions(self) -> list[Promotion]:
         return [p for p in self.promotions if p.active]
@@ -262,20 +267,21 @@ class DealAgent:
             savings_breakdown=savings_breakdown,
         )
 
-        self.applied_stacks[stack.id] = stack
+        with get_db() as conn:
+            db_create_stack(conn, stack)
         return stack
 
     def apply_stack(self, stack_id: str) -> Optional[DiscountStack]:
-        stack = self.applied_stacks.get(stack_id)
-        if stack:
-            return stack
-        return None
+        with get_db() as conn:
+            return db_get_stack(conn, stack_id)
 
     def get_stack(self, stack_id: str) -> Optional[DiscountStack]:
-        return self.applied_stacks.get(stack_id)
+        with get_db() as conn:
+            return db_get_stack(conn, stack_id)
 
     def list_stacks(self) -> list[DiscountStack]:
-        return list(self.applied_stacks.values())
+        with get_db() as conn:
+            return db_list_stacks(conn)
 
     def process_cart(self, request: DealSessionRequest) -> dict:
         cart = CartSession(

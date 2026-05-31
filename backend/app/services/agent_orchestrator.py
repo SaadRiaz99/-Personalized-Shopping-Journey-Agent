@@ -1,8 +1,18 @@
+from app.database import (
+    create_agent as db_create_agent,
+    create_task as db_create_task,
+    delete_agent as db_delete_agent,
+    get_agent as db_get_agent,
+    get_db,
+    list_agents as db_list_agents,
+    list_tasks as db_list_tasks,
+    update_agent as db_update_agent,
+)
 from app.models import Agent, AgentStatus, PrivacyRegion, QueryIntent, Task, TaskStatus
 from app.services.intent_parser import parse_intent
 from app.services.price_match import price_match_agent as pm_agent
 from app.services.privacy_guardrail import privacy_guardrail
-from app.services.recommendation import get_recommendations, search_products, SAMPLE_PRODUCTS
+from app.services.recommendation import get_recommendations, search_products
 from app.services.safety_guardrail import check_safety as check_safety_guardrail
 from app.services.catalog_search import search_products as catalog_search_products, get_product as catalog_get_product, list_categories as catalog_list_categories
 from datetime import datetime
@@ -13,8 +23,6 @@ import uuid
 
 class AgentOrchestrator:
     def __init__(self):
-        self.agents: dict[str, Agent] = {}
-        self.tasks: dict[str, Task] = {}
         self._callbacks: list = []
 
     def on_event(self, callback):
@@ -30,42 +38,47 @@ class AgentOrchestrator:
             name=name,
             task=task,
         )
-        self.agents[agent.id] = agent
+        with get_db() as conn:
+            db_create_agent(conn, agent)
         return agent
 
     def get_agent(self, agent_id: str) -> Optional[Agent]:
-        return self.agents.get(agent_id)
+        with get_db() as conn:
+            return db_get_agent(conn, agent_id)
 
     def list_agents(self) -> list[Agent]:
-        return list(self.agents.values())
+        with get_db() as conn:
+            return db_list_agents(conn)
 
     def delete_agent(self, agent_id: str) -> bool:
-        if agent_id in self.agents:
-            del self.agents[agent_id]
-            return True
-        return False
+        with get_db() as conn:
+            return db_delete_agent(conn, agent_id)
 
     def create_task(self, agent_id: str, task_type: str) -> Optional[Task]:
-        agent = self.agents.get(agent_id)
-        if not agent:
-            return None
-        task = Task(
-            id=str(uuid.uuid4())[:8],
-            agent_id=agent_id,
-            type=task_type,
-        )
-        self.tasks[task.id] = task
-        return task
+        with get_db() as conn:
+            agent = db_get_agent(conn, agent_id)
+            if not agent:
+                return None
+            task = Task(
+                id=str(uuid.uuid4())[:8],
+                agent_id=agent_id,
+                type=task_type,
+            )
+            db_create_task(conn, task)
+            return task
 
     def list_tasks(self) -> list[Task]:
-        return list(self.tasks.values())
+        with get_db() as conn:
+            return db_list_tasks(conn)
 
     async def run_agent(self, agent_id: str, user_id: str = "default") -> Optional[dict]:
-        agent = self.agents.get(agent_id)
-        if not agent:
-            return None
-        agent.status = AgentStatus.running
-        agent.updated_at = datetime.now()
+        with get_db() as conn:
+            agent = db_get_agent(conn, agent_id)
+            if not agent:
+                return None
+            agent.status = AgentStatus.running
+            agent.updated_at = datetime.now()
+            db_update_agent(conn, agent)
         await self._notify("agent_update", agent.model_dump())
 
         query = agent.task or ""
@@ -88,6 +101,8 @@ class AgentOrchestrator:
             }
             agent.status = AgentStatus.error
             agent.updated_at = datetime.now()
+            with get_db() as conn:
+                db_update_agent(conn, agent)
             await self._notify("agent_update", agent.model_dump())
             await self._notify("agent_result", result)
             return result
@@ -109,6 +124,8 @@ class AgentOrchestrator:
             }
             agent.status = AgentStatus.error
             agent.updated_at = datetime.now()
+            with get_db() as conn:
+                db_update_agent(conn, agent)
             await self._notify("agent_update", agent.model_dump())
             await self._notify("agent_result", result)
             return result
@@ -161,37 +178,45 @@ class AgentOrchestrator:
 
         agent.status = AgentStatus.completed
         agent.updated_at = datetime.now()
+        with get_db() as conn:
+            db_update_agent(conn, agent)
         await self._notify("agent_update", agent.model_dump())
         await self._notify("agent_result", result)
 
         return result
 
     async def run_price_match(self, agent_id: str, product_id: str, sku: str) -> Optional[dict]:
-        agent = self.agents.get(agent_id)
-        if not agent:
-            return None
+        from shared.products import ALL_PRODUCTS as CATALOG
 
-        agent.status = AgentStatus.running
-        agent.updated_at = datetime.now()
+        with get_db() as conn:
+            agent = db_get_agent(conn, agent_id)
+            if not agent:
+                return None
+
+            agent.status = AgentStatus.running
+            agent.updated_at = datetime.now()
+            db_update_agent(conn, agent)
         await self._notify("agent_update", agent.model_dump())
 
-        product = next((p for p in SAMPLE_PRODUCTS if p.id == product_id), None)
+        product = next((p for p in CATALOG if str(p["id"]) == product_id), None)
         if not product:
             result = {"agent_id": agent_id, "status": "error", "message": f"Product {product_id} not found"}
             agent.status = AgentStatus.error
             agent.updated_at = datetime.now()
+            with get_db() as conn:
+                db_update_agent(conn, agent)
             await self._notify("agent_update", agent.model_dump())
             await self._notify("agent_result", result)
             return result
 
         await asyncio.sleep(1)
 
-        discount = pm_agent.check_price(sku, product.price, product_id, agent_id)
+        discount = pm_agent.check_price(sku, product["price"], product_id, agent_id)
 
         await self._notify("price_check", {
             "product_id": product_id,
             "sku": sku,
-            "store_price": product.price,
+            "store_price": product["price"],
             "competitor_store": discount.competitor_store,
             "competitor_price": discount.competitor_price,
             "discount_amount": discount.discount_amount,
@@ -201,13 +226,15 @@ class AgentOrchestrator:
         result = {
             "agent_id": agent_id,
             "status": "completed",
-            "message": f"Price match check complete for {product.name}",
-            "product": product.model_dump(),
+            "message": f"Price match check complete for {product['name']}",
+            "product": product,
             "discount": discount.model_dump(),
         }
 
         agent.status = AgentStatus.completed
         agent.updated_at = datetime.now()
+        with get_db() as conn:
+            db_update_agent(conn, agent)
         await self._notify("agent_update", agent.model_dump())
         await self._notify("agent_result", result)
 
@@ -234,6 +261,8 @@ class AgentOrchestrator:
         # 1. Researcher Agent: Parse Intent & Search Catalog
         researcher = self.create_agent(f"Researcher-{collaboration_id}", task=query)
         researcher.status = AgentStatus.running
+        with get_db() as conn:
+            db_update_agent(conn, researcher)
         await self._notify("agent_update", researcher.model_dump())
         
         intent = await parse_intent(query)
@@ -245,12 +274,16 @@ class AgentOrchestrator:
         )
         products = cat_search["products"]
         researcher.status = AgentStatus.completed
+        with get_db() as conn:
+            db_update_agent(conn, researcher)
         await self._notify("agent_update", researcher.model_dump())
         await self._notify("collaboration_step", {"step": "research", "agent": researcher.name, "found": len(products)})
 
         # 2. Auditor Agent: Price Match Check
         auditor = self.create_agent(f"Auditor-{collaboration_id}", task="Price audit")
         auditor.status = AgentStatus.running
+        with get_db() as conn:
+            db_update_agent(conn, auditor)
         await self._notify("agent_update", auditor.model_dump())
         
         audited_products = []
@@ -265,12 +298,16 @@ class AgentOrchestrator:
                 audited_products.append(p)
         
         auditor.status = AgentStatus.completed
+        with get_db() as conn:
+            db_update_agent(conn, auditor)
         await self._notify("agent_update", auditor.model_dump())
         await self._notify("collaboration_step", {"step": "audit", "agent": auditor.name, "processed": len(audited_products)})
 
         # 3. Stylist Agent: Finalize and Personalize (Simulation)
         stylist = self.create_agent(f"Stylist-{collaboration_id}", task="Personalization")
         stylist.status = AgentStatus.running
+        with get_db() as conn:
+            db_update_agent(conn, stylist)
         await self._notify("agent_update", stylist.model_dump())
         
         # Sort by combination of rating and price match availability
@@ -281,6 +318,8 @@ class AgentOrchestrator:
         )
 
         stylist.status = AgentStatus.completed
+        with get_db() as conn:
+            db_update_agent(conn, stylist)
         await self._notify("agent_update", stylist.model_dump())
         
         result = {

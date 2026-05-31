@@ -274,3 +274,141 @@ class DealSessionRequest(BaseModel):
     loyalty_tier: LoyaltyTier = LoyaltyTier.bronze
     budget: Optional[float] = None
     opted_out: bool = False
+
+
+# ── Gift Finder Models ──────────────────────────────────────
+
+class GiftRecipient(BaseModel):
+    occasion: str = ""
+    relationship: str = ""
+    age_group: str = ""
+    interests: list[str] = []
+    budget: Optional[float] = None
+    gender_preference: Optional[str] = None
+
+
+class GiftRecommendation(BaseModel):
+    product: dict
+    relevance_score: float
+    match_reasons: list[str]
+
+
+class GiftFinderResult(BaseModel):
+    recipient: GiftRecipient
+    recommendations: list[GiftRecommendation]
+    total_found: int
+    summary: str
+
+
+# ── Cross-sell / Upsell Models ──────────────────────────────
+
+class CrossSellItem(BaseModel):
+    product: dict
+    type: str  # "complementary" | "upsell" | "accessory"
+    reason: str
+    match_score: float
+
+
+class CrossSellResult(BaseModel):
+    source_product: dict
+    recommendations: list[CrossSellItem]
+    cart_context: list[dict] = []
+
+
+class WishlistItem(BaseModel):
+    id: str
+    user_id: str
+    product_id: int
+    product_name: str
+    product_price: float
+    product_category: str
+    product_image: Optional[str] = None
+    note: Optional[str] = None
+    price_alert_threshold: Optional[float] = None
+    created_at: str = ""
+
+
+class PriceAlertEvent(BaseModel):
+    id: str
+    wishlist_item_id: str
+    product_id: int
+    product_name: str
+    current_price: float
+    target_price: float
+    triggered_at: str
+    notified: bool = False
+
+
+# ── Advanced Auth Models ─────────────────────────────────────
+
+class UserRole(str, Enum):
+    admin = "admin"
+    premium = "premium"
+    user = "user"
+
+
+class AuthUser(BaseModel):
+    id: str
+    username: str
+    email: str
+    hashed_password: str
+    role: UserRole = UserRole.user
+    disabled: bool = False
+    email_verified: bool = False
+    twofa_enabled: bool = False
+    twofa_secret: Optional[str] = None
+    failed_login_attempts: int = 0
+    locked_until: Optional[str] = None
+    created_at: str = ""
+    last_login: Optional[str] = None
+
+
+class RegisterRequest(BaseModel):
+    username: str = Field(..., min_length=3, max_length=32)
+    email: str = Field(..., min_length=5, max_length=128)
+    password: str = Field(..., min_length=8, max_length=128)
+
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+    twofa_code: Optional[str] = None
+    device_info: Optional[str] = None
+
+
+class TokenResponse(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"
+    expires_in: int
+    user: dict
+
+
+class RefreshRequest(BaseModel):
+    refresh_token: str
+
+
+class ChangePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str
+
+
+class LoginHistoryEntry(BaseModel):
+    id: str
+    user_id: str
+    ip_address: str
+    device_info: str
+    success: bool
+    fail_reason: Optional[str] = None
+    timestamp: str
+
+
+class UserSession(BaseModel):
+    id: str
+    user_id: str
+    refresh_token_hash: str
+    device_info: str
+    ip_address: str
+    created_at: str
+    last_activity: str
+    is_active: bool = True

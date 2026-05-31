@@ -16,6 +16,8 @@ venv/
 .env
 err.log
 out.log
+*_err.log
+*_out.log
 
 # IDEs
 .vscode/

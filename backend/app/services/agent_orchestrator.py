@@ -8,13 +8,19 @@ from app.database import (
     list_tasks as db_list_tasks,
     update_agent as db_update_agent,
 )
-from app.models import Agent, AgentStatus, PrivacyRegion, QueryIntent, Task, TaskStatus
+from app.models import (
+    Agent, AgentStatus, PrivacyRegion, QueryIntent, Task, TaskStatus,
+    GiftRecipient, GiftFinderResult,
+    CrossSellResult,
+)
 from app.services.intent_parser import parse_intent
 from app.services.price_match import price_match_agent as pm_agent
 from app.services.privacy_guardrail import privacy_guardrail
 from app.services.recommendation import get_recommendations, search_products
 from app.services.safety_guardrail import check_safety as check_safety_guardrail
 from app.services.catalog_search import search_products as catalog_search_products, get_product as catalog_get_product, list_categories as catalog_list_categories
+from app.services.gift_finder import find_gifts
+from app.services.cross_sell import get_cross_sell
 from datetime import datetime
 from typing import Optional
 import asyncio
@@ -238,6 +244,60 @@ class AgentOrchestrator:
         await self._notify("agent_update", agent.model_dump())
         await self._notify("agent_result", result)
 
+        return result
+
+    async def run_gift_finder(self, agent_id: str, recipient: GiftRecipient) -> Optional[dict]:
+        with get_db() as conn:
+            agent = db_get_agent(conn, agent_id)
+            if not agent:
+                return None
+            agent.status = AgentStatus.running
+            agent.updated_at = datetime.now()
+            db_update_agent(conn, agent)
+        await self._notify("agent_update", agent.model_dump())
+
+        result_data = find_gifts(recipient)
+
+        result = {
+            "agent_id": agent_id,
+            "status": "completed",
+            "message": f"Gift finder complete — found {result_data.total_found} ideas",
+            "gift_result": result_data.model_dump(),
+        }
+
+        agent.status = AgentStatus.completed
+        agent.updated_at = datetime.now()
+        with get_db() as conn:
+            db_update_agent(conn, agent)
+        await self._notify("agent_update", agent.model_dump())
+        await self._notify("agent_result", result)
+        return result
+
+    async def run_cross_sell_agent(self, agent_id: str, product_id: int) -> Optional[dict]:
+        with get_db() as conn:
+            agent = db_get_agent(conn, agent_id)
+            if not agent:
+                return None
+            agent.status = AgentStatus.running
+            agent.updated_at = datetime.now()
+            db_update_agent(conn, agent)
+        await self._notify("agent_update", agent.model_dump())
+
+        result_data = get_cross_sell(product_id)
+
+        result = {
+            "agent_id": agent_id,
+            "status": "completed",
+            "message": f"Cross-sell analysis complete — found {len(result_data.recommendations)} recommendations",
+            "cross_sell_result": result_data.model_dump(),
+        }
+
+        agent.status = AgentStatus.completed
+        agent.updated_at = datetime.now()
+        with get_db() as conn:
+            db_update_agent(conn, agent)
+        await self._notify("agent_update", agent.model_dump())
+        await self._notify("agent_result", result)
         return result
 
     async def run_collaborative_task(self, query: str, user_id: str = "default") -> dict:

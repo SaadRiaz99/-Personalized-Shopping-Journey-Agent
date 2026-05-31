@@ -168,6 +168,59 @@ export interface DiscountResult {
   created_at: string
 }
 
+// Advanced Auth
+export type UserRole = 'admin' | 'premium' | 'user'
+
+export interface AuthUser {
+  id: string
+  username: string
+  email: string
+  role: UserRole
+  email_verified: boolean
+  twofa_enabled: boolean
+}
+
+export interface TokenResponse {
+  access_token: string
+  refresh_token: string
+  token_type: string
+  expires_in: number
+  user: AuthUser
+}
+
+export interface LoginRequest {
+  username: string
+  password: string
+  twofa_code?: string
+  device_info?: string
+}
+
+export interface RegisterRequest {
+  username: string
+  email: string
+  password: string
+}
+
+export interface LoginHistoryEntry {
+  id: string
+  user_id: string
+  ip_address: string
+  device_info: string
+  success: boolean
+  fail_reason: string | null
+  timestamp: string
+}
+
+export interface UserSession {
+  id: string
+  user_id: string
+  device_info: string
+  ip_address: string
+  created_at: string
+  last_activity: string
+  is_active: boolean
+}
+
 export interface PriceCheckResponse {
   agent: Agent
   discount: DiscountResult
@@ -175,4 +228,66 @@ export interface PriceCheckResponse {
     input: { allowed: boolean; reason: string; category: string | null }
     rate: { allowed: boolean; reason: string; category: string | null }
   }
+}
+
+// Gift Finder
+export interface GiftRecipient {
+  occasion: string
+  relationship: string
+  age_group: string
+  interests: string[]
+  budget?: number
+  gender_preference?: string
+}
+
+export interface GiftRecommendation {
+  product: Record<string, unknown>
+  relevance_score: number
+  match_reasons: string[]
+}
+
+export interface GiftFinderResult {
+  recipient: GiftRecipient
+  recommendations: GiftRecommendation[]
+  total_found: number
+  summary: string
+}
+
+// Cross-sell / Upsell
+export interface CrossSellItem {
+  product: Record<string, unknown>
+  type: 'complementary' | 'upsell' | 'accessory'
+  reason: string
+  match_score: number
+}
+
+export interface CrossSellResult {
+  source_product: Record<string, unknown>
+  recommendations: CrossSellItem[]
+  cart_context: Record<string, unknown>[]
+}
+
+// Wishlist
+export interface WishlistItem {
+  id: string
+  user_id: string
+  product_id: number
+  product_name: string
+  product_price: number
+  product_category: string
+  product_image: string | null
+  note: string | null
+  price_alert_threshold: number | null
+  created_at: string
+}
+
+export interface PriceAlertEvent {
+  id: string
+  wishlist_item_id: string
+  product_id: number
+  product_name: string
+  current_price: number
+  target_price: number
+  triggered_at: string
+  notified: boolean
 }

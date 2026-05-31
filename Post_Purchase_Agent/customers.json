@@ -1,0 +1,274 @@
+{
+  "customers": [
+    {
+      "customer_id": "C001",
+      "name": "Aisha Khan",
+      "email": "aisha.khan@email.com",
+      "tier": "bronze",
+      "points": 120,
+      "total_orders": 1,
+      "total_spent": 2499.0,
+      "join_date": "2026-05-01",
+      "milestones": [],
+      "preferences": { "category": "electronics", "notifications": true }
+    },
+    {
+      "customer_id": "C002",
+      "name": "Bilal Ahmed",
+      "email": "bilal.ahmed@email.com",
+      "tier": "silver",
+      "points": 1850,
+      "total_orders": 5,
+      "total_spent": 12400.0,
+      "join_date": "2025-11-15",
+      "milestones": ["first_purchase", "second_purchase", "5_orders"],
+      "preferences": { "category": "fashion", "notifications": true }
+    },
+    {
+      "customer_id": "C003",
+      "name": "Fatima Ali",
+      "email": "fatima.ali@email.com",
+      "tier": "gold",
+      "points": 7200,
+      "total_orders": 18,
+      "total_spent": 45600.0,
+      "join_date": "2025-03-20",
+      "milestones": ["first_purchase", "second_purchase", "5_orders", "10_orders", "vip_eligible"],
+      "preferences": { "category": "home", "notifications": true }
+    },
+    {
+      "customer_id": "C004",
+      "name": "Usman Malik",
+      "email": "usman.malik@email.com",
+      "tier": "platinum",
+      "points": 25000,
+      "total_orders": 42,
+      "total_spent": 128000.0,
+      "join_date": "2024-08-10",
+      "milestones": ["first_purchase", "second_purchase", "5_orders", "10_orders", "20_orders", "vip", "platinum"],
+      "preferences": { "category": "electronics", "notifications": true }
+    },
+    {
+      "customer_id": "C005",
+      "name": "Zainab Hussain",
+      "email": "zainab.h@email.com",
+      "tier": "bronze",
+      "points": 80,
+      "total_orders": 1,
+      "total_spent": 1599.0,
+      "join_date": "2026-05-20",
+      "milestones": ["first_purchase"],
+      "preferences": { "category": "beauty", "notifications": true }
+    },
+    {
+      "customer_id": "C006",
+      "name": "Omar Farooq",
+      "email": "omar.f@email.com",
+      "tier": "silver",
+      "points": 2100,
+      "total_orders": 6,
+      "total_spent": 18900.0,
+      "join_date": "2025-10-05",
+      "milestones": ["first_purchase", "second_purchase", "5_orders"],
+      "preferences": { "category": "sports", "notifications": false }
+    },
+    {
+      "customer_id": "C007",
+      "name": "Sana Tariq",
+      "email": "sana.t@email.com",
+      "tier": "bronze",
+      "points": 350,
+      "total_orders": 2,
+      "total_spent": 4200.0,
+      "join_date": "2026-04-12",
+      "milestones": ["first_purchase", "second_purchase"],
+      "preferences": { "category": "fashion", "notifications": true }
+    },
+    {
+      "customer_id": "C008",
+      "name": "Hamza Raza",
+      "email": "hamza.r@email.com",
+      "tier": "gold",
+      "points": 8500,
+      "total_orders": 22,
+      "total_spent": 67500.0,
+      "join_date": "2025-01-18",
+      "milestones": ["first_purchase", "second_purchase", "5_orders", "10_orders", "20_orders", "vip_eligible"],
+      "preferences": { "category": "electronics", "notifications": true }
+    }
+  ],
+  "orders": [
+    {
+      "order_id": "ORD001",
+      "customer_id": "C001",
+      "items": [
+        { "product": "Wireless Headphones", "sku": "WH001", "price": 2499.0, "qty": 1 }
+      ],
+      "total": 2499.0,
+      "status": "confirmed",
+      "order_date": "2026-05-28",
+      "estimated_delivery": "2026-06-02",
+      "delivery_address": "House 12, Street 5, Lahore",
+      "carrier": "TCS",
+      "tracking": "TCS-87492A",
+      "feedback": null,
+      "sentiment": null
+    },
+    {
+      "order_id": "ORD002",
+      "customer_id": "C002",
+      "items": [
+        { "product": "Leather Jacket", "sku": "LJ001", "price": 8500.0, "qty": 1 },
+        { "product": "Denim Jeans", "sku": "DJ002", "price": 3900.0, "qty": 1 }
+      ],
+      "total": 12400.0,
+      "status": "in_transit",
+      "order_date": "2026-05-25",
+      "estimated_delivery": "2026-05-30",
+      "delivery_address": "Flat 3B, Block C, Karachi",
+      "carrier": "Leopards",
+      "tracking": "LEO-3910X",
+      "feedback": null,
+      "sentiment": null
+    },
+    {
+      "order_id": "ORD003",
+      "customer_id": "C003",
+      "items": [
+        { "product": "Coffee Maker", "sku": "CM001", "price": 7999.0, "qty": 1 },
+        { "product": "Desk Lamp", "sku": "DL001", "price": 4999.0, "qty": 2 }
+      ],
+      "total": 17997.0,
+      "status": "delivered",
+      "order_date": "2026-05-20",
+      "estimated_delivery": "2026-05-26",
+      "delivery_address": "Villa 7, Phase 2, Islamabad",
+      "carrier": "TCS",
+      "tracking": "TCS-99124B",
+      "feedback": "The coffee maker is amazing! Exactly what I wanted. The lamp is beautiful too. Very happy with the quality.",
+      "sentiment": "positive"
+    },
+    {
+      "order_id": "ORD004",
+      "customer_id": "C004",
+      "items": [
+        { "product": "Smart Watch Pro", "sku": "SW001", "price": 19999.0, "qty": 1 },
+        { "product": "Bluetooth Speaker", "sku": "BS001", "price": 5999.0, "qty": 1 }
+      ],
+      "total": 25998.0,
+      "status": "delivered",
+      "order_date": "2026-05-22",
+      "estimated_delivery": "2026-05-28",
+      "delivery_address": "456 Lake Road, Lahore",
+      "carrier": "Leopards",
+      "tracking": "LEO-4021Y",
+      "feedback": "Smart watch stopped working after 2 days. Very disappointed with the quality control. Expected better.",
+      "sentiment": "negative"
+    },
+    {
+      "order_id": "ORD005",
+      "customer_id": "C005",
+      "items": [
+        { "product": "Beauty Set Premium", "sku": "BS002", "price": 1599.0, "qty": 1 }
+      ],
+      "total": 1599.0,
+      "status": "shipped",
+      "order_date": "2026-05-27",
+      "estimated_delivery": "2026-06-01",
+      "delivery_address": "789 Garden Town, Lahore",
+      "carrier": "TCS",
+      "tracking": "TCS-12345Z",
+      "feedback": null,
+      "sentiment": null
+    },
+    {
+      "order_id": "ORD006",
+      "customer_id": "C003",
+      "items": [
+        { "product": "Yoga Mat Premium", "sku": "YM001", "price": 3999.0, "qty": 1 }
+      ],
+      "total": 3999.0,
+      "status": "delivered",
+      "order_date": "2026-05-15",
+      "estimated_delivery": "2026-05-21",
+      "delivery_address": "Villa 7, Phase 2, Islamabad",
+      "carrier": "TCS",
+      "tracking": "TCS-88231A",
+      "feedback": "Good quality mat but the color is slightly different from the picture. Still satisfied overall.",
+      "sentiment": "mixed"
+    },
+    {
+      "order_id": "ORD007",
+      "customer_id": "C004",
+      "items": [
+        { "product": "Running Shoes Ultra", "sku": "RS001", "price": 12999.0, "qty": 1 }
+      ],
+      "total": 12999.0,
+      "status": "in_transit",
+      "order_date": "2026-05-26",
+      "estimated_delivery": "2026-05-31",
+      "delivery_address": "456 Lake Road, Lahore",
+      "carrier": "TCS",
+      "tracking": "TCS-55441F",
+      "feedback": null,
+      "sentiment": null
+    },
+    {
+      "order_id": "ORD008",
+      "customer_id": "C007",
+      "items": [
+        { "product": "Designer Handbag", "sku": "DH001", "price": 4200.0, "qty": 1 }
+      ],
+      "total": 4200.0,
+      "status": "confirmed",
+      "order_date": "2026-05-28",
+      "estimated_delivery": "2026-06-03",
+      "delivery_address": "12 Model Town, Multan",
+      "carrier": "Leopards",
+      "tracking": "LEO-6677K",
+      "feedback": null,
+      "sentiment": null
+    },
+    {
+      "order_id": "ORD009",
+      "customer_id": "C002",
+      "items": [
+        { "product": "Casual Sneakers", "sku": "CS003", "price": 5500.0, "qty": 1 }
+      ],
+      "total": 5500.0,
+      "status": "delivered",
+      "order_date": "2026-05-10",
+      "estimated_delivery": "2026-05-16",
+      "delivery_address": "Flat 3B, Block C, Karachi",
+      "carrier": "Leopards",
+      "tracking": "LEO-2211M",
+      "feedback": "Perfect fit and very comfortable! Fast delivery too. Will order again.",
+      "sentiment": "positive"
+    },
+    {
+      "order_id": "ORD010",
+      "customer_id": "C006",
+      "items": [
+        { "product": "Treadmill Home", "sku": "TM001", "price": 18900.0, "qty": 1 }
+      ],
+      "total": 18900.0,
+      "status": "delayed",
+      "order_date": "2026-05-18",
+      "estimated_delivery": "2026-05-27",
+      "actual_delivery": null,
+      "delivery_address": "22 Sports Complex, Faisalabad",
+      "carrier": "TCS",
+      "tracking": "TCS-99002P",
+      "feedback": null,
+      "sentiment": null,
+      "delay_reason": "Customs clearance hold",
+      "delay_expected_resolution": "2026-06-02"
+    }
+  ],
+  "tier_rules": {
+    "bronze": { "min_points": 0, "value_per_point": 0.25, "benefits": ["standard_shipping"] },
+    "silver": { "min_points": 1000, "value_per_point": 0.50, "benefits": ["free_shipping", "birthday_discount"] },
+    "gold": { "min_points": 5000, "value_per_point": 0.75, "benefits": ["free_shipping", "birthday_discount", "priority_support", "early_access"] },
+    "platinum": { "min_points": 20000, "value_per_point": 1.00, "benefits": ["free_shipping", "birthday_discount", "priority_support", "early_access", "dedicated_manager", "exclusive_events"] }
+  }
+}

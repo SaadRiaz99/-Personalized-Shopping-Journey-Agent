@@ -1694,3 +1694,761 @@
 {"event": "span_end", "span_id": "span_47fc3a73011d40569e9d3396", "trace_id": "trace_56167b78114f43c682b299dbfa435770", "label": "AgentSpanData:ShopBot", "error": null}
 {"event": "span_end", "span_id": "span_880cc6c738184f458b8584c0", "trace_id": "trace_56167b78114f43c682b299dbfa435770", "label": "TaskSpanData:RecommendationAgent", "error": null}
 {"event": "trace_end", "trace_id": "trace_56167b78114f43c682b299dbfa435770", "name": "recommendation_turn:cli-session", "elapsed": 0.187}
+{"event": "span_end", "span_id": "span_304b68de080c49a783301cff", "trace_id": "trace_9803a98145b6464d852961b60a1f10dd", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_a3cdc95b9b8640508ebfa4ec", "trace_id": "trace_9803a98145b6464d852961b60a1f10dd", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_ca469580eda74751af7f6394", "trace_id": "trace_9803a98145b6464d852961b60a1f10dd", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_ea05d5a2d68545f6ba26ab6d", "trace_id": "trace_9803a98145b6464d852961b60a1f10dd", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_82e36bc8c17a4e16a5314f22", "trace_id": "trace_9803a98145b6464d852961b60a1f10dd", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_7388121d2f4141c4bb894216", "trace_id": "trace_9803a98145b6464d852961b60a1f10dd", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_5e6148c933bd432eb8e1463e", "trace_id": "trace_9803a98145b6464d852961b60a1f10dd", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_9803a98145b6464d852961b60a1f10dd", "name": "recommendation_turn:cli-session", "elapsed": 1.913}
+{"event": "span_end", "span_id": "span_ee708f81ffc242bda761f338", "trace_id": "trace_ba6b1c2c9e3a4086bd94abfe0e60a83e", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_f17df046a0c549d188d25248", "trace_id": "trace_ba6b1c2c9e3a4086bd94abfe0e60a83e", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_ded54ffd9204414aa7ab6cc8", "trace_id": "trace_ba6b1c2c9e3a4086bd94abfe0e60a83e", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_d883aff9967c45fc905f9b42", "trace_id": "trace_ba6b1c2c9e3a4086bd94abfe0e60a83e", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_03082063ddc14c73919966ad", "trace_id": "trace_ba6b1c2c9e3a4086bd94abfe0e60a83e", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_35991a48ed8749e4a752c023", "trace_id": "trace_ba6b1c2c9e3a4086bd94abfe0e60a83e", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_bd8ecbd01bf0485abedaea81", "trace_id": "trace_ba6b1c2c9e3a4086bd94abfe0e60a83e", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_ba6b1c2c9e3a4086bd94abfe0e60a83e", "name": "recommendation_turn:cli-session", "elapsed": 0.365}
+{"event": "span_end", "span_id": "span_ab2c5a05505b4e84a59c957f", "trace_id": "trace_c75788bb10fe418d89e1194d3a2a74a2", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_7864f4cfb6044ffdbbcb5247", "trace_id": "trace_c75788bb10fe418d89e1194d3a2a74a2", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_111e8ca3a3f74c9d9c226330", "trace_id": "trace_c75788bb10fe418d89e1194d3a2a74a2", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_4d00b7c53e0b4149b57ad13c", "trace_id": "trace_c75788bb10fe418d89e1194d3a2a74a2", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_f9aba804eb024b29b8155276", "trace_id": "trace_c75788bb10fe418d89e1194d3a2a74a2", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_dd8cd7f2d76841e5ba616e64", "trace_id": "trace_c75788bb10fe418d89e1194d3a2a74a2", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_6c879bc180a84399a96f1c83", "trace_id": "trace_c75788bb10fe418d89e1194d3a2a74a2", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_0f1c0788e03a43088195e1b5", "trace_id": "trace_c75788bb10fe418d89e1194d3a2a74a2", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_feefefea86f74095b104251e", "trace_id": "trace_c75788bb10fe418d89e1194d3a2a74a2", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_4365047f6b6047c3b2833b1f", "trace_id": "trace_c75788bb10fe418d89e1194d3a2a74a2", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_c75788bb10fe418d89e1194d3a2a74a2", "name": "recommendation_turn:cli-session", "elapsed": 8.439}
+{"event": "span_end", "span_id": "span_75e88f9a86a84ae1ac8f3b1d", "trace_id": "trace_743e0204f8ed47a6a56619e32aed2a1c", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_1de0633d87ad4046a3ae46df", "trace_id": "trace_743e0204f8ed47a6a56619e32aed2a1c", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_63bb13d945db421e8d67a6f4", "trace_id": "trace_743e0204f8ed47a6a56619e32aed2a1c", "label": "TurnSpanData", "error": "{'message': 'Guardrail tripwire triggered', 'data': {'guardrail': 'off_topic_check'}}"}
+{"event": "span_end", "span_id": "span_9a91d7e535b547c0ba55e9bf", "trace_id": "trace_743e0204f8ed47a6a56619e32aed2a1c", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_2ac19e6c359542e6907fcdea", "trace_id": "trace_743e0204f8ed47a6a56619e32aed2a1c", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_743e0204f8ed47a6a56619e32aed2a1c", "name": "recommendation_turn:cli-session", "elapsed": 0.021}
+{"event": "span_end", "span_id": "span_02ee3063d12247ae88eae4e2", "trace_id": "trace_4c68b5089393471984cb085b743a9554", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_2a48c571e97e4e6f94721c21", "trace_id": "trace_4c68b5089393471984cb085b743a9554", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_c86585def6b44ca1a4f9a040", "trace_id": "trace_4c68b5089393471984cb085b743a9554", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_f31248bfd6a244809ec63029", "trace_id": "trace_4c68b5089393471984cb085b743a9554", "label": "FunctionSpanData:get_item_details", "error": "{'message': 'Error running tool (non-fatal)', 'data': {'tool_name': 'get_item_details', 'error': \"Invalid JSON input for tool get_item_details: 1 validation error for get_item_details_args\\nitem_id\\n  Input should be a valid integer, unable to parse string as an integer [type=int_parsing, input_value='Google Pixel 6', input_type=str]\\n    For further information visit https://errors.pydantic.dev/2.13/v/int_parsing\"}}"}
+{"event": "span_end", "span_id": "span_3ee58adb01384fc096fc195b", "trace_id": "trace_4c68b5089393471984cb085b743a9554", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_ef9f25da71ac43688741a863", "trace_id": "trace_4c68b5089393471984cb085b743a9554", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_b038cf2375ce40d891bc2b3e", "trace_id": "trace_4c68b5089393471984cb085b743a9554", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_a725afedc8ae4a20857a40ec", "trace_id": "trace_4c68b5089393471984cb085b743a9554", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_6d1985d1123f4a72b2124dff", "trace_id": "trace_4c68b5089393471984cb085b743a9554", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_db96226d127d4d98a5d8c7cd", "trace_id": "trace_4c68b5089393471984cb085b743a9554", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_d922b5b1d4484c2892d2e486", "trace_id": "trace_4c68b5089393471984cb085b743a9554", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_a9b273622348484faa2087b9", "trace_id": "trace_4c68b5089393471984cb085b743a9554", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_e2476840a5674964b6b0945e", "trace_id": "trace_4c68b5089393471984cb085b743a9554", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_4c68b5089393471984cb085b743a9554", "name": "recommendation_turn:cli-session", "elapsed": 2.742}
+{"event": "span_end", "span_id": "span_36161ceb1afd41e0b56aa60c", "trace_id": "trace_ed205184278747119dc5ba03f3d8dbeb", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_1584293a674a40cab764bfb4", "trace_id": "trace_ed205184278747119dc5ba03f3d8dbeb", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_8eb11cf292ef448eae38cdc8", "trace_id": "trace_ed205184278747119dc5ba03f3d8dbeb", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_fd430914e000431e91917a59", "trace_id": "trace_ed205184278747119dc5ba03f3d8dbeb", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_ff7c1e479e5641e4be3d7b69", "trace_id": "trace_ed205184278747119dc5ba03f3d8dbeb", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_57734f5b9d6246fa84eeaea2", "trace_id": "trace_ed205184278747119dc5ba03f3d8dbeb", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_4e284bec4160493690d5154c", "trace_id": "trace_ed205184278747119dc5ba03f3d8dbeb", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_ed205184278747119dc5ba03f3d8dbeb", "name": "recommendation_turn:cli-session", "elapsed": 0.371}
+{"event": "span_end", "span_id": "span_6798c4cb3a9941899fd8766d", "trace_id": "trace_2a44d596c0e647b1af9013e382419e7e", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_2c297c5c5abc40e7b3067a51", "trace_id": "trace_2a44d596c0e647b1af9013e382419e7e", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_592027b81e954d929461506a", "trace_id": "trace_2a44d596c0e647b1af9013e382419e7e", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_0f0349f02bb6470d95c08c89", "trace_id": "trace_2a44d596c0e647b1af9013e382419e7e", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_1be8152f0e134223b6fed1a2", "trace_id": "trace_2a44d596c0e647b1af9013e382419e7e", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_bee508387e9347ffaaafecc9", "trace_id": "trace_2a44d596c0e647b1af9013e382419e7e", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_1f1e1994c5e5459cba21af11", "trace_id": "trace_2a44d596c0e647b1af9013e382419e7e", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_2a44d596c0e647b1af9013e382419e7e", "name": "recommendation_turn:cli-session", "elapsed": 0.509}
+{"event": "span_end", "span_id": "span_13ac4776ea0445c7a4db672d", "trace_id": "trace_b09660d9020441d1886935a199fb2afb", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_640be481ef794dd39b407ff3", "trace_id": "trace_b09660d9020441d1886935a199fb2afb", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_91af721af7bd4dc0ae93c670", "trace_id": "trace_b09660d9020441d1886935a199fb2afb", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_3f035e66b98a41c284995e5f", "trace_id": "trace_b09660d9020441d1886935a199fb2afb", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_6c3ef8d66d9c41e38a904ab8", "trace_id": "trace_b09660d9020441d1886935a199fb2afb", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_c75eb281006f4acfb022cd60", "trace_id": "trace_b09660d9020441d1886935a199fb2afb", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_d2cfc6c2a8ba4de689d05373", "trace_id": "trace_b09660d9020441d1886935a199fb2afb", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_b09660d9020441d1886935a199fb2afb", "name": "recommendation_turn:cli-session", "elapsed": 0.422}
+{"event": "span_end", "span_id": "span_b5f854f177794e13b0f1a4b1", "trace_id": "trace_862d0639fb35495b841025bbca1fde18", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_0a318c702f92469aa0317d84", "trace_id": "trace_862d0639fb35495b841025bbca1fde18", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_8809f9a18d404388a778b621", "trace_id": "trace_862d0639fb35495b841025bbca1fde18", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_ba90b4860c364b2395eb48c2", "trace_id": "trace_862d0639fb35495b841025bbca1fde18", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_c1a8a60fa6bf4e298c07b2bb", "trace_id": "trace_862d0639fb35495b841025bbca1fde18", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_548a6d98ce744a6ca511e9b1", "trace_id": "trace_862d0639fb35495b841025bbca1fde18", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_f04f9f3baf67422fb692886d", "trace_id": "trace_862d0639fb35495b841025bbca1fde18", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_862d0639fb35495b841025bbca1fde18", "name": "recommendation_turn:cli-session", "elapsed": 0.31}
+{"event": "span_end", "span_id": "span_99c9271d7f59488db1da8f87", "trace_id": "trace_0867b68ee1704f3083787af26244161e", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_4dfd7d630d29418bb2b84b4c", "trace_id": "trace_0867b68ee1704f3083787af26244161e", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_3e4650a230224d5f90a32a52", "trace_id": "trace_0867b68ee1704f3083787af26244161e", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_9fcda8f9e48f4c6e8b18ec4a", "trace_id": "trace_0867b68ee1704f3083787af26244161e", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_678c059cb99044dc81e5d37e", "trace_id": "trace_0867b68ee1704f3083787af26244161e", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_66ca234142494ffaa019881a", "trace_id": "trace_0867b68ee1704f3083787af26244161e", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_e646a58dcb0c41e4aa0ecdd4", "trace_id": "trace_0867b68ee1704f3083787af26244161e", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_0867b68ee1704f3083787af26244161e", "name": "recommendation_turn:cli-session", "elapsed": 0.378}
+{"event": "span_end", "span_id": "span_5b2203b1fe3e45bb9aca6a7e", "trace_id": "trace_8c7cb9bc6c60404e95ff0cfbd040e659", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_4d916ec296eb4e5baa165ab4", "trace_id": "trace_8c7cb9bc6c60404e95ff0cfbd040e659", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_1b37f903451341eab4c62946", "trace_id": "trace_8c7cb9bc6c60404e95ff0cfbd040e659", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_51d679651401491784d6f688", "trace_id": "trace_8c7cb9bc6c60404e95ff0cfbd040e659", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_9564266641a140f5a3fb7581", "trace_id": "trace_8c7cb9bc6c60404e95ff0cfbd040e659", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_da4ea4ca9fe44e588089203d", "trace_id": "trace_8c7cb9bc6c60404e95ff0cfbd040e659", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_6c9f17a8a3134046a1cea943", "trace_id": "trace_8c7cb9bc6c60404e95ff0cfbd040e659", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_98f7276e8fa64d99868ff133", "trace_id": "trace_8c7cb9bc6c60404e95ff0cfbd040e659", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_8622d0d9c3c44acbadf1b120", "trace_id": "trace_8c7cb9bc6c60404e95ff0cfbd040e659", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_8c7cb9bc6c60404e95ff0cfbd040e659", "name": "recommendation_turn:cli-session", "elapsed": 1.977}
+{"event": "span_end", "span_id": "span_f3e1de5587604092951e3c0b", "trace_id": "trace_0f93fe6a42fd47f3bd13e23b53832799", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_c22b4efd726f44539642dc31", "trace_id": "trace_0f93fe6a42fd47f3bd13e23b53832799", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_0adad198efd44c7ba3d32dc7", "trace_id": "trace_0f93fe6a42fd47f3bd13e23b53832799", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_63432d3a8e744720b4bd69ee", "trace_id": "trace_0f93fe6a42fd47f3bd13e23b53832799", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_2c2cd7140a3843ed8211f98a", "trace_id": "trace_0f93fe6a42fd47f3bd13e23b53832799", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_ce7a63bc71574e2fac53cd88", "trace_id": "trace_0f93fe6a42fd47f3bd13e23b53832799", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_56c0818ecbee44f88ebb7900", "trace_id": "trace_0f93fe6a42fd47f3bd13e23b53832799", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_20d4455244174fa2b27ebacf", "trace_id": "trace_0f93fe6a42fd47f3bd13e23b53832799", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_e726a0caff8f45e6807d792b", "trace_id": "trace_0f93fe6a42fd47f3bd13e23b53832799", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_6fd2c44c426649299aa2332f", "trace_id": "trace_0f93fe6a42fd47f3bd13e23b53832799", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_0f93fe6a42fd47f3bd13e23b53832799", "name": "recommendation_turn:cli-session", "elapsed": 6.155}
+{"event": "span_end", "span_id": "span_a9dfabb1c913459db43deaf2", "trace_id": "trace_fc66a2ffa5e944a4a62e6cf337935137", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_de5656bdc9af4312b320177b", "trace_id": "trace_fc66a2ffa5e944a4a62e6cf337935137", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_713df1c7fc0246ddac04c476", "trace_id": "trace_fc66a2ffa5e944a4a62e6cf337935137", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_d430ddcefd78459cba367f8c", "trace_id": "trace_fc66a2ffa5e944a4a62e6cf337935137", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_eef331768ba7478faf2bb213", "trace_id": "trace_fc66a2ffa5e944a4a62e6cf337935137", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_a2ea8740fd3a45e28f228495", "trace_id": "trace_fc66a2ffa5e944a4a62e6cf337935137", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_6f30252815d74b6ba653db06", "trace_id": "trace_fc66a2ffa5e944a4a62e6cf337935137", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_fc1a8cb44f554b02ba4a670c", "trace_id": "trace_fc66a2ffa5e944a4a62e6cf337935137", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_24d1168113164c1b99dc2529", "trace_id": "trace_fc66a2ffa5e944a4a62e6cf337935137", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_9bbef7d1ce6c4afc940c792d", "trace_id": "trace_fc66a2ffa5e944a4a62e6cf337935137", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_fc66a2ffa5e944a4a62e6cf337935137", "name": "recommendation_turn:cli-session", "elapsed": 1.925}
+{"event": "span_end", "span_id": "span_a5b68daf95a74e248850fbc1", "trace_id": "trace_2435f22feb674e7e8b4420f9ca579fd0", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_8af38063f8144729afc42af9", "trace_id": "trace_2435f22feb674e7e8b4420f9ca579fd0", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_4f4395de756d45349ed2a2e7", "trace_id": "trace_2435f22feb674e7e8b4420f9ca579fd0", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_5faf20ddde4b46acafd5ef3d", "trace_id": "trace_2435f22feb674e7e8b4420f9ca579fd0", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_17ea84a4d1d1437a8a71b684", "trace_id": "trace_2435f22feb674e7e8b4420f9ca579fd0", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_f735687b27ab4333b7013f48", "trace_id": "trace_2435f22feb674e7e8b4420f9ca579fd0", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_224dc2649b73479db978277d", "trace_id": "trace_2435f22feb674e7e8b4420f9ca579fd0", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_f7df25c1729b4f5d9bdf0056", "trace_id": "trace_2435f22feb674e7e8b4420f9ca579fd0", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_1e5ac062f1bd43b880c2adba", "trace_id": "trace_2435f22feb674e7e8b4420f9ca579fd0", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_4d72829d4ce74648ad8097ef", "trace_id": "trace_2435f22feb674e7e8b4420f9ca579fd0", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_2435f22feb674e7e8b4420f9ca579fd0", "name": "recommendation_turn:cli-session", "elapsed": 1.801}
+{"event": "span_end", "span_id": "span_c3e9c67357214bc696a57d91", "trace_id": "trace_24c20718235d44ba831aad76d2249654", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_e829d63377174bf09e372dd2", "trace_id": "trace_24c20718235d44ba831aad76d2249654", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_f76df67acc054cc5bb92eef1", "trace_id": "trace_24c20718235d44ba831aad76d2249654", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_c6665ae1e9a742cbb27fe46c", "trace_id": "trace_24c20718235d44ba831aad76d2249654", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_99eb76b894c24a918ba1fc75", "trace_id": "trace_24c20718235d44ba831aad76d2249654", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_2e72ccc854ce4d15a6bb7a3c", "trace_id": "trace_24c20718235d44ba831aad76d2249654", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_05f70f234243430cb586b180", "trace_id": "trace_24c20718235d44ba831aad76d2249654", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_24c20718235d44ba831aad76d2249654", "name": "recommendation_turn:cli-session", "elapsed": 0.599}
+{"event": "span_end", "span_id": "span_dd833995d30347d5af902083", "trace_id": "trace_61aaa663062c45d386d6a9c2d4af9300", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_5ea08031696b47f98a15601e", "trace_id": "trace_61aaa663062c45d386d6a9c2d4af9300", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_f877926655394cfa9240b802", "trace_id": "trace_61aaa663062c45d386d6a9c2d4af9300", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_ea9652cf22d74d32bf162345", "trace_id": "trace_61aaa663062c45d386d6a9c2d4af9300", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_c8e9344e2775486993577111", "trace_id": "trace_61aaa663062c45d386d6a9c2d4af9300", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_6b1535ef402049fd82ede00d", "trace_id": "trace_61aaa663062c45d386d6a9c2d4af9300", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_e139ec6625f54259ad0e81f6", "trace_id": "trace_61aaa663062c45d386d6a9c2d4af9300", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_61aaa663062c45d386d6a9c2d4af9300", "name": "recommendation_turn:cli-session", "elapsed": 0.872}
+{"event": "span_end", "span_id": "span_c9444dfd6454415b8d876c43", "trace_id": "trace_45244f788c5441709bb4b744c7fa9d3e", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_bbb44e43ed9f41d995bb2987", "trace_id": "trace_45244f788c5441709bb4b744c7fa9d3e", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_9474d22d861b4cb59df0f624", "trace_id": "trace_45244f788c5441709bb4b744c7fa9d3e", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_9ada138c6bfa4405a065978f", "trace_id": "trace_45244f788c5441709bb4b744c7fa9d3e", "label": "FunctionSpanData:filter_by_tag", "error": null}
+{"event": "span_end", "span_id": "span_f5debb7f56e94499b71d2fd0", "trace_id": "trace_45244f788c5441709bb4b744c7fa9d3e", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_c0a42a2107ff4aff99722e59", "trace_id": "trace_45244f788c5441709bb4b744c7fa9d3e", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_7ee70de94e7243b7a0e62ee0", "trace_id": "trace_45244f788c5441709bb4b744c7fa9d3e", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_9c9ee7922335478a96b2437e", "trace_id": "trace_45244f788c5441709bb4b744c7fa9d3e", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_74df56a33012416e8483051d", "trace_id": "trace_45244f788c5441709bb4b744c7fa9d3e", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_417d605741604d728d3a8594", "trace_id": "trace_45244f788c5441709bb4b744c7fa9d3e", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_45244f788c5441709bb4b744c7fa9d3e", "name": "recommendation_turn:cli-session", "elapsed": 0.877}
+{"event": "span_end", "span_id": "span_640ddb96955141349f2727ba", "trace_id": "trace_35afb4bc0a994b93811451c482530620", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_5e66a7d97d1045fa9003bcf9", "trace_id": "trace_35afb4bc0a994b93811451c482530620", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_1d2e45ea524c4e71b0161bb3", "trace_id": "trace_35afb4bc0a994b93811451c482530620", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_7b620fcffdc341e2a713b4ef", "trace_id": "trace_35afb4bc0a994b93811451c482530620", "label": "FunctionSpanData:filter_by_tag", "error": null}
+{"event": "span_end", "span_id": "span_b25d11f78626494e9fcc00eb", "trace_id": "trace_35afb4bc0a994b93811451c482530620", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_5fb3638e6ad746218dd6cde5", "trace_id": "trace_35afb4bc0a994b93811451c482530620", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_aabfafb03dea40fb844c97e8", "trace_id": "trace_35afb4bc0a994b93811451c482530620", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_769f8e51dc36447baa0af7d5", "trace_id": "trace_35afb4bc0a994b93811451c482530620", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_0093a8b099d9470ba1a82252", "trace_id": "trace_35afb4bc0a994b93811451c482530620", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_58e1bfb84b34482680221626", "trace_id": "trace_35afb4bc0a994b93811451c482530620", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_35afb4bc0a994b93811451c482530620", "name": "recommendation_turn:cli-session", "elapsed": 0.89}
+{"event": "trace_end", "trace_id": "trace_3294f35beae44be48f724661e0cd7ebe", "name": "recommendation_turn:mock-test-1", "elapsed": 0.0}
+{"event": "trace_end", "trace_id": "trace_0bdd91ca33c14284adc0a8de68ccbb75", "name": "recommendation_turn:mock-session-test", "elapsed": 0.001}
+{"event": "trace_end", "trace_id": "trace_e598dafc1d0348bda71c2e8320a98ba5", "name": "recommendation_turn:mock-session-test", "elapsed": 0.001}
+{"event": "trace_end", "trace_id": "trace_e85bd4fb027a4588953418093a11822e", "name": "recommendation_turn:mock-empty-test", "elapsed": 0.0}
+{"event": "trace_end", "trace_id": "trace_9f416547ef6f4a12ac3a38026a0e2ba5", "name": "recommendation_turn:mock-test-1", "elapsed": 0.0}
+{"event": "trace_end", "trace_id": "trace_f42bfd66ab69489f83359bada978f748", "name": "recommendation_turn:mock-session-test", "elapsed": 0.0}
+{"event": "trace_end", "trace_id": "trace_89f88e80027b43c1917a5e6b8a0da6bd", "name": "recommendation_turn:mock-session-test", "elapsed": 0.001}
+{"event": "trace_end", "trace_id": "trace_8a6cc1fd3d71482daee9585c34dbb8ce", "name": "recommendation_turn:mock-empty-test", "elapsed": 0.0}
+{"event": "trace_end", "trace_id": "trace_d0d62832be2b43b29b9e57d30d9be75e", "name": "recommendation_turn:mock-test-1", "elapsed": 0.0}
+{"event": "trace_end", "trace_id": "trace_752965002e0c46ef98308f70548713cf", "name": "recommendation_turn:mock-session-test", "elapsed": 0.0}
+{"event": "trace_end", "trace_id": "trace_cfd5cd0752fd4498a2ee0f6285dba822", "name": "recommendation_turn:mock-session-test", "elapsed": 0.0}
+{"event": "trace_end", "trace_id": "trace_b9baac7209d34f09bb7fac9f08d1f124", "name": "recommendation_turn:mock-empty-test", "elapsed": 0.0}
+{"event": "trace_end", "trace_id": "trace_3e0a651938764eb88a72c8b544116dda", "name": "recommendation_turn:mock-test-1", "elapsed": 0.001}
+{"event": "trace_end", "trace_id": "trace_a9b9bf5c6baa41638da737f41b0589a8", "name": "recommendation_turn:mock-session-test", "elapsed": 0.0}
+{"event": "trace_end", "trace_id": "trace_d736f7bab6fc4f1d912fa573fd5cb1dd", "name": "recommendation_turn:mock-session-test", "elapsed": 0.001}
+{"event": "trace_end", "trace_id": "trace_315e472dd06e4a13ad7900523a4088c3", "name": "recommendation_turn:mock-empty-test", "elapsed": 0.0}
+{"event": "span_end", "span_id": "span_5b8844d3642d4b54ac1f584f", "trace_id": "trace_6da6ca38014d45c6905e7027433d3742", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_43cf1eca1a984af3bdd65d4a", "trace_id": "trace_6da6ca38014d45c6905e7027433d3742", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_c130f32d404841f48727c943", "trace_id": "trace_6da6ca38014d45c6905e7027433d3742", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_f51744b5dfeb4b429fb51273", "trace_id": "trace_6da6ca38014d45c6905e7027433d3742", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_a204131746e6401583cccf48", "trace_id": "trace_6da6ca38014d45c6905e7027433d3742", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_6da6ca38014d45c6905e7027433d3742", "name": "recommendation_turn:cli-session", "elapsed": 0.023}
+{"event": "span_end", "span_id": "span_845a95fd867142c2af72b4e2", "trace_id": "trace_68cfe78e44054fb2b8613dee3a649e56", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_431ec8550a784d4db724ea3a", "trace_id": "trace_68cfe78e44054fb2b8613dee3a649e56", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_25cdadb730b4427a871fca6f", "trace_id": "trace_68cfe78e44054fb2b8613dee3a649e56", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_96cad567911f43bf8ef9e636", "trace_id": "trace_68cfe78e44054fb2b8613dee3a649e56", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_dd246580dd9742eda10bedd4", "trace_id": "trace_68cfe78e44054fb2b8613dee3a649e56", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_68cfe78e44054fb2b8613dee3a649e56", "name": "recommendation_turn:cli-session", "elapsed": 0.016}
+{"event": "span_end", "span_id": "span_27f4e684b7c544a1aab78c48", "trace_id": "trace_38e248eb9a0c4618b5835f152972aa26", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_02378a078e6441f68402b7fc", "trace_id": "trace_38e248eb9a0c4618b5835f152972aa26", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_70fba8bf89a44cd1acfdf00b", "trace_id": "trace_38e248eb9a0c4618b5835f152972aa26", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_a77f8829f5ac49159d36a72a", "trace_id": "trace_38e248eb9a0c4618b5835f152972aa26", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_088cc4bdb7c1439a856e8899", "trace_id": "trace_38e248eb9a0c4618b5835f152972aa26", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_38e248eb9a0c4618b5835f152972aa26", "name": "recommendation_turn:cli-session", "elapsed": 0.013}
+{"event": "span_end", "span_id": "span_00f6abbf222d4b969f185cf9", "trace_id": "trace_a3e38cd57eef47ecacc0894ab3d3667a", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_7e5f2d255a1e4b4db0d846c4", "trace_id": "trace_a3e38cd57eef47ecacc0894ab3d3667a", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_ef45408b15344d53b92e278e", "trace_id": "trace_a3e38cd57eef47ecacc0894ab3d3667a", "label": "TurnSpanData", "error": "{'message': 'Guardrail tripwire triggered', 'data': {'guardrail': 'off_topic_check'}}"}
+{"event": "span_end", "span_id": "span_1cb788165af1454fb8ec8fbf", "trace_id": "trace_a3e38cd57eef47ecacc0894ab3d3667a", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_394abe5ebefe4ad48daf3557", "trace_id": "trace_a3e38cd57eef47ecacc0894ab3d3667a", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_a3e38cd57eef47ecacc0894ab3d3667a", "name": "recommendation_turn:cli-session", "elapsed": 0.02}
+{"event": "span_end", "span_id": "span_dda5eada399e44c59421138f", "trace_id": "trace_6a4c8de02eb346f5be43465bcb9bf4cc", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_8996399247ce4f45aaae516c", "trace_id": "trace_6a4c8de02eb346f5be43465bcb9bf4cc", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_c91b734d1f7345cca142e493", "trace_id": "trace_6a4c8de02eb346f5be43465bcb9bf4cc", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_f505c74fc9f04188b873ee56", "trace_id": "trace_6a4c8de02eb346f5be43465bcb9bf4cc", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_0a54a647f09c4aefac0cf7cd", "trace_id": "trace_6a4c8de02eb346f5be43465bcb9bf4cc", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_6a4c8de02eb346f5be43465bcb9bf4cc", "name": "recommendation_turn:cli-session", "elapsed": 0.024}
+{"event": "span_end", "span_id": "span_0a8d964df41f4314b21d6127", "trace_id": "trace_eb091723759e40bc9381e9ce2067fa4f", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_0c08366cce7b4bbd8e3d93e1", "trace_id": "trace_eb091723759e40bc9381e9ce2067fa4f", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_ebc5519b941b4a0dad33d4ea", "trace_id": "trace_eb091723759e40bc9381e9ce2067fa4f", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_ec89c0ca40854e559bb0076f", "trace_id": "trace_eb091723759e40bc9381e9ce2067fa4f", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_96b000221b1c4b1cac7c88a1", "trace_id": "trace_eb091723759e40bc9381e9ce2067fa4f", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_eb091723759e40bc9381e9ce2067fa4f", "name": "recommendation_turn:cli-session", "elapsed": 0.033}
+{"event": "span_end", "span_id": "span_210e53e91ff94d5e9061ec08", "trace_id": "trace_1ac97f8e65094622b142ef9f840e033e", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_23551bba0b6240ea8b44da89", "trace_id": "trace_1ac97f8e65094622b142ef9f840e033e", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_bd0e6b46e2f24c498fb90948", "trace_id": "trace_1ac97f8e65094622b142ef9f840e033e", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_224f4b54fa50426292fd6ea0", "trace_id": "trace_1ac97f8e65094622b142ef9f840e033e", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_02ff3db835f4492ca367e84d", "trace_id": "trace_1ac97f8e65094622b142ef9f840e033e", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_1ac97f8e65094622b142ef9f840e033e", "name": "recommendation_turn:cli-session", "elapsed": 0.015}
+{"event": "span_end", "span_id": "span_12f32b4156a546c4aa5e4cbd", "trace_id": "trace_7c60612c5b6242c0bba51082699f33fb", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_8058902fa5694894808d8322", "trace_id": "trace_7c60612c5b6242c0bba51082699f33fb", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_e881ed7a20eb4dcdb0fad252", "trace_id": "trace_7c60612c5b6242c0bba51082699f33fb", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_0bc265c954b644318b7dc3b0", "trace_id": "trace_7c60612c5b6242c0bba51082699f33fb", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_f1c26d0f694947289e31ab6e", "trace_id": "trace_7c60612c5b6242c0bba51082699f33fb", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_7c60612c5b6242c0bba51082699f33fb", "name": "recommendation_turn:cli-session", "elapsed": 0.019}
+{"event": "span_end", "span_id": "span_f5bccbaa6e014ef0950e113a", "trace_id": "trace_56fd9869516a419ea48b3432e73bd135", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_d05e8785dff2465baaae0c69", "trace_id": "trace_56fd9869516a419ea48b3432e73bd135", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_632f2da18ac04b80804ca523", "trace_id": "trace_56fd9869516a419ea48b3432e73bd135", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_b56216c5a9f443989a8fea57", "trace_id": "trace_56fd9869516a419ea48b3432e73bd135", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_f34e37a488ad4d7eb4d689e7", "trace_id": "trace_56fd9869516a419ea48b3432e73bd135", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_56fd9869516a419ea48b3432e73bd135", "name": "recommendation_turn:cli-session", "elapsed": 0.033}
+{"event": "span_end", "span_id": "span_d747659c0ecf4a4889ad26c2", "trace_id": "trace_63e016ada95841c9ac9b3e75ed8645f8", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_3588646741e247b4ae62ea0e", "trace_id": "trace_63e016ada95841c9ac9b3e75ed8645f8", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_0c1d8fcbc87e46ecbb7be6ea", "trace_id": "trace_63e016ada95841c9ac9b3e75ed8645f8", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_a4ce3e946966484b977105f3", "trace_id": "trace_63e016ada95841c9ac9b3e75ed8645f8", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_10e43a958b5e48b8a545d1e9", "trace_id": "trace_63e016ada95841c9ac9b3e75ed8645f8", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_63e016ada95841c9ac9b3e75ed8645f8", "name": "recommendation_turn:cli-session", "elapsed": 0.017}
+{"event": "span_end", "span_id": "span_4be17ca0b0c34f15aecb35b2", "trace_id": "trace_a71b837c23874186ba6853e4cb20bf26", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_7c63fffff30e4b04ae96730a", "trace_id": "trace_a71b837c23874186ba6853e4cb20bf26", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_602c3c5b750f42c58a62271e", "trace_id": "trace_a71b837c23874186ba6853e4cb20bf26", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_ddc7821c88494e1e9cce7bb2", "trace_id": "trace_a71b837c23874186ba6853e4cb20bf26", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_ba6e2c576953487a887dd20b", "trace_id": "trace_a71b837c23874186ba6853e4cb20bf26", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_a71b837c23874186ba6853e4cb20bf26", "name": "recommendation_turn:cli-session", "elapsed": 0.014}
+{"event": "span_end", "span_id": "span_d39742ccb4e64061a13d0d58", "trace_id": "trace_9c993f1d88a34e2498f4f9fc13d17c0b", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_1bc72ab391e247158d3cabdb", "trace_id": "trace_9c993f1d88a34e2498f4f9fc13d17c0b", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_ac59c87345d9445c85df5c2d", "trace_id": "trace_9c993f1d88a34e2498f4f9fc13d17c0b", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_2fe0e2e0b5484141be22d118", "trace_id": "trace_9c993f1d88a34e2498f4f9fc13d17c0b", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_3519d3c9038042568962e24c", "trace_id": "trace_9c993f1d88a34e2498f4f9fc13d17c0b", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_9c993f1d88a34e2498f4f9fc13d17c0b", "name": "recommendation_turn:cli-session", "elapsed": 0.016}
+{"event": "span_end", "span_id": "span_53c8cfb201dd41d48742b3bc", "trace_id": "trace_d3ac40c68bf744818815d3ffe8b62bd9", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_3bb3724fceb7411d870e5eec", "trace_id": "trace_d3ac40c68bf744818815d3ffe8b62bd9", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_5971cb7cc1a94a2a9159ad3d", "trace_id": "trace_d3ac40c68bf744818815d3ffe8b62bd9", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_85d9a51aa4734bb5ae0a1ccd", "trace_id": "trace_d3ac40c68bf744818815d3ffe8b62bd9", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_55f83338c682426e9dff433f", "trace_id": "trace_d3ac40c68bf744818815d3ffe8b62bd9", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_d3ac40c68bf744818815d3ffe8b62bd9", "name": "recommendation_turn:cli-session", "elapsed": 0.019}
+{"event": "span_end", "span_id": "span_2dbfd8f80a9a49abb37a3446", "trace_id": "trace_f2321ca8625148c5b647a60c8c8337a8", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_cc4a1624ff404197a9a1df15", "trace_id": "trace_f2321ca8625148c5b647a60c8c8337a8", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_c28e2097331d4db5bd0d673c", "trace_id": "trace_f2321ca8625148c5b647a60c8c8337a8", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_f9ec382572af4f01a4f49ad8", "trace_id": "trace_f2321ca8625148c5b647a60c8c8337a8", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_a63cc1e1bdd14595a8dd23fc", "trace_id": "trace_f2321ca8625148c5b647a60c8c8337a8", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_f2321ca8625148c5b647a60c8c8337a8", "name": "recommendation_turn:cli-session", "elapsed": 0.014}
+{"event": "span_end", "span_id": "span_15742c9834f84605b8333282", "trace_id": "trace_33cfbe64a61b4070a5e9210fcbf5b191", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_db08e7fbb79144838c932f6e", "trace_id": "trace_33cfbe64a61b4070a5e9210fcbf5b191", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_4ea1457fbadc429b92ffaabf", "trace_id": "trace_33cfbe64a61b4070a5e9210fcbf5b191", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_1f8176b130874e269ff42fe2", "trace_id": "trace_33cfbe64a61b4070a5e9210fcbf5b191", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_d4d3c6fc91114beb8d4a6599", "trace_id": "trace_33cfbe64a61b4070a5e9210fcbf5b191", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_33cfbe64a61b4070a5e9210fcbf5b191", "name": "recommendation_turn:cli-session", "elapsed": 0.014}
+{"event": "span_end", "span_id": "span_6a75d76f5a664b84813b19ef", "trace_id": "trace_af1ae65ed4d04f52882cfe2c7a404875", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_ff1ce142ac2842abb8c78a2c", "trace_id": "trace_af1ae65ed4d04f52882cfe2c7a404875", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_05e5eab52b30417cbf385907", "trace_id": "trace_af1ae65ed4d04f52882cfe2c7a404875", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_1048b4752b5b48419f329537", "trace_id": "trace_af1ae65ed4d04f52882cfe2c7a404875", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_7e7dc6547eff492eb93b95f1", "trace_id": "trace_af1ae65ed4d04f52882cfe2c7a404875", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_af1ae65ed4d04f52882cfe2c7a404875", "name": "recommendation_turn:cli-session", "elapsed": 0.015}
+{"event": "span_end", "span_id": "span_88852e4712be4350992209e2", "trace_id": "trace_67997aa6271c4970a12fbc51a35719fd", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_e05a1cccb4ca415d98f08c61", "trace_id": "trace_67997aa6271c4970a12fbc51a35719fd", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_87bbbc09ad8342ff99633a2d", "trace_id": "trace_67997aa6271c4970a12fbc51a35719fd", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_3de02cd5286a428d89de96e6", "trace_id": "trace_67997aa6271c4970a12fbc51a35719fd", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_2caeb6db8d7046719cbfde3a", "trace_id": "trace_67997aa6271c4970a12fbc51a35719fd", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_67997aa6271c4970a12fbc51a35719fd", "name": "recommendation_turn:cli-session", "elapsed": 0.013}
+{"event": "span_end", "span_id": "span_18ad85c7b1644afdbd70145c", "trace_id": "trace_a35476e6bd364bd79da9ee80c885c5e4", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_632479d0b3aa42d1b60a10c9", "trace_id": "trace_a35476e6bd364bd79da9ee80c885c5e4", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_4a29008f5e5247d4baeb633d", "trace_id": "trace_a35476e6bd364bd79da9ee80c885c5e4", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_9f45dfc4fb94468c9c4f1db9", "trace_id": "trace_a35476e6bd364bd79da9ee80c885c5e4", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_afbbba8cc2de4943a3e29551", "trace_id": "trace_a35476e6bd364bd79da9ee80c885c5e4", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_a35476e6bd364bd79da9ee80c885c5e4", "name": "recommendation_turn:cli-session", "elapsed": 0.014}
+{"event": "span_end", "span_id": "span_e60945651b2f4fee8c1fc403", "trace_id": "trace_a7934a9c909243d48d2c8953cb0a8173", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_72084f90d2284d83bc281929", "trace_id": "trace_a7934a9c909243d48d2c8953cb0a8173", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_920723dea8c64c5bbe4c1def", "trace_id": "trace_a7934a9c909243d48d2c8953cb0a8173", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_37db10cc15ed4abab6339240", "trace_id": "trace_a7934a9c909243d48d2c8953cb0a8173", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_0018c7b9a3dd457cb6f1ab22", "trace_id": "trace_a7934a9c909243d48d2c8953cb0a8173", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_a7934a9c909243d48d2c8953cb0a8173", "name": "recommendation_turn:cli-session", "elapsed": 0.014}
+{"event": "span_end", "span_id": "span_51c9c59a22f84288b019f195", "trace_id": "trace_501acf10e8eb43ffb5c1360aa5480be6", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_c725fd2b206f45b1b1230ccf", "trace_id": "trace_501acf10e8eb43ffb5c1360aa5480be6", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_2238f23db16b4ed6bab67f54", "trace_id": "trace_501acf10e8eb43ffb5c1360aa5480be6", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_f5ea942038af4e35a5cfa862", "trace_id": "trace_501acf10e8eb43ffb5c1360aa5480be6", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_379b8daea2c34f558345abbd", "trace_id": "trace_501acf10e8eb43ffb5c1360aa5480be6", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_501acf10e8eb43ffb5c1360aa5480be6", "name": "recommendation_turn:cli-session", "elapsed": 0.016}
+{"event": "span_end", "span_id": "span_0a798d2e889d49a49b793e28", "trace_id": "trace_5f6442bfa2af43ea9c226ed768f1ae6d", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_095fbf9ec2b9475eb08c5cf8", "trace_id": "trace_5f6442bfa2af43ea9c226ed768f1ae6d", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_69dbed7d6d2049a2ba749fc4", "trace_id": "trace_5f6442bfa2af43ea9c226ed768f1ae6d", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_f683360a913147bebd1b11b6", "trace_id": "trace_5f6442bfa2af43ea9c226ed768f1ae6d", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_569398bd44d4426db57c537c", "trace_id": "trace_5f6442bfa2af43ea9c226ed768f1ae6d", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_5f6442bfa2af43ea9c226ed768f1ae6d", "name": "recommendation_turn:cli-session", "elapsed": 0.014}
+{"event": "span_end", "span_id": "span_ce4d1e02b8e4443db9fd66a4", "trace_id": "trace_2c70cfe8164344bf8776f68c0bd3eaf8", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_a44e6ee265224d1bb30179f1", "trace_id": "trace_2c70cfe8164344bf8776f68c0bd3eaf8", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_03bba255f1654d4280d09994", "trace_id": "trace_2c70cfe8164344bf8776f68c0bd3eaf8", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_435cab2554b54eeb9899fb78", "trace_id": "trace_2c70cfe8164344bf8776f68c0bd3eaf8", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_3675b28d4f8c4fbcaa944261", "trace_id": "trace_2c70cfe8164344bf8776f68c0bd3eaf8", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_2c70cfe8164344bf8776f68c0bd3eaf8", "name": "recommendation_turn:cli-session", "elapsed": 0.015}
+{"event": "span_end", "span_id": "span_a715b4ff3b12480a9fc1a226", "trace_id": "trace_084ce83a01d5431e9ebe173e6f497f40", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_8533170c2d1a415ba3762a51", "trace_id": "trace_084ce83a01d5431e9ebe173e6f497f40", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_0898542195e748328f26be0c", "trace_id": "trace_084ce83a01d5431e9ebe173e6f497f40", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_12e77967670f49afbe8b593f", "trace_id": "trace_084ce83a01d5431e9ebe173e6f497f40", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_6b6448b18ad346098133efdf", "trace_id": "trace_084ce83a01d5431e9ebe173e6f497f40", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_084ce83a01d5431e9ebe173e6f497f40", "name": "recommendation_turn:cli-session", "elapsed": 0.014}
+{"event": "span_end", "span_id": "span_ac767bd4f4f349dda7ee7e1c", "trace_id": "trace_020a7d57612b4173b5b8f4e6307bbb9c", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_637c22e4fcfc44d7bae90562", "trace_id": "trace_020a7d57612b4173b5b8f4e6307bbb9c", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_d1a80b52a5a240fca68f886a", "trace_id": "trace_020a7d57612b4173b5b8f4e6307bbb9c", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_d67b822711da415c9758a007", "trace_id": "trace_020a7d57612b4173b5b8f4e6307bbb9c", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_f4fc85f49a3d4237b78f6e8c", "trace_id": "trace_020a7d57612b4173b5b8f4e6307bbb9c", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_020a7d57612b4173b5b8f4e6307bbb9c", "name": "recommendation_turn:cli-session", "elapsed": 0.017}
+{"event": "span_end", "span_id": "span_95e5804f0349417f9fa6e7fa", "trace_id": "trace_e8a181a686114af58351fec63d1050e6", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_e831f264af5b4c1ea24f475b", "trace_id": "trace_e8a181a686114af58351fec63d1050e6", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_0fb1f5aa2c9f42c5a2990a8b", "trace_id": "trace_e8a181a686114af58351fec63d1050e6", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_be43ec6529d3471e8d4780f0", "trace_id": "trace_e8a181a686114af58351fec63d1050e6", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_73ea1b2d863d4dd89394eff7", "trace_id": "trace_e8a181a686114af58351fec63d1050e6", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_e8a181a686114af58351fec63d1050e6", "name": "recommendation_turn:cli-session", "elapsed": 0.014}
+{"event": "span_end", "span_id": "span_3814c55389704bfaa13ab1ab", "trace_id": "trace_c0cc42791fd147ec986beed92705dd91", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_e4a7c991603149938dc77022", "trace_id": "trace_c0cc42791fd147ec986beed92705dd91", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_ed1e4822df754ec5bdd95476", "trace_id": "trace_c0cc42791fd147ec986beed92705dd91", "label": "TurnSpanData", "error": "{'message': 'Guardrail tripwire triggered', 'data': {'guardrail': 'off_topic_check'}}"}
+{"event": "span_end", "span_id": "span_fa2c238cc29c442092bed4d3", "trace_id": "trace_c0cc42791fd147ec986beed92705dd91", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_38f525cd995d4a858689d523", "trace_id": "trace_c0cc42791fd147ec986beed92705dd91", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_c0cc42791fd147ec986beed92705dd91", "name": "recommendation_turn:cli-session", "elapsed": 0.014}
+{"event": "span_end", "span_id": "span_faeb89ffac674ca5a2cbb354", "trace_id": "trace_f4a145b241df486faa43da440850eca3", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_3e903144b5b640ef84fffd91", "trace_id": "trace_f4a145b241df486faa43da440850eca3", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_996661a369134bc6a2fb7ba7", "trace_id": "trace_f4a145b241df486faa43da440850eca3", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_31e5059c30634736b9e1f93f", "trace_id": "trace_f4a145b241df486faa43da440850eca3", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_430fdc0791354489a66d231a", "trace_id": "trace_f4a145b241df486faa43da440850eca3", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_f4a145b241df486faa43da440850eca3", "name": "recommendation_turn:cli-session", "elapsed": 0.015}
+{"event": "span_end", "span_id": "span_e57dc8533c4f499e969180e9", "trace_id": "trace_35f1900f8ca141cdbc1233bb6d943032", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_9f42e9f1a0db44cbb6747bc2", "trace_id": "trace_35f1900f8ca141cdbc1233bb6d943032", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_909b4fcd0b10440186f9e716", "trace_id": "trace_35f1900f8ca141cdbc1233bb6d943032", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_2d7e1e1899a34f469c38712d", "trace_id": "trace_35f1900f8ca141cdbc1233bb6d943032", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_cc87178fa6cc4d70ac48cd63", "trace_id": "trace_35f1900f8ca141cdbc1233bb6d943032", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_35f1900f8ca141cdbc1233bb6d943032", "name": "recommendation_turn:cli-session", "elapsed": 0.016}
+{"event": "span_end", "span_id": "span_b4f8429c11db4852b6016792", "trace_id": "trace_472c87b543c84b2b824f6a757f9e4829", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_d75b87a2b9d2409f9e556d67", "trace_id": "trace_472c87b543c84b2b824f6a757f9e4829", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_4773cc34edaa4de599263edf", "trace_id": "trace_472c87b543c84b2b824f6a757f9e4829", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_457db2de957447f5a7b73c48", "trace_id": "trace_472c87b543c84b2b824f6a757f9e4829", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_b26e50fb9dfd49599546c4f6", "trace_id": "trace_472c87b543c84b2b824f6a757f9e4829", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_472c87b543c84b2b824f6a757f9e4829", "name": "recommendation_turn:cli-session", "elapsed": 0.024}
+{"event": "span_end", "span_id": "span_d716112de01e4265bef4b26d", "trace_id": "trace_8ff41ec68a004b2da0477925d67f7a99", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_302d3db03cad43e99726a012", "trace_id": "trace_8ff41ec68a004b2da0477925d67f7a99", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_c02597da7e4949858a3578d2", "trace_id": "trace_8ff41ec68a004b2da0477925d67f7a99", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_964f014abee34727b22810e5", "trace_id": "trace_8ff41ec68a004b2da0477925d67f7a99", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_0489c137f0544aa4bdef8cb1", "trace_id": "trace_8ff41ec68a004b2da0477925d67f7a99", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_524a2aafbda14177b3d1eb76", "trace_id": "trace_8ff41ec68a004b2da0477925d67f7a99", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_0006eda346a94bf18553a05c", "trace_id": "trace_8ff41ec68a004b2da0477925d67f7a99", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_0e4e5b26990741b29bc19a6f", "trace_id": "trace_8ff41ec68a004b2da0477925d67f7a99", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_38b830c8bbd541e99b1038ca", "trace_id": "trace_8ff41ec68a004b2da0477925d67f7a99", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_780074771298410292c3a0c7", "trace_id": "trace_8ff41ec68a004b2da0477925d67f7a99", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_8ff41ec68a004b2da0477925d67f7a99", "name": "recommendation_turn:cli-session", "elapsed": 6.64}
+{"event": "span_end", "span_id": "span_685c1813a6704072b3406114", "trace_id": "trace_c01053460af2478e95b72174c8fa79c5", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_efbd647239a4411daeb8cbe3", "trace_id": "trace_c01053460af2478e95b72174c8fa79c5", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_515b5e1029574804aa000621", "trace_id": "trace_c01053460af2478e95b72174c8fa79c5", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_3cad7b96bae649669a309b8a", "trace_id": "trace_c01053460af2478e95b72174c8fa79c5", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_1a91c5245f784e8f88c51dca", "trace_id": "trace_c01053460af2478e95b72174c8fa79c5", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_d8d8b116896746c2bed55d2b", "trace_id": "trace_c01053460af2478e95b72174c8fa79c5", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_e9c8295281bd4921909ada0d", "trace_id": "trace_c01053460af2478e95b72174c8fa79c5", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_35f83062d9e44d2490245b67", "trace_id": "trace_c01053460af2478e95b72174c8fa79c5", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_312b75d599ce4c129558d318", "trace_id": "trace_c01053460af2478e95b72174c8fa79c5", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_7f6482e5a35444e191f175ae", "trace_id": "trace_c01053460af2478e95b72174c8fa79c5", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_c01053460af2478e95b72174c8fa79c5", "name": "recommendation_turn:cli-session", "elapsed": 2.11}
+{"event": "span_end", "span_id": "span_a474d7b6112d46cfafc208d9", "trace_id": "trace_2824b025fc4d4922902f210d6e60acbc", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_e83640b89bb148f58b15a222", "trace_id": "trace_2824b025fc4d4922902f210d6e60acbc", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_2cf00b16460340ee8544baf8", "trace_id": "trace_2824b025fc4d4922902f210d6e60acbc", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_a2a54e8f48de4d3aae407cd8", "trace_id": "trace_2824b025fc4d4922902f210d6e60acbc", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_f8d0aeefcab147729aec2c6d", "trace_id": "trace_2824b025fc4d4922902f210d6e60acbc", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_4802b6f23b554135b44f821c", "trace_id": "trace_2824b025fc4d4922902f210d6e60acbc", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_40c967ddeea44bf6b98b13d4", "trace_id": "trace_2824b025fc4d4922902f210d6e60acbc", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_c00e9731612b41c089e8f12f", "trace_id": "trace_2824b025fc4d4922902f210d6e60acbc", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_7f2fdd93d16b4a24abb2cc7b", "trace_id": "trace_2824b025fc4d4922902f210d6e60acbc", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_0f55e96403de4062803fd988", "trace_id": "trace_2824b025fc4d4922902f210d6e60acbc", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_2824b025fc4d4922902f210d6e60acbc", "name": "recommendation_turn:cli-session", "elapsed": 2.371}
+{"event": "span_end", "span_id": "span_efd1bb4fe0794ed7a7e4a93a", "trace_id": "trace_517ea3aee5b348188aa0f7ba909f57e9", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_82f2ce8349b6453897da21ca", "trace_id": "trace_517ea3aee5b348188aa0f7ba909f57e9", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_583f60590373492fa8216849", "trace_id": "trace_517ea3aee5b348188aa0f7ba909f57e9", "label": "TurnSpanData", "error": "{'message': 'Guardrail tripwire triggered', 'data': {'guardrail': 'off_topic_check'}}"}
+{"event": "span_end", "span_id": "span_340174515ac5491799346c6d", "trace_id": "trace_517ea3aee5b348188aa0f7ba909f57e9", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_c95abdfad96c49f7973c77d6", "trace_id": "trace_517ea3aee5b348188aa0f7ba909f57e9", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_517ea3aee5b348188aa0f7ba909f57e9", "name": "recommendation_turn:cli-session", "elapsed": 0.015}
+{"event": "span_end", "span_id": "span_035ac30e85724af4bd56a476", "trace_id": "trace_ed8b459ed93640bbbbf5b97a1e481061", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_c1de8484850b479eb6578bce", "trace_id": "trace_ed8b459ed93640bbbbf5b97a1e481061", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_7b480e24017543ae8c284b48", "trace_id": "trace_ed8b459ed93640bbbbf5b97a1e481061", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_0dcab0ed7f51412cb03c8d64", "trace_id": "trace_ed8b459ed93640bbbbf5b97a1e481061", "label": "FunctionSpanData:search_items", "error": "{'message': 'Error running tool (non-fatal)', 'data': {'tool_name': 'search_items', 'error': \"Invalid JSON input for tool search_items: 1 validation error for search_items_args\\nquery\\n  Field required [type=missing, input_value={'category': 'Electronics...50', 'sort_by': 'price'}, input_type=dict]\\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\"}}"}
+{"event": "span_end", "span_id": "span_6bd7e0d1142a4244a7c97a50", "trace_id": "trace_ed8b459ed93640bbbbf5b97a1e481061", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_1bf4d69a32e64eb594bc939a", "trace_id": "trace_ed8b459ed93640bbbbf5b97a1e481061", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_5f1d36ca661c45d1a18a05a0", "trace_id": "trace_ed8b459ed93640bbbbf5b97a1e481061", "label": "FunctionSpanData:search_items", "error": "{'message': 'Error running tool (non-fatal)', 'data': {'tool_name': 'search_items', 'error': \"Invalid JSON input for tool search_items: 1 validation error for search_items_args\\nquery\\n  Field required [type=missing, input_value={'category': 'Electronics... 50, 'sort_by': 'price'}, input_type=dict]\\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\"}}"}
+{"event": "span_end", "span_id": "span_c21675ebafb74ba28abf6d91", "trace_id": "trace_ed8b459ed93640bbbbf5b97a1e481061", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_45fb86d71abe4278aaa898ed", "trace_id": "trace_ed8b459ed93640bbbbf5b97a1e481061", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_7199ec539fff45368f28f50c", "trace_id": "trace_ed8b459ed93640bbbbf5b97a1e481061", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_3b62b36fa3af4449b651be57", "trace_id": "trace_ed8b459ed93640bbbbf5b97a1e481061", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_51f35acf454443c39a7ea265", "trace_id": "trace_ed8b459ed93640bbbbf5b97a1e481061", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_c135204321ec4165b4ee22e3", "trace_id": "trace_ed8b459ed93640bbbbf5b97a1e481061", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_ed8b459ed93640bbbbf5b97a1e481061", "name": "recommendation_turn:cli-session", "elapsed": 1.841}
+{"event": "span_end", "span_id": "span_fa5f0cae849246e0af46d165", "trace_id": "trace_c467061f2f7c4ae68481449dee098e40", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_26ea4fd6298942d188a0651f", "trace_id": "trace_c467061f2f7c4ae68481449dee098e40", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_3fd70aa6ff7a47b4af066256", "trace_id": "trace_c467061f2f7c4ae68481449dee098e40", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_582252da052b4c49bf5e92b7", "trace_id": "trace_c467061f2f7c4ae68481449dee098e40", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_b9d6910057fc40bbb15d7165", "trace_id": "trace_c467061f2f7c4ae68481449dee098e40", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_ff3bc8f2685a48c6a9183fae", "trace_id": "trace_c467061f2f7c4ae68481449dee098e40", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_5f908e0579d74336846226bb", "trace_id": "trace_c467061f2f7c4ae68481449dee098e40", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_82fb37c581d54663a16e3702", "trace_id": "trace_c467061f2f7c4ae68481449dee098e40", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_dd79519f97344ce99b8cc800", "trace_id": "trace_c467061f2f7c4ae68481449dee098e40", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_3f8c16387e1e473384f3ec2c", "trace_id": "trace_c467061f2f7c4ae68481449dee098e40", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_c467061f2f7c4ae68481449dee098e40", "name": "recommendation_turn:cli-session", "elapsed": 1.6}
+{"event": "span_end", "span_id": "span_57045ebb31a5419989f46763", "trace_id": "trace_f6845d3600e844a58b7425702507116a", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_fae9772e57144e24ae6d7f1e", "trace_id": "trace_f6845d3600e844a58b7425702507116a", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_7cf04d5d7cc34f508dfd9efa", "trace_id": "trace_f6845d3600e844a58b7425702507116a", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_8338808dda1e447fb19edb52", "trace_id": "trace_f6845d3600e844a58b7425702507116a", "label": "FunctionSpanData:search_items", "error": "{'message': 'Error running tool (non-fatal)', 'data': {'tool_name': 'search_items', 'error': \"Invalid JSON input for tool search_items: 1 validation error for search_items_args\\nquery\\n  Field required [type=missing, input_value={'max_price': '10', 'sort_by': 'price'}, input_type=dict]\\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\"}}"}
+{"event": "span_end", "span_id": "span_5faaf32519f3425a994b5fb2", "trace_id": "trace_f6845d3600e844a58b7425702507116a", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_e407824d6ee948d2968b597d", "trace_id": "trace_f6845d3600e844a58b7425702507116a", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_66ce6da569dc4bba873a888d", "trace_id": "trace_f6845d3600e844a58b7425702507116a", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_dd7297b1da4547d1a3279c93", "trace_id": "trace_f6845d3600e844a58b7425702507116a", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_ee410fd6500b409eaa79945d", "trace_id": "trace_f6845d3600e844a58b7425702507116a", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_1637f8c802f24557ba2eb11d", "trace_id": "trace_f6845d3600e844a58b7425702507116a", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_f6845d3600e844a58b7425702507116a", "name": "recommendation_turn:cli-session", "elapsed": 1.29}
+{"event": "span_end", "span_id": "span_460a8a51559547f8a2bb61d8", "trace_id": "trace_09f254dbeb1a415d859b3d16aa870f45", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_c8e8b91a890143b08e9ecac6", "trace_id": "trace_09f254dbeb1a415d859b3d16aa870f45", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_017cae7e48454a8f9bba1027", "trace_id": "trace_09f254dbeb1a415d859b3d16aa870f45", "label": "TurnSpanData", "error": "{'message': 'Guardrail tripwire triggered', 'data': {'guardrail': 'off_topic_check'}}"}
+{"event": "span_end", "span_id": "span_67e967e0a7b145a18250cadb", "trace_id": "trace_09f254dbeb1a415d859b3d16aa870f45", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_50b50a9e0179496baa3cf07e", "trace_id": "trace_09f254dbeb1a415d859b3d16aa870f45", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_09f254dbeb1a415d859b3d16aa870f45", "name": "recommendation_turn:cli-session", "elapsed": 0.016}
+{"event": "span_end", "span_id": "span_f3f73b13d2714038a6fbd386", "trace_id": "trace_17a8d28bb4724cd9a0ee79f6bd9c80c7", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_53252cf01e6640c4bf21e751", "trace_id": "trace_17a8d28bb4724cd9a0ee79f6bd9c80c7", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_a18ef42823364a3784537cc1", "trace_id": "trace_17a8d28bb4724cd9a0ee79f6bd9c80c7", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_ca8d434b631b4dfe8f1cf79d", "trace_id": "trace_17a8d28bb4724cd9a0ee79f6bd9c80c7", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_12b283cfbf8747fb9843ebb9", "trace_id": "trace_17a8d28bb4724cd9a0ee79f6bd9c80c7", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_63ddb167dc6647298c47bbd1", "trace_id": "trace_17a8d28bb4724cd9a0ee79f6bd9c80c7", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_6c15324a115c4cc8995cec23", "trace_id": "trace_17a8d28bb4724cd9a0ee79f6bd9c80c7", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_ee3e4695b00945e4ab113e03", "trace_id": "trace_17a8d28bb4724cd9a0ee79f6bd9c80c7", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_92ffde91a8e946c0befefeb8", "trace_id": "trace_17a8d28bb4724cd9a0ee79f6bd9c80c7", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_ac015ba4615f43399fd59848", "trace_id": "trace_17a8d28bb4724cd9a0ee79f6bd9c80c7", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_17a8d28bb4724cd9a0ee79f6bd9c80c7", "name": "recommendation_turn:cli-session", "elapsed": 2.628}
+{"event": "span_end", "span_id": "span_2690f158812c474ea0f95ddf", "trace_id": "trace_31f35b96626d432b8db08a23822dcb5b", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_fa313b97cd4241a2a24ac793", "trace_id": "trace_31f35b96626d432b8db08a23822dcb5b", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_54418eb1e5ec41cf9eed2f1f", "trace_id": "trace_31f35b96626d432b8db08a23822dcb5b", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_5390743482074c618f76cb24", "trace_id": "trace_31f35b96626d432b8db08a23822dcb5b", "label": "FunctionSpanData:filter_by_tag", "error": null}
+{"event": "span_end", "span_id": "span_81f627e9573846eb952d19c2", "trace_id": "trace_31f35b96626d432b8db08a23822dcb5b", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_9f1d4f4a00294182b5a334dc", "trace_id": "trace_31f35b96626d432b8db08a23822dcb5b", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_c5bf860ca4644e6e801e74b8", "trace_id": "trace_31f35b96626d432b8db08a23822dcb5b", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_a579110311f74fabbe802ef2", "trace_id": "trace_31f35b96626d432b8db08a23822dcb5b", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_e8eac518686d49b0b73250a6", "trace_id": "trace_31f35b96626d432b8db08a23822dcb5b", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_1b982878bbde4557b3f7758d", "trace_id": "trace_31f35b96626d432b8db08a23822dcb5b", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_31f35b96626d432b8db08a23822dcb5b", "name": "recommendation_turn:cli-session", "elapsed": 1.542}
+{"event": "span_end", "span_id": "span_8a21844d925c4d0087b847a0", "trace_id": "trace_647f69a5c1674905a1e2ce5d3dda1d5a", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_11eb4b38480f4cfc92034c0a", "trace_id": "trace_647f69a5c1674905a1e2ce5d3dda1d5a", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_ec508045cf364a20b7c4bdeb", "trace_id": "trace_647f69a5c1674905a1e2ce5d3dda1d5a", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_75e62ffb4f2342bbafe9f78d", "trace_id": "trace_647f69a5c1674905a1e2ce5d3dda1d5a", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_ef2a7107066440138ccf9888", "trace_id": "trace_647f69a5c1674905a1e2ce5d3dda1d5a", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_28426c256271433b929d689c", "trace_id": "trace_647f69a5c1674905a1e2ce5d3dda1d5a", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_b8f59e919ad84265a03d746f", "trace_id": "trace_647f69a5c1674905a1e2ce5d3dda1d5a", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_647f69a5c1674905a1e2ce5d3dda1d5a", "name": "recommendation_turn:cli-session", "elapsed": 1.387}
+{"event": "span_end", "span_id": "span_f949baad92b2424aab44f7a0", "trace_id": "trace_186079d377b64e649b328cfb7e10b381", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_cb561ec11aff4fbf82433f15", "trace_id": "trace_186079d377b64e649b328cfb7e10b381", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_272992f26e924e55aedbc0e4", "trace_id": "trace_186079d377b64e649b328cfb7e10b381", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_774a121b560a472d858c6773", "trace_id": "trace_186079d377b64e649b328cfb7e10b381", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_27ee795d7ba5448982231f77", "trace_id": "trace_186079d377b64e649b328cfb7e10b381", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_e664d74d1b634ae7aa4660ef", "trace_id": "trace_186079d377b64e649b328cfb7e10b381", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_09d3941d792b4f71aee45d6f", "trace_id": "trace_186079d377b64e649b328cfb7e10b381", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_fac1f06c90a54cd0a2b48f37", "trace_id": "trace_186079d377b64e649b328cfb7e10b381", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_79ea527b14eb443195dc748f", "trace_id": "trace_186079d377b64e649b328cfb7e10b381", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_3746b7a159eb4713a5aef640", "trace_id": "trace_186079d377b64e649b328cfb7e10b381", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_186079d377b64e649b328cfb7e10b381", "name": "recommendation_turn:cli-session", "elapsed": 2.551}
+{"event": "span_end", "span_id": "span_df2a8cfbacf34c8d8899a956", "trace_id": "trace_47a6fdde7d064a1e9760257a474ca3dc", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_384279b5e6b8407a810f7259", "trace_id": "trace_47a6fdde7d064a1e9760257a474ca3dc", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_5d838d83cc514f218a359a10", "trace_id": "trace_47a6fdde7d064a1e9760257a474ca3dc", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_b514d11acc0d45f4b080047e", "trace_id": "trace_47a6fdde7d064a1e9760257a474ca3dc", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_776394212176422db94f1800", "trace_id": "trace_47a6fdde7d064a1e9760257a474ca3dc", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_445d8b29c94946b4b1b09487", "trace_id": "trace_47a6fdde7d064a1e9760257a474ca3dc", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_008e556014404e3c9c68b63b", "trace_id": "trace_47a6fdde7d064a1e9760257a474ca3dc", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_47a6fdde7d064a1e9760257a474ca3dc", "name": "recommendation_turn:cli-session", "elapsed": 0.909}
+{"event": "span_end", "span_id": "span_9dbd11b161ff4729b82ebe0e", "trace_id": "trace_3efd1ea3967b47709f753298218243fb", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_8a54784336ee42c795d31a9e", "trace_id": "trace_3efd1ea3967b47709f753298218243fb", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_5aae249d45bc4d55b5da0342", "trace_id": "trace_3efd1ea3967b47709f753298218243fb", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_627b0bfdc9c94555a712a00d", "trace_id": "trace_3efd1ea3967b47709f753298218243fb", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_6f2a8c9bcf39478fa1018076", "trace_id": "trace_3efd1ea3967b47709f753298218243fb", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_cf77996b14124a0092a0034a", "trace_id": "trace_3efd1ea3967b47709f753298218243fb", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_363dbd971064496ca5e3e14b", "trace_id": "trace_3efd1ea3967b47709f753298218243fb", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_4fa56be7aa024819b4186b83", "trace_id": "trace_3efd1ea3967b47709f753298218243fb", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_cb70a036c01443bc9987f16b", "trace_id": "trace_3efd1ea3967b47709f753298218243fb", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_e03416e39c2a414aaf32e635", "trace_id": "trace_3efd1ea3967b47709f753298218243fb", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_3efd1ea3967b47709f753298218243fb", "name": "recommendation_turn:cli-session", "elapsed": 2.554}
+{"event": "span_end", "span_id": "span_0bd3f0e1eb4247c48c48b6f8", "trace_id": "trace_829dad1133b84ad2ae4e8c54d7bf912c", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_2c2b89b3faa046a0bdb9865b", "trace_id": "trace_829dad1133b84ad2ae4e8c54d7bf912c", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_f3921716ed8c4a648440fd03", "trace_id": "trace_829dad1133b84ad2ae4e8c54d7bf912c", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_48c22d344f6b463b9b4b2ff9", "trace_id": "trace_829dad1133b84ad2ae4e8c54d7bf912c", "label": "FunctionSpanData:get_item_details", "error": null}
+{"event": "span_end", "span_id": "span_29c4e9bce66f43e08b0fdde7", "trace_id": "trace_829dad1133b84ad2ae4e8c54d7bf912c", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_77f54c9eab31488da8ac952c", "trace_id": "trace_829dad1133b84ad2ae4e8c54d7bf912c", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_1ae5b32aedde4185b6731b9d", "trace_id": "trace_829dad1133b84ad2ae4e8c54d7bf912c", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_3ac83951005c494b9eed3750", "trace_id": "trace_829dad1133b84ad2ae4e8c54d7bf912c", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_b84dae6940944aedacd66d38", "trace_id": "trace_829dad1133b84ad2ae4e8c54d7bf912c", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_407e0f4c7a8646748d987668", "trace_id": "trace_829dad1133b84ad2ae4e8c54d7bf912c", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_829dad1133b84ad2ae4e8c54d7bf912c", "name": "recommendation_turn:cli-session", "elapsed": 1.148}
+{"event": "span_end", "span_id": "span_0492738cf1d84548889130e6", "trace_id": "trace_3ebe9bc978e04001b7b739855ecf5ed7", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_96e0490128b94527a401943b", "trace_id": "trace_3ebe9bc978e04001b7b739855ecf5ed7", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_2e41f8203e094680be981483", "trace_id": "trace_3ebe9bc978e04001b7b739855ecf5ed7", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_fdafdd13e6f743daaea03023", "trace_id": "trace_3ebe9bc978e04001b7b739855ecf5ed7", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_7f31f6d03b474beaa939747a", "trace_id": "trace_3ebe9bc978e04001b7b739855ecf5ed7", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_1d0ee0d0410a4499b9d29d0f", "trace_id": "trace_3ebe9bc978e04001b7b739855ecf5ed7", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_e8564a7733344428a798f2fa", "trace_id": "trace_3ebe9bc978e04001b7b739855ecf5ed7", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_3ebe9bc978e04001b7b739855ecf5ed7", "name": "recommendation_turn:cli-session", "elapsed": 0.979}
+{"event": "span_end", "span_id": "span_d9538bebc36f41ee802cf437", "trace_id": "trace_149c2ca2f09147fcb9fac0b478d73476", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_61e7ecba4e8f451eb738b3fa", "trace_id": "trace_149c2ca2f09147fcb9fac0b478d73476", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_faa709b1bf9a4a44a30c06fa", "trace_id": "trace_149c2ca2f09147fcb9fac0b478d73476", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_c6dcdcfb07e04d47ade70c92", "trace_id": "trace_149c2ca2f09147fcb9fac0b478d73476", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_f526a6b84f784674bdf7be24", "trace_id": "trace_149c2ca2f09147fcb9fac0b478d73476", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_cb30336402394293a5629f42", "trace_id": "trace_149c2ca2f09147fcb9fac0b478d73476", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_468e56c41bfd4a0a85b1c8db", "trace_id": "trace_149c2ca2f09147fcb9fac0b478d73476", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_149c2ca2f09147fcb9fac0b478d73476", "name": "recommendation_turn:cli-session", "elapsed": 0.792}
+{"event": "span_end", "span_id": "span_3c476d0ffde8493081364183", "trace_id": "trace_898b9383a7484723aeabac63635cb81a", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_4e79a8d413034d679b6acbd3", "trace_id": "trace_898b9383a7484723aeabac63635cb81a", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_e04f023b964e46ada8b5d0b5", "trace_id": "trace_898b9383a7484723aeabac63635cb81a", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_07403704eb9140a99cd7d7c1", "trace_id": "trace_898b9383a7484723aeabac63635cb81a", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_ddac107aa657483da1137a12", "trace_id": "trace_898b9383a7484723aeabac63635cb81a", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_665d2979cfac4b6ba991fbe9", "trace_id": "trace_898b9383a7484723aeabac63635cb81a", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_c6c7f91c86544c68b2be8790", "trace_id": "trace_898b9383a7484723aeabac63635cb81a", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_898b9383a7484723aeabac63635cb81a", "name": "recommendation_turn:cli-session", "elapsed": 0.98}
+{"event": "span_end", "span_id": "span_987ad2482f3c4e66acf6d73c", "trace_id": "trace_7ea6292c0c544ca88c95dba9695e2ba3", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_d5a3155a67134e22991a468b", "trace_id": "trace_7ea6292c0c544ca88c95dba9695e2ba3", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_d578cf8d290e42a7a0932f9d", "trace_id": "trace_7ea6292c0c544ca88c95dba9695e2ba3", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_a2dcf71d50804112891d4c9b", "trace_id": "trace_7ea6292c0c544ca88c95dba9695e2ba3", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_3d95e371277f4d4d9386e4d7", "trace_id": "trace_7ea6292c0c544ca88c95dba9695e2ba3", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_2df07f69b2f644aba5ac3876", "trace_id": "trace_7ea6292c0c544ca88c95dba9695e2ba3", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_2642db3eaaa1443da86b6b99", "trace_id": "trace_7ea6292c0c544ca88c95dba9695e2ba3", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_5c7d6011d07947b3b6483b2d", "trace_id": "trace_7ea6292c0c544ca88c95dba9695e2ba3", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_72b4e14bcd494944ae864858", "trace_id": "trace_7ea6292c0c544ca88c95dba9695e2ba3", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_2cbc8f12623b41e88df679b8", "trace_id": "trace_7ea6292c0c544ca88c95dba9695e2ba3", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_7ea6292c0c544ca88c95dba9695e2ba3", "name": "recommendation_turn:cli-session", "elapsed": 2.531}
+{"event": "span_end", "span_id": "span_e6cec58c2e374b6283792901", "trace_id": "trace_bdacd8cd96744aa4b65803be477b1d9d", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_7a02273d4ade4fd88ab89149", "trace_id": "trace_bdacd8cd96744aa4b65803be477b1d9d", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_e533dc9fa0c84b73aae0dbaf", "trace_id": "trace_bdacd8cd96744aa4b65803be477b1d9d", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_2e7c85efb8ca4b9d976c5997", "trace_id": "trace_bdacd8cd96744aa4b65803be477b1d9d", "label": "FunctionSpanData:filter_by_tag", "error": null}
+{"event": "span_end", "span_id": "span_fb2f00b291d24badbebc9a65", "trace_id": "trace_bdacd8cd96744aa4b65803be477b1d9d", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_385183bd1ffc450aa088c821", "trace_id": "trace_bdacd8cd96744aa4b65803be477b1d9d", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_8d7d3be92e1f46bc964860ec", "trace_id": "trace_bdacd8cd96744aa4b65803be477b1d9d", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_9183577503634eefabf370e5", "trace_id": "trace_bdacd8cd96744aa4b65803be477b1d9d", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_8498ba042c394709b64da5a1", "trace_id": "trace_bdacd8cd96744aa4b65803be477b1d9d", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_88dafe977ffe4fc693b13761", "trace_id": "trace_bdacd8cd96744aa4b65803be477b1d9d", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_bdacd8cd96744aa4b65803be477b1d9d", "name": "recommendation_turn:cli-session", "elapsed": 1.608}
+{"event": "span_end", "span_id": "span_b520b9e3f3924d98b0c575cf", "trace_id": "trace_587b2daef1644a8882e86e8488274d78", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_79429c8d6e554e7f8916b166", "trace_id": "trace_587b2daef1644a8882e86e8488274d78", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_80c7bb3e740b44f9b1a8751a", "trace_id": "trace_587b2daef1644a8882e86e8488274d78", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_01018ca387704321bc226b4a", "trace_id": "trace_587b2daef1644a8882e86e8488274d78", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_8fb2971cbde6468eb8d9d4ca", "trace_id": "trace_587b2daef1644a8882e86e8488274d78", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_b06c310e3617446a812a088e", "trace_id": "trace_587b2daef1644a8882e86e8488274d78", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_5b4726db76a5486e820f9af0", "trace_id": "trace_587b2daef1644a8882e86e8488274d78", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_587b2daef1644a8882e86e8488274d78", "name": "recommendation_turn:cli-session", "elapsed": 0.73}
+{"event": "span_end", "span_id": "span_9857680a413f426ebe47e90d", "trace_id": "trace_56ba0a713ce84b09afa39b493ca0ec5c", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_6b623015208c4b2d90fcb253", "trace_id": "trace_56ba0a713ce84b09afa39b493ca0ec5c", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_d6a39f6a55954e6a8b04ce5d", "trace_id": "trace_56ba0a713ce84b09afa39b493ca0ec5c", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_f61bed5c1b764e8196c3cc78", "trace_id": "trace_56ba0a713ce84b09afa39b493ca0ec5c", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_84c0b8a9086f4b3eb382fe8e", "trace_id": "trace_56ba0a713ce84b09afa39b493ca0ec5c", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_925d5f7887f049e3937a3053", "trace_id": "trace_56ba0a713ce84b09afa39b493ca0ec5c", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_829d961e4075478f95c40006", "trace_id": "trace_56ba0a713ce84b09afa39b493ca0ec5c", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_56ba0a713ce84b09afa39b493ca0ec5c", "name": "recommendation_turn:cli-session", "elapsed": 1.061}
+{"event": "span_end", "span_id": "span_0c77737bf96d4e55b688979f", "trace_id": "trace_e10a9ef602764159b8dc730e0e2cf1c1", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_c277c7477db14436bf8107b1", "trace_id": "trace_e10a9ef602764159b8dc730e0e2cf1c1", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_c4db39dad63344aca942474d", "trace_id": "trace_e10a9ef602764159b8dc730e0e2cf1c1", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_5963e32074124e7bbac0c372", "trace_id": "trace_e10a9ef602764159b8dc730e0e2cf1c1", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_1b2395e015904f5981ccb877", "trace_id": "trace_e10a9ef602764159b8dc730e0e2cf1c1", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_ac7e31abe26142f8b11b60a8", "trace_id": "trace_e10a9ef602764159b8dc730e0e2cf1c1", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_17de8d3e60d04269a958156c", "trace_id": "trace_e10a9ef602764159b8dc730e0e2cf1c1", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_e10a9ef602764159b8dc730e0e2cf1c1", "name": "recommendation_turn:cli-session", "elapsed": 0.887}
+{"event": "span_end", "span_id": "span_5784edd242144a92a515b4b3", "trace_id": "trace_726ee2d394244708bd31d76caba10ba4", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_b396cdd53ab7495895361714", "trace_id": "trace_726ee2d394244708bd31d76caba10ba4", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_4f5ade01ce3c4e0a8fab52e0", "trace_id": "trace_726ee2d394244708bd31d76caba10ba4", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_3e587f791b864ad79747bd1b", "trace_id": "trace_726ee2d394244708bd31d76caba10ba4", "label": "FunctionSpanData:search_items", "error": "{'message': 'Error running tool (non-fatal)', 'data': {'tool_name': 'search_items', 'error': \"Invalid JSON input for tool search_items: 1 validation error for search_items_args\\nquery\\n  Field required [type=missing, input_value={'category': 'Book', 'max...0', 'sort_by': 'rating'}, input_type=dict]\\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\"}}"}
+{"event": "span_end", "span_id": "span_d182e191dac64ec4afa9610e", "trace_id": "trace_726ee2d394244708bd31d76caba10ba4", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_e76ee948f01a4f4cbcb8f981", "trace_id": "trace_726ee2d394244708bd31d76caba10ba4", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_fe510c99b7224f2fb34430e4", "trace_id": "trace_726ee2d394244708bd31d76caba10ba4", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_c965e49741e843a790cca566", "trace_id": "trace_726ee2d394244708bd31d76caba10ba4", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_0cca5b83e6b549db9756bbcd", "trace_id": "trace_726ee2d394244708bd31d76caba10ba4", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_f83bf6ecec884721acd6d1f9", "trace_id": "trace_726ee2d394244708bd31d76caba10ba4", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_726ee2d394244708bd31d76caba10ba4", "name": "recommendation_turn:cli-session", "elapsed": 1.144}
+{"event": "span_end", "span_id": "span_d9dd5851ac974614848c06b0", "trace_id": "trace_8644eb4831474912b2b4fed149f915a2", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_1119aeb95f574713b1cb3cec", "trace_id": "trace_8644eb4831474912b2b4fed149f915a2", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_8d066d4e686b492e9fc62548", "trace_id": "trace_8644eb4831474912b2b4fed149f915a2", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_8c4f763966414425b595caa7", "trace_id": "trace_8644eb4831474912b2b4fed149f915a2", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_60d7c39d3ea84ad991978b87", "trace_id": "trace_8644eb4831474912b2b4fed149f915a2", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_15a602a6ad1d450bb252ae6e", "trace_id": "trace_8644eb4831474912b2b4fed149f915a2", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_df641ac0c90940fc80c86d3a", "trace_id": "trace_8644eb4831474912b2b4fed149f915a2", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_8644eb4831474912b2b4fed149f915a2", "name": "recommendation_turn:cli-session", "elapsed": 0.577}
+{"event": "span_end", "span_id": "span_2f1e3214d71e4820a1cee010", "trace_id": "trace_7d8a12ee1c1043f982b666069e1ca7ae", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_77771afbd7c4474bac2b982e", "trace_id": "trace_7d8a12ee1c1043f982b666069e1ca7ae", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_f3c1708e86c04ecca8fc4d5a", "trace_id": "trace_7d8a12ee1c1043f982b666069e1ca7ae", "label": "TurnSpanData", "error": "{'message': 'Guardrail tripwire triggered', 'data': {'guardrail': 'off_topic_check'}}"}
+{"event": "span_end", "span_id": "span_8e26a611c0e04b73b09b5538", "trace_id": "trace_7d8a12ee1c1043f982b666069e1ca7ae", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_ed9fd27552984caa8118bb9e", "trace_id": "trace_7d8a12ee1c1043f982b666069e1ca7ae", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_7d8a12ee1c1043f982b666069e1ca7ae", "name": "recommendation_turn:cli-session", "elapsed": 0.023}
+{"event": "span_end", "span_id": "span_675b22d4ff9a402c903aa5fc", "trace_id": "trace_b5593c6146bb47ee9d6c673f6ec41e8b", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_b794cf4a47db475a86b182a0", "trace_id": "trace_b5593c6146bb47ee9d6c673f6ec41e8b", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_3865feee58e04413b0e1f6b0", "trace_id": "trace_b5593c6146bb47ee9d6c673f6ec41e8b", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_17a0f6cf84da4af9974fb9e9", "trace_id": "trace_b5593c6146bb47ee9d6c673f6ec41e8b", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_7fd3e4c7b5ec4116b7ea0930", "trace_id": "trace_b5593c6146bb47ee9d6c673f6ec41e8b", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_c998349af5114fafbb188651", "trace_id": "trace_b5593c6146bb47ee9d6c673f6ec41e8b", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_cfbb46592fe14c4ab1930c57", "trace_id": "trace_b5593c6146bb47ee9d6c673f6ec41e8b", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_b5593c6146bb47ee9d6c673f6ec41e8b", "name": "recommendation_turn:cli-session", "elapsed": 1.113}
+{"event": "span_end", "span_id": "span_d7be458af41b4c308344b917", "trace_id": "trace_81c1b1d557af43fba27aee2cb5aaa855", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_175001b226f147aa9b7d985f", "trace_id": "trace_81c1b1d557af43fba27aee2cb5aaa855", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_f3243d7f7cee42e1b899d26a", "trace_id": "trace_81c1b1d557af43fba27aee2cb5aaa855", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_491be1dfa3ed4ec3a9bf32f5", "trace_id": "trace_81c1b1d557af43fba27aee2cb5aaa855", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_f5be1c24e4a148f79af9a081", "trace_id": "trace_81c1b1d557af43fba27aee2cb5aaa855", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_8b7cbf18e69b4587be727784", "trace_id": "trace_81c1b1d557af43fba27aee2cb5aaa855", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_57b65de249db4c5797aeaa93", "trace_id": "trace_81c1b1d557af43fba27aee2cb5aaa855", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_81c1b1d557af43fba27aee2cb5aaa855", "name": "recommendation_turn:cli-session", "elapsed": 0.65}
+{"event": "trace_end", "trace_id": "trace_d44dd942c95547aab9d8694a518ad385", "name": "recommendation_turn:mock-test-1", "elapsed": 0.0}
+{"event": "trace_end", "trace_id": "trace_ae3ab1b257d745dd9be4c1c1af5992e8", "name": "recommendation_turn:mock-session-test", "elapsed": 0.0}
+{"event": "trace_end", "trace_id": "trace_8332c4f7d7c647cdbdd62cb32bfff330", "name": "recommendation_turn:mock-session-test", "elapsed": 0.0}
+{"event": "trace_end", "trace_id": "trace_e6529c617c88492da2f8ca7673179b91", "name": "recommendation_turn:mock-empty-test", "elapsed": 0.001}
+{"event": "span_end", "span_id": "span_8f9d465fd2bd4db0b4da2207", "trace_id": "trace_5d13d97168ed488395a565a0ea63e2ed", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_d3ae14dfab1b4377b27d2a14", "trace_id": "trace_5d13d97168ed488395a565a0ea63e2ed", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_d41368f3bca84c0ab4ad4c34", "trace_id": "trace_5d13d97168ed488395a565a0ea63e2ed", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_28f181065e3644fdae3b9868", "trace_id": "trace_5d13d97168ed488395a565a0ea63e2ed", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_cc1b1bade6c4414a99a85c95", "trace_id": "trace_5d13d97168ed488395a565a0ea63e2ed", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_8ff4376c349f42b8840b175f", "trace_id": "trace_5d13d97168ed488395a565a0ea63e2ed", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_e553bc17c7994adf91d0a8d7", "trace_id": "trace_5d13d97168ed488395a565a0ea63e2ed", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_9a1c5e85f0614a33b1508e2e", "trace_id": "trace_5d13d97168ed488395a565a0ea63e2ed", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_a6320760df1949d098a1bce0", "trace_id": "trace_5d13d97168ed488395a565a0ea63e2ed", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_0a86518d4b7c4e63891b90e3", "trace_id": "trace_5d13d97168ed488395a565a0ea63e2ed", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_5d13d97168ed488395a565a0ea63e2ed", "name": "recommendation_turn:test", "elapsed": 7.972}
+{"event": "span_end", "span_id": "span_2cca464a23cc4314b1917263", "trace_id": "trace_c0c2e3f2a0d34d1ca5fe8f5c1c33c513", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_918e5f4666864eaaa82f0656", "trace_id": "trace_c0c2e3f2a0d34d1ca5fe8f5c1c33c513", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_659112b5cb614b4cad6d89b3", "trace_id": "trace_c0c2e3f2a0d34d1ca5fe8f5c1c33c513", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_08f7e17356f84b8c94e1a734", "trace_id": "trace_c0c2e3f2a0d34d1ca5fe8f5c1c33c513", "label": "FunctionSpanData:filter_by_tag", "error": null}
+{"event": "span_end", "span_id": "span_f6826a1691e34819b0a2a4d1", "trace_id": "trace_c0c2e3f2a0d34d1ca5fe8f5c1c33c513", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_bad21b85f2d64fada5461548", "trace_id": "trace_c0c2e3f2a0d34d1ca5fe8f5c1c33c513", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_ebecbfac2b7b42f4bbf4a1d8", "trace_id": "trace_c0c2e3f2a0d34d1ca5fe8f5c1c33c513", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_4892b622eb9d4c04b91d0959", "trace_id": "trace_c0c2e3f2a0d34d1ca5fe8f5c1c33c513", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_988ff60eff244c09afeba79e", "trace_id": "trace_c0c2e3f2a0d34d1ca5fe8f5c1c33c513", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_fb1c3f191731408e8e524647", "trace_id": "trace_c0c2e3f2a0d34d1ca5fe8f5c1c33c513", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_c0c2e3f2a0d34d1ca5fe8f5c1c33c513", "name": "recommendation_turn:test", "elapsed": 1.419}
+{"event": "span_end", "span_id": "span_0df3614977c542a48afc99a0", "trace_id": "trace_8865b4430d45407d981fd6ee5d011e45", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_5799d93d30874d02b8e6a4a9", "trace_id": "trace_8865b4430d45407d981fd6ee5d011e45", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_c97b25ffda4743c89bf8c28a", "trace_id": "trace_8865b4430d45407d981fd6ee5d011e45", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_fb8a9ffa08434cfd808ac293", "trace_id": "trace_8865b4430d45407d981fd6ee5d011e45", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_4577b642a3544228b52c1820", "trace_id": "trace_8865b4430d45407d981fd6ee5d011e45", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_fe6d8c233609498ea7458d78", "trace_id": "trace_8865b4430d45407d981fd6ee5d011e45", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_00bf23389763486aba28aec1", "trace_id": "trace_8865b4430d45407d981fd6ee5d011e45", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_6936176bb06f467694244bac", "trace_id": "trace_8865b4430d45407d981fd6ee5d011e45", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_0197a833dbcc4329a3972a17", "trace_id": "trace_8865b4430d45407d981fd6ee5d011e45", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_1f18cabd4aca4f0c89fdbd0f", "trace_id": "trace_8865b4430d45407d981fd6ee5d011e45", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_8865b4430d45407d981fd6ee5d011e45", "name": "recommendation_turn:test", "elapsed": 2.717}
+{"event": "span_end", "span_id": "span_abdf874e7ea046fba9b1d085", "trace_id": "trace_93b40e4a7dae4a0090caeda9f764bc26", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_1951e0b582e74bbaa0a8ae45", "trace_id": "trace_93b40e4a7dae4a0090caeda9f764bc26", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_d63c7322d11847d290d3203d", "trace_id": "trace_93b40e4a7dae4a0090caeda9f764bc26", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_f163bb1e0dd94c19a28a3440", "trace_id": "trace_93b40e4a7dae4a0090caeda9f764bc26", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_836b7e1052ed448c9e34a0a1", "trace_id": "trace_93b40e4a7dae4a0090caeda9f764bc26", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_57d33e07de294e5381cbf743", "trace_id": "trace_93b40e4a7dae4a0090caeda9f764bc26", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_909be4908b3b4f1985d3660e", "trace_id": "trace_93b40e4a7dae4a0090caeda9f764bc26", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_e3eb110c92e9406288029505", "trace_id": "trace_93b40e4a7dae4a0090caeda9f764bc26", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_b1ad84fbd5324f6998fe9821", "trace_id": "trace_93b40e4a7dae4a0090caeda9f764bc26", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_7e8d860d9a7e4a8fb4b9b414", "trace_id": "trace_93b40e4a7dae4a0090caeda9f764bc26", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_93b40e4a7dae4a0090caeda9f764bc26", "name": "recommendation_turn:cli-session", "elapsed": 6.311}
+{"event": "span_end", "span_id": "span_16461e2f930246a2bc98d87c", "trace_id": "trace_0010d028c7a943979da6dbab3ea284f0", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_51804b97938b4fa6af3a7c76", "trace_id": "trace_0010d028c7a943979da6dbab3ea284f0", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_9ef58599f8244b1c8502bb7b", "trace_id": "trace_0010d028c7a943979da6dbab3ea284f0", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_90723d0203a147508da7d16a", "trace_id": "trace_0010d028c7a943979da6dbab3ea284f0", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_638131835a80403e8872df27", "trace_id": "trace_0010d028c7a943979da6dbab3ea284f0", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_fc640e5262b64c57a5f2a86d", "trace_id": "trace_0010d028c7a943979da6dbab3ea284f0", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_94434ae0ced342a5ad2bbc6f", "trace_id": "trace_0010d028c7a943979da6dbab3ea284f0", "label": "FunctionSpanData:list_categories", "error": null}
+{"event": "span_end", "span_id": "span_01da7d7d2c73494883dfd0fb", "trace_id": "trace_0010d028c7a943979da6dbab3ea284f0", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_1701732c1f53415c983e09f8", "trace_id": "trace_0010d028c7a943979da6dbab3ea284f0", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_9693f9a20e8643c9801e7fa5", "trace_id": "trace_0010d028c7a943979da6dbab3ea284f0", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_3ecc8cad632e4d148467af17", "trace_id": "trace_0010d028c7a943979da6dbab3ea284f0", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_bd8d8ad244694a96b1d1ef01", "trace_id": "trace_0010d028c7a943979da6dbab3ea284f0", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_783c02375fb84096bdfe2ebc", "trace_id": "trace_0010d028c7a943979da6dbab3ea284f0", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_0010d028c7a943979da6dbab3ea284f0", "name": "recommendation_turn:cli-session", "elapsed": 2.522}
+{"event": "span_end", "span_id": "span_0f0383d431124d509275e8e8", "trace_id": "trace_1b3a65c96996473e92a4ce811c3610e9", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_29c9949131af42dda271cba6", "trace_id": "trace_1b3a65c96996473e92a4ce811c3610e9", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_84355eb3516549dd9d9b6a26", "trace_id": "trace_1b3a65c96996473e92a4ce811c3610e9", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_0715699abcca4ddda9b8a1e7", "trace_id": "trace_1b3a65c96996473e92a4ce811c3610e9", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_1b1d9075eb8542cea2d5cac5", "trace_id": "trace_1b3a65c96996473e92a4ce811c3610e9", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_bc602404282a4ff1ade7cbc0", "trace_id": "trace_1b3a65c96996473e92a4ce811c3610e9", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_f575c4f101404f4394893245", "trace_id": "trace_1b3a65c96996473e92a4ce811c3610e9", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_2f8c26eac8804459a32ac811", "trace_id": "trace_1b3a65c96996473e92a4ce811c3610e9", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_e04108d146c9432ea700874f", "trace_id": "trace_1b3a65c96996473e92a4ce811c3610e9", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_05a7730089e44e1096d463ba", "trace_id": "trace_1b3a65c96996473e92a4ce811c3610e9", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_1b3a65c96996473e92a4ce811c3610e9", "name": "recommendation_turn:cli-session", "elapsed": 2.131}
+{"event": "span_end", "span_id": "span_9e1c473f21e042ff971e6dc1", "trace_id": "trace_67abe5b630a442089a7539b36f5b4b3a", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_706ea5a9a5d8471da136433e", "trace_id": "trace_67abe5b630a442089a7539b36f5b4b3a", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_0934f50ea77a4e2bbc337c04", "trace_id": "trace_67abe5b630a442089a7539b36f5b4b3a", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_fca88b0ff75146efba76601a", "trace_id": "trace_67abe5b630a442089a7539b36f5b4b3a", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_88f1f6b5d4c64e6786423063", "trace_id": "trace_67abe5b630a442089a7539b36f5b4b3a", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_2f578e723bee46c2b559bbd2", "trace_id": "trace_67abe5b630a442089a7539b36f5b4b3a", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_db3a41d3e32d467cb67de4e6", "trace_id": "trace_67abe5b630a442089a7539b36f5b4b3a", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_a0c10e5d8dd342f390f04cfe", "trace_id": "trace_67abe5b630a442089a7539b36f5b4b3a", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_c6a5552bd37c4b7693791dfb", "trace_id": "trace_67abe5b630a442089a7539b36f5b4b3a", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_b48099a7b25c4bcc80d8193e", "trace_id": "trace_67abe5b630a442089a7539b36f5b4b3a", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_67abe5b630a442089a7539b36f5b4b3a", "name": "recommendation_turn:cli-session", "elapsed": 1.573}
+{"event": "span_end", "span_id": "span_3c5993f5996c47b48607ffaa", "trace_id": "trace_0085203a14ff41f79ed92e05d473c28f", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_a22b31f3b6f048748545e4f2", "trace_id": "trace_0085203a14ff41f79ed92e05d473c28f", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_0867a8dfb85840fb8ad7db8d", "trace_id": "trace_0085203a14ff41f79ed92e05d473c28f", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_1bfd261e842f4f3c93f5e19a", "trace_id": "trace_0085203a14ff41f79ed92e05d473c28f", "label": "FunctionSpanData:filter_by_tag", "error": null}
+{"event": "span_end", "span_id": "span_ac0a988d57674d1384e4920d", "trace_id": "trace_0085203a14ff41f79ed92e05d473c28f", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_a3cb7577d2664e6286ced2b0", "trace_id": "trace_0085203a14ff41f79ed92e05d473c28f", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_445ab09e55b54da29c6ee2b3", "trace_id": "trace_0085203a14ff41f79ed92e05d473c28f", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_c9123884b31143528ea4c096", "trace_id": "trace_0085203a14ff41f79ed92e05d473c28f", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_0502c77495f7408faf3d3cdc", "trace_id": "trace_0085203a14ff41f79ed92e05d473c28f", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_ecbe12bcdcb2475f81f459c3", "trace_id": "trace_0085203a14ff41f79ed92e05d473c28f", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_0085203a14ff41f79ed92e05d473c28f", "name": "recommendation_turn:cli-session", "elapsed": 1.148}
+{"event": "span_end", "span_id": "span_a3c746365e2b452abe2789a0", "trace_id": "trace_35c9e70a300e4df2b4250c502a65a83d", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_7806aae5238041b59a7b9a3c", "trace_id": "trace_35c9e70a300e4df2b4250c502a65a83d", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_13c758b80cb445489fd27dd0", "trace_id": "trace_35c9e70a300e4df2b4250c502a65a83d", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_7bbbbf9facc74a0097a4018e", "trace_id": "trace_35c9e70a300e4df2b4250c502a65a83d", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_d168c131a35e419cbaf6a05e", "trace_id": "trace_35c9e70a300e4df2b4250c502a65a83d", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_07ae29a4fbb249429d2bb9c8", "trace_id": "trace_35c9e70a300e4df2b4250c502a65a83d", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_742307179338415c825449ae", "trace_id": "trace_35c9e70a300e4df2b4250c502a65a83d", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_2d66a2e9681d40539e4ec4a3", "trace_id": "trace_35c9e70a300e4df2b4250c502a65a83d", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_237a302af6fe46a69088738c", "trace_id": "trace_35c9e70a300e4df2b4250c502a65a83d", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_1a4d6dcdf3af4ded83029cb6", "trace_id": "trace_35c9e70a300e4df2b4250c502a65a83d", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_0b010b3b57484287b19df3dd", "trace_id": "trace_35c9e70a300e4df2b4250c502a65a83d", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_dd4b2b429dc6455d93ec2f14", "trace_id": "trace_35c9e70a300e4df2b4250c502a65a83d", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_2e23e7663b534c8eab66f97f", "trace_id": "trace_35c9e70a300e4df2b4250c502a65a83d", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_35c9e70a300e4df2b4250c502a65a83d", "name": "recommendation_turn:cli-session", "elapsed": 3.65}
+{"event": "span_end", "span_id": "span_bfc8ae8278aa47e2b421109c", "trace_id": "trace_fa5b530e0eab479893797f0b1f20264d", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_6bb76cfb426f40c39cdbe92a", "trace_id": "trace_fa5b530e0eab479893797f0b1f20264d", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_35c327f1c2fe424ca8f39828", "trace_id": "trace_fa5b530e0eab479893797f0b1f20264d", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_194a308a5c8b4e6d9000558b", "trace_id": "trace_fa5b530e0eab479893797f0b1f20264d", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_a7e197fe4d704d19ae5717b0", "trace_id": "trace_fa5b530e0eab479893797f0b1f20264d", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_08995f9911ae42148e5b512d", "trace_id": "trace_fa5b530e0eab479893797f0b1f20264d", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_dc502cf89960497ca737be80", "trace_id": "trace_fa5b530e0eab479893797f0b1f20264d", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_95a1d7c39ffe4f22a2d0c906", "trace_id": "trace_fa5b530e0eab479893797f0b1f20264d", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_fa036646868b46268b3a4a44", "trace_id": "trace_fa5b530e0eab479893797f0b1f20264d", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_bb755e64027e4335a98c991d", "trace_id": "trace_fa5b530e0eab479893797f0b1f20264d", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_fa5b530e0eab479893797f0b1f20264d", "name": "recommendation_turn:cli-session", "elapsed": 2.732}
+{"event": "span_end", "span_id": "span_fe960ba2f192413b9ca1ba48", "trace_id": "trace_50fc776b7f714d88969fe62b053764a6", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_96a3461fc540484db123d87f", "trace_id": "trace_50fc776b7f714d88969fe62b053764a6", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_42e794925c5a43bca34136bc", "trace_id": "trace_50fc776b7f714d88969fe62b053764a6", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_581058804e214f2e99e19fbd", "trace_id": "trace_50fc776b7f714d88969fe62b053764a6", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_496728e5f87e4e00af5ed17d", "trace_id": "trace_50fc776b7f714d88969fe62b053764a6", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_a9520e12ac6048198cdff17c", "trace_id": "trace_50fc776b7f714d88969fe62b053764a6", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_cf16f78c76204425b748584e", "trace_id": "trace_50fc776b7f714d88969fe62b053764a6", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_dbf2503f7c8343f5a667a922", "trace_id": "trace_50fc776b7f714d88969fe62b053764a6", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_eab66a588fee4407ad643fe1", "trace_id": "trace_50fc776b7f714d88969fe62b053764a6", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_8bc07e6565894597b9369427", "trace_id": "trace_50fc776b7f714d88969fe62b053764a6", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_50fc776b7f714d88969fe62b053764a6", "name": "recommendation_turn:cli-session", "elapsed": 3.263}
+{"event": "span_end", "span_id": "span_41a1a0afb3d94805b6bdebb7", "trace_id": "trace_9c1d700cda2b4eb58ed27b938a08ae87", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_13f865054d5d42f78d5c9609", "trace_id": "trace_9c1d700cda2b4eb58ed27b938a08ae87", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_24418a4121d64ca28d80e619", "trace_id": "trace_9c1d700cda2b4eb58ed27b938a08ae87", "label": "TurnSpanData", "error": "{'message': 'Guardrail tripwire triggered', 'data': {'guardrail': 'off_topic_check'}}"}
+{"event": "span_end", "span_id": "span_bd39139f6d90418c96b6123d", "trace_id": "trace_9c1d700cda2b4eb58ed27b938a08ae87", "label": "AgentSpanData:ShopBot", "error": null}
+{"event": "span_end", "span_id": "span_c29d1d88e07443b2999b018f", "trace_id": "trace_9c1d700cda2b4eb58ed27b938a08ae87", "label": "TaskSpanData:RecommendationAgent", "error": null}
+{"event": "trace_end", "trace_id": "trace_9c1d700cda2b4eb58ed27b938a08ae87", "name": "recommendation_turn:cli-session", "elapsed": 0.018}

@@ -16,6 +16,9 @@ dependencies = [
     "ruff>=0.15.14",
 ]
 
+[dependency-groups]
+dev = ["hypothesis>=6.155.1"]
+
 [tool.pytest.ini_options]
 pythonpath = ["."]
 asyncio_mode = "auto"

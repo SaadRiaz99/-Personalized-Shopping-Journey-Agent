@@ -19,6 +19,7 @@ from rich         import print as rprint     # Rich-enhanced print
 from agent.agent          import run_turn    # Main agent entry point
 from agent.session_memory import drop_session  # Session reset
 from agents               import InputGuardrailTripwireTriggered, OutputGuardrailTripwireTriggered
+from openai import APIStatusError, APITimeoutError, APIConnectionError, RateLimitError
 
 console = Console()
 SESSION_ID = "cli-session"                   # Fixed session key for CLI user
@@ -115,8 +116,53 @@ async def main():
                 border_style="red",
             ))
 
+        except APIStatusError as e:
+            if e.status_code == 400:
+                console.print(Panel(
+                    "[yellow]I had trouble understanding that request. "
+                    "Please try rephrasing — for example: \"show me smartphones\" "
+                    "or \"recommend a phone.\"[/]",
+                    title="[bold yellow]Could you rephrase that?[/]",
+                    border_style="yellow",
+                ))
+            elif e.status_code == 429:
+                console.print(Panel(
+                    "[yellow]The service is temporarily busy. "
+                    "Please wait a moment and try again.[/]",
+                    title="[bold yellow]Rate limit reached[/]",
+                    border_style="yellow",
+                ))
+            else:
+                console.print(Panel(
+                    f"[red]Something went wrong with the AI service (HTTP {e.status_code}). "
+                    "Please try again later.[/]",
+                    title="[bold red]Service error[/]",
+                    border_style="red",
+                ))
+
+        except (APITimeoutError, APIConnectionError) as e:
+            console.print(Panel(
+                "[yellow]Could not reach the AI service. "
+                "Please check your internet connection and try again.[/]",
+                title="[bold yellow]Connection issue[/]",
+                border_style="yellow",
+            ))
+
+        except RateLimitError as e:
+            console.print(Panel(
+                "[yellow]API rate limit reached (20 requests/day on the free tier). "
+                "Please try again later, or add a billing account.[/]",
+                title="[bold yellow]Rate limit reached[/]",
+                border_style="yellow",
+            ))
+
         except Exception as e:
-            console.print(f"[bold red]Error:[/] {e}")
+            console.print(Panel(
+                f"[red]Unexpected error: {e}[/]\n"
+                "[dim]Try running /reset to clear the session and start fresh.[/]",
+                title="[bold red]Error[/]",
+                border_style="red",
+            ))
 
 
 if __name__ == "__main__":

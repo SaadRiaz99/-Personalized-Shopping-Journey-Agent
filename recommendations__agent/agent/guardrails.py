@@ -64,8 +64,8 @@ _OFF_TOPIC_PATTERNS = [
     r"\b(disease|illness|infection|treatment|therapy|medication|prescription)\b",
     r"\b(diet|nutrition|calorie|workout|exercise|fitness|weight loss)\b",
     r"\b(mental health|anxiety|depression|therapy|counseling|therapist)\b",
-    # Finance / investing
-    r"\b(stock|share|market|trading|invest|investing|investment|portfolio)\b",
+    # Finance / investing (NOT "in stock" — that is commerce)
+    r"\b(share|market|trading|invest|investing|investment|portfolio)\b",
     r"\b(crypto|cryptocurrency|bitcoin|ethereum|blockchain|nft|token)\b",
     r"\b(tax|loan|mortgage|interest|credit|debt|banking|insurance)\b",
     r"\b(budget|financial|finance|retirement|savings|401k|ira)\b",

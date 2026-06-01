@@ -11,6 +11,7 @@ Test suite covering:
 """
 
 import json
+import unittest
 import pytest
 from unittest.mock import MagicMock
 
@@ -29,9 +30,11 @@ from agent.tools import (
     search_items,
     filter_by_tag,
     get_item_details,
+    list_categories,
     search_items_fn,
     filter_by_tag_fn,
     get_item_details_fn,
+    list_categories_fn,
     _all_items,
     CATALOGUE,
 )
@@ -49,8 +52,8 @@ def make_ctx(session_id: str = "test-session") -> MagicMock:
 # ── 1. Tool unit tests ────────────────────────────────────────────────────────
 class TestTools:
 
-    def test_catalogue_has_12_hardcoded(self):
-        assert len(CATALOGUE) == 12
+    def test_catalogue_has_15_hardcoded(self):
+        assert len(CATALOGUE) == 15
 
     def test_all_items_includes_products_json(self):
         all_items = _all_items()
@@ -106,6 +109,64 @@ class TestTools:
         if json_ids:
             result = json.loads(get_item_details_fn(json_ids[0]))
             assert result["id"] == json_ids[0]
+
+    # ── New search parameter tests ─────────────────────────────────────────
+    def test_search_items_with_category_filter(self):
+        """search_items can filter by category."""
+        result = json.loads(search_items_fn("", category="Book"))
+        assert len(result) >= 1
+        assert all(r["category"] == "Book" for r in result)
+
+    def test_search_items_with_min_rating(self):
+        """search_items can filter by min_rating."""
+        result = json.loads(search_items_fn("phone", min_rating=4.7))
+        assert len(result) >= 1
+        assert all(r["rating"] >= 4.7 for r in result)
+
+    def test_search_items_with_price_range(self):
+        """search_items can filter by price range (no price field in results — no crash)."""
+        result = json.loads(search_items_fn("laptop", min_price=10, max_price=2000))
+        assert isinstance(result, list)
+
+    def test_search_items_sorted_by_rating(self):
+        """search_items can sort results by rating descending."""
+        result = json.loads(search_items_fn("book", sort_by="rating"))
+        if len(result) >= 2:
+            assert result[0]["rating"] >= result[1]["rating"]
+
+    def test_search_items_with_in_stock_only(self):
+        """search_items can filter by in_stock_only (no crash if field absent)."""
+        result = json.loads(search_items_fn("headphones", in_stock_only=True))
+        assert isinstance(result, list)
+
+    def test_list_categories_returns_strings(self):
+        """list_categories returns a JSON array of category names."""
+        result = json.loads(list_categories_fn())
+        assert isinstance(result, list)
+        assert len(result) >= 1
+        assert all(isinstance(c, str) for c in result)
+        assert "Book" in result
+
+    # ── filter_by_tag with category tests ───────────────────────────────────
+    def test_filter_by_tag_with_category(self):
+        """filter_by_tag with category limits results to that category."""
+        result = json.loads(filter_by_tag_fn("sci-fi", category="Book"))
+        assert len(result) >= 1
+        for item in result:
+            assert item["category"] == "Book"
+
+    def test_filter_by_tag_with_category_and_min_rating(self):
+        """filter_by_tag with category + min_rating intersects both filters."""
+        result = json.loads(filter_by_tag_fn("sci-fi", min_rating=4.7, category="Book"))
+        assert len(result) >= 1
+        for item in result:
+            assert item["category"] == "Book"
+            assert item["rating"] >= 4.7
+
+    def test_filter_by_tag_with_nonexistent_category(self):
+        """filter_by_tag with a category that has no matching tag returns empty."""
+        result = json.loads(filter_by_tag_fn("nonexistent-tag-xyz", category="Apparel"))
+        assert result == []
 
 
 # ── 2. Session memory tests ───────────────────────────────────────────────────
@@ -282,7 +343,56 @@ class TestContext:
         assert len(summary["tools_called"]) == 1
 
 
-# ── 5. Integration tests (live GEMINI_API_KEY) ────────────────────────────────
+# ── 5. Mock-LLM integration tests (no API key required) ───────────────────────
+class TestMockLLM:
+    """Tests that mock Runner.run() to avoid real API calls."""
+
+    @pytest.mark.asyncio
+    async def test_run_turn_returns_dict_with_expected_keys(self):
+        """run_turn returns response, tool_calls, and session_summary."""
+        from agents import Runner
+        from agent.agent import run_turn
+        mock_result = MagicMock()
+        mock_result.final_output = "Here are 3 great sci-fi books I found for you."
+        mock_result.last_agent = None
+        with unittest.mock.patch.object(Runner, "run", return_value=mock_result):
+            result = await run_turn("recommend a sci-fi book", session_id="mock-test-1")
+        assert isinstance(result, dict)
+        assert "response" in result
+        assert "tool_calls" in result
+        assert "session_summary" in result
+        assert "sci-fi" in result["response"]
+
+    @pytest.mark.asyncio
+    async def test_mock_run_turn_uses_same_session(self):
+        """run_turn uses the same session object across calls with same ID."""
+        from agents import Runner
+        from agent.agent import run_turn
+        from agent.session_memory import get_or_create_session, drop_session
+        drop_session("mock-session-test")
+        mock_result = MagicMock()
+        mock_result.final_output = "Here are some recommendations for you."
+        mock_result.last_agent = None
+        with unittest.mock.patch.object(Runner, "run", return_value=mock_result):
+            await run_turn("show me books", session_id="mock-session-test")
+            result2 = await run_turn("show me electronics", session_id="mock-session-test")
+        session = get_or_create_session("mock-session-test")
+        assert result2["session_summary"]["session_id"] == session.session_id
+
+    @pytest.mark.asyncio
+    async def test_mock_empty_input_handled(self):
+        """run_turn handles empty/whitespace input gracefully."""
+        from agents import Runner
+        from agent.agent import run_turn
+        mock_result = MagicMock()
+        mock_result.final_output = "Please tell me what kind of products you're looking for."
+        mock_result.last_agent = None
+        with unittest.mock.patch.object(Runner, "run", return_value=mock_result):
+            result = await run_turn("   ", session_id="mock-empty-test")
+        assert isinstance(result["response"], str)
+
+
+# ── 6. Integration tests (live GEMINI_API_KEY) ────────────────────────────────
 class TestIntegration:
 
     @pytest.mark.asyncio

@@ -53,21 +53,19 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//QmICAAAA//98Uk2PmzAQ/SuuryUpAfIhblW1
-        h2wr9dBjVVkODODG2MQzZItW/PcOm2bDqmm5IL15896bGT9LU8pc1uAWq+0uzlZpttosHr59+rJ+
-        1J/T/ZDFVJ8eyT3ISPrDTyiI6UWjaVn4trNAxjsuFQE0AUvdVCLZ+hIs030HTpsPdUeLzC9a4wx3
-        dMGfTQmB61+5/nHPGA5I0KrKuBpCF4ybzKpOZUmWFJskTquJBOFsClBkpmbXW8v2jWcIZf6dB3Il
-        /JJ5HEnra3Y54JXFugYbxVGRQ+cSyXcs6DSZM6h/VFtA1DXI/FkGb/kvNaJB0hyOjb0jeImZiPci
-        EXDqtUWRLcW+EoPvRaPPILQbxKkHnJaFQh98T4KTlX1BKHwQDqAUDdhOPBlqBPoWqOElCLAIkagA
-        rKgCgCAvNB7fsXGAqkdtr6NdUnPLBRjHH5Hsr7nZqu1IkT+C42Uk2XoKfr3eDd9Fkjxpe0O26cRE
-        ni9exvyt0zX3GlSHwR9lXukp31t9VQJpY3EyLnTRQPkqxyd5QdRTMARzWPel8XNgehozYLzEmGv3
-        HRJP3SrjKgjg+EX8nfQO6U/YOTfdbO9zb0vCNw2rzW68s8J5vNeDzKcyLV/kP3OP4/gbAAD//wMA
-        p5hSRbIDAAA=
+        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//fFFda9tAEPwr5l4ru5IiybHeAqFQSikUSh9K
+        Oc7SSt7kvnp7spsG/feu4tpWqNt7OZidnZndfRbYilr0YJfZ+jYtsmJTrpcfqq/3dPuu+vLx/ib7
+        9flgDq0XiXDbB2gi05udiqvGGa8horNcagKoCCx1UUmEcS1opjsPVuHb3sdl4ZYGLXKHD26PLQSu
+        f+L63XvG6IkiGNmh7SH4gHYy67zMNlVX5pXKy4kEYY8NyIhTsx20ZvudY4hE/Y0Hsi38FHWaCO16
+        dtnSicW6SDvJUYlD14Kim8ayKuIe5D+qBohUD6J+FsFp/oUiQoqKw7GxsxFeYuaLN4t8AT8GpWlR
+        rLgWoBtI6ZP7UZhHOwLj+D0Rw0macxofZXSPYDlvXpST9mnBZ3yTiOii0hdiWUxE4gTpKuVX5Bm3
+        Isntk3sUdcdpIHktL1uICjVNvo1qdtCe5XhpL4g8BIwwh9XQopsD0/FmwHiMMdcePEUe2ki0HQSw
+        fLO/k14h/Qk7595U6+vcy47oVUNaFuOVDc7jne8xnwoNH+Q/c4/j+BsAAP//AwBSAPJ8SQMAAA==
     headers:
       Access-Control-Allow-Origin:
       - '*'
       CF-RAY:
-      - a0576c0ca872c697-KHI
+      - a05791ae19d2c697-KHI
       Connection:
       - keep-alive
       Content-Encoding:
@@ -75,7 +73,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 02 Jun 2026 15:16:57 GMT
+      - Tue, 02 Jun 2026 15:42:38 GMT
       Permissions-Policy:
       - payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
         "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
@@ -88,7 +86,7 @@ interactions:
       X-Content-Type-Options:
       - nosniff
       X-Generation-Id:
-      - gen-1780413416-ESCL5JaK3Iy40tgqJtnE
+      - gen-1780414957-K6WDs8F6UMD31zRwmwdp
       access-control-expose-headers:
       - X-Generation-Id,cf-ray
     status:
@@ -143,21 +141,21 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//QmICAAAA//9CYgIAAAD//0JiAgAAAP//fVLL
-        ktMwEPwVlS5cnOBsHuvyjS0uFMWNA4RQLlkex9rYGqORE0LK/84oibNeCPhiudXu6W7pJE0hU7kF
-        O5k9JvFiNl/MVpPndXJcQ/G0ar4+vcf1pw/Hj19kJDF/Bu2ZrivlpxqbtgZv0PKWdqA8sNSLSiQb
-        LKBmOrZglXm7bf1kgZPGWMN/tA73pgDH++9+dQ4YoiN5aLLS2C241hkbZpVtBvn8EeLVDHQggdsb
-        DZk34V/b1TVPr5Ahkuk3zmML+CnTOJI1bnlITgOLdQ1VGTsl9pxK8tiyoFXe7CH7x24DRGoLMj1J
-        hzW/pSIy5BWb48FoPZxtnjbSUKaVVzw2+9GBO25kWqqaINrIiyrnYmwjP1cgOs7xhsSZKAwJJRrl
-        q/BNodJIHCqjK1EgkLDohYOaCxYeBYFyumKtSOQOD3ReoROKdrwUKsfOCw5edNqTMJalr1/iam+6
-        kT2bd1B2pOqhnpvHC9D33yPZDdlZoWl95nEHlgudLeMQfrgAN3yeRNIjD3lhJklgEncUT2N+Fst5
-        FKrKj7gbCnotnxXglakpzNVKV1Dc1MLUgGQHZzyMYdUVBsdAuFwjoL+4GGt3LXkO3WTGluDA8qX6
-        y+gdztXrmPrwsIzuyw0N0R/8pL/T39jc7TTGmUzDx/Gf1H3f/wa5gOq4CAQAAA==
+        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//QmICAAAA//9CYgIAAAD//0JiAgAAAP//fVLB
+        ctowFPwVjc6GGgIJcMup0+mhh+ZWOh4hP+NXbMnRe8aljP+9TyQmTkvri+3VanffSmeNud7oPbjJ
+        7GGVLmaL9fJh8rnbhV85dFUePh7p6ev6/pF1ov3uB1gWui0NT62vmwoYvZMlG8AwiNSbSqJrn0Ml
+        dN+AM/hh3/Bk4Sc1OpQdTfBHzCHI+hdZf/wkGJ2Ioc4KdHsITUAXzYomSxf3q3Vq5nYZSRCOaCFj
+        jJtdW1ViX3qBSG++yUAuh596kya68ntx2dHAEl2kMpOoJKE3mtg3IugM4xGyf6zWQGT2oDdnHXwl
+        b22IkNi4WIn1juES87zVSJk1bMQ2e24hnLZ6U5iKINnqF1WZS7CtfipBXRgKSRlVGy7jP8UylaGD
+        8FThg2LhUVsrXyjuvHJtvYNAiepKtGXc27oAVSxesVcya95aVgQm2FI0ErULvqPLl6i9ZlPonlsM
+        CDTd6l5mCFC0ZKqhpWvUF6Dvvye6HSoQj7rhjP0BnPQ6W6axg+EiXPG7VaLZi90bc7WKTJKq0mkq
+        z2J5l8TGdid/GHp6L5/lwAYrir7W2BLyq1p0jUjWBWQYw6bN0Y+BeMlGQP+SYqzdNsQydJ2hKyCA
+        k7v1V9AbnNesY+p8vkxuyw0N0R/8VX+jv3G462mMZ8JajuM/U/d9/xusPzy4EAQAAA==
     headers:
       Access-Control-Allow-Origin:
       - '*'
       CF-RAY:
-      - a0576c0ca993b7dc-KHI
+      - a05791ae1e4a541f-KHI
       Connection:
       - keep-alive
       Content-Encoding:
@@ -165,7 +163,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 02 Jun 2026 15:16:58 GMT
+      - Tue, 02 Jun 2026 15:42:38 GMT
       Permissions-Policy:
       - payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
         "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
@@ -178,7 +176,7 @@ interactions:
       X-Content-Type-Options:
       - nosniff
       X-Generation-Id:
-      - gen-1780413416-jZ8yZedB6mYBDoZMIyKX
+      - gen-1780414957-KwbrzdewldrGvsTS96At
       access-control-expose-headers:
       - X-Generation-Id,cf-ray
     status:
@@ -233,22 +231,21 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//QmICAAAA//9CYgIAAAD//0JiAgAAAP//QmIC
-        AAAA//9CYgIAAAD//3xSTbPaMAz8Kx5fegk0QPjKrcee2mnfpVM6GccRifscO7UUKMPkv1fmPSBv
-        SsslzGq1Wq18lqaSuazBTWbrTZrNFtlsM1lVT6dMw7dsW66z9WbxdfVlIRPpy5+giem6UTTVvu0s
-        kPGOSzqAImCpu0oiW1+BZbrvwCnzvu5okvlJa5zhji74g6kgcP0T1z98ZAxPSNAWe+NqCF0wLg7b
-        d0WarTbbVM31MpIgHIyGgkxsdr21PL7xDKHMv/NCroLfMk8TaX3NU0q8sljXYFOwVWTTuUTyHQs6
-        ReYAxT+qLSCqGmR+lsFb/kqFaJAUm+PB3hFcbJ530mChFSkeW/zqIZx2Mt8ri5Ds5Isq78XYTj41
-        IHre4x2KC1EYFKr0PYljMMQs8flEjXdCc4KCvEAfSChheW4ijo3RzaVF8Hp1UG0bW1gJ4zWEcpVw
-        nkQAG29y6QcVdBNZPogy+CPG/9xd9ZpQGG4Sr9anOznwYgH2PSp7je7m/wUYhh+J7K+5sE7bUUH+
-        GRyHPVvOYjDX13HDM4bJ85A7czuPTOT80mnKv2w9XyYxx/Lkn6/pvdUvKiBlLMbBWukGqpscn/yC
-        FDFFGMOqr4wfA/HpjYDhxcZYu++QeOu2MG4PARy/uL+dPiC9mh1z5/PVY+49JHzbkK2GBxGO7d0O
-        Mt7KtHyR/+w9DMMfAAAA//8DALnUl6o+BAAA
+        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//QmICAAAA//99UsGO2jAU/BXLl14CDWygS27t
+        oYftpVr1UKlUkXFeiEtip37PUIry732GDWRV2lwSj8cz8yY+SVPKXG7BTmbvHtNslq2W6eT509Mx
+        KxeQfZ09fZg/zx8/kpWJdJsfoInpulY01a7tGiDj4pb2oAhY6qaSyNaV0DDddWCVebvtaJK5SWus
+        4ROdd3tTguf997+DB4bwiARtURm7Bd95Y6NX1RVZqStQqcqySAK/NxoKMvGsDU3D7rVjCGX+jeex
+        JfySOds3bssmGxxYrGuwLjgpcuZcIrmOBa0is4fiH7stIKotyPwkvWv4LRWiQVIcjo2dJTjHPK2l
+        wUIrUmxb/Azgj2uZV6pBSNbyospzMbaWX2oQged4g+JMFAZF5TRDpXBWHLwhporPR6p5qbnFRBxq
+        o+tIDNZDE7sW5ASC8rpmciI23h3w/OW8ULiLCmrjAgkuoQyaUBgr1LASL1Gna9nzIB6qgKoZqrrm
+        vQB9/z2RYeiBFdqOCnI7sFzubDGLRQyX4Yo/rBJJjk1uzFUamch9pdOUn2yZLpLY2+bodkNbr/WL
+        EkiZBqOxVrqG8ioXxSJSxMJgDKtQGjcG4k0bAf0lxlg7dEg8dVsYW4EHyzfs76R3SC9hx9z5fHmf
+        eysJXx94yPo7FY7jXX/IeCrT8h/5z9x93/8B98atGwEEAAA=
     headers:
       Access-Control-Allow-Origin:
       - '*'
       CF-RAY:
-      - a0576c1c3bf8c697-KHI
+      - a05791bd2f92b7dc-KHI
       Connection:
       - keep-alive
       Content-Encoding:
@@ -256,7 +253,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 02 Jun 2026 15:17:01 GMT
+      - Tue, 02 Jun 2026 15:42:41 GMT
       Permissions-Policy:
       - payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
         "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
@@ -269,7 +266,7 @@ interactions:
       X-Content-Type-Options:
       - nosniff
       X-Generation-Id:
-      - gen-1780413418-6dTy4ceY49b74783S6R3
+      - gen-1780414960-RKJy4d5e4X1JB2R28Ftn
       access-control-expose-headers:
       - X-Generation-Id,cf-ray
     status:
@@ -329,21 +326,21 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//fFJNj9MwEP0rxpe9pKVJP7bktkIcChKsOIJW
-        ketMkqGObTxOd8sq/51JS7dZUcjFyvObN+/N+FliKXNZg52kt+vZIp0vsmxStr758P7b/dM2vfsY
-        u1/3nz99lYl02x+gI9N1o+JUu9YbiOgsX+kAKgJLXVQS2boSDNOdB6vwbe3jZOEmLVrkCh/cHksI
-        fP+F7+82jNGBIrRFhbaG4APaoVnli/TdqlpmK5UtBxKEPWooIg7FtjOG2zeOIZL5dw5kS3iS+SyR
-        xtXcZUtnFusiNQVbJTadS4rOs6BVEfdQ/OO2BSJVg8yfZXCGT6mIkKJic9zY2QhHm5ubVjQQQETH
-        p/Hi4DrBmqVgD2WnIwnFP6di8YixEQHMMDSB9meHAYGmYlMNdTcsY5zb8RxE5YIgDxor1BcpBjXX
-        1m4oS0QFYEQV4Nhd0e4NWwtQdaTMOfwpFyuegL5/SGR3Tsa6rY9FdDuwPK5sMR+infd7wdeJjC4q
-        c0Fu04FJPIHZdMbfcp4tE4lUbA9uJ/NKGYLktX5RQlRoaGislW6gfJHjpR2R4jFghDGsuhLdGBge
-        zwjoTzbG2p2nyKnbAm3Fi7H8Zv52eoX0x+yYO18trnMvQ6JXBelq3V8Z4djey0LGqbDljfwnd9/3
-        vwEAAP//AwB/5aTAyQMAAA==
+        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//fFJNj9MwEP0rxue09CNtt7ktEmJ74uMGaBW5
+        ziQxdTzG4xTCKv+dSUu3WVHIJdKbN2/em/GTNIXMZAVuMt/czdJ5ul0vJv7D/J37Xt8/fHzz6eHL
+        28+/mu4oE4n7b6Aj03Wt4lRj4y1Eg45LOoCKwFJXlUQ2WIBlOnpwyryufJykOGmMM9zhAx5NAYHr
+        77l+v2OMOorQ5KVxFQQfjBuGlT6fb9flarFWi9VAgnA0GvJohmbXWsvja2SIZPaVA7kCfspslkiL
+        FU/Z04XFuobqnK0Sm84kRfQs6FQ0R8j/UW2ASFUgsycZ0PJfKiJDUbE5HowuwsnmTmjlRA3Wiw5b
+        wWqF4OlFqyMJDMK4EkOjhn2JAHbYlogoqEbvOe9U7MpTowMujMlqj20USpAHbUqjL6qDqGaZCkOX
+        iBLAijIADKKKDq/YXICyJWUv8c/JeNYZ6PvHRLaXbCza+JhHPIDjhS3S5RDucuErvk1kxKjsFdks
+        BibxDmbTGX+r5d0qkYbyfYcHmZXKEiQv9fMCojKWhsFa6RqKZzk+2wnJfwQTYQyrtjA4BobnMwL6
+        s42xduspcuom531CAMev5m+nN0h/zI65y3V6m3tdEr1omG/S/sYKx/aeDzJOZRq+yH9y933/GwAA
+        //8DAJrF8F3LAwAA
     headers:
       Access-Control-Allow-Origin:
       - '*'
       CF-RAY:
-      - a0576c33aebf3d3a-KHI
+      - a05791cc6b4f34ba-KHI
       Connection:
       - keep-alive
       Content-Encoding:
@@ -351,7 +348,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 02 Jun 2026 15:17:03 GMT
+      - Tue, 02 Jun 2026 15:42:43 GMT
       Permissions-Policy:
       - payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
         "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
@@ -364,7 +361,7 @@ interactions:
       X-Content-Type-Options:
       - nosniff
       X-Generation-Id:
-      - gen-1780413422-dmphECZPxb1AJtuzPNKR
+      - gen-1780414962-pP1GnqhAHQBRHZEYzmyv
       access-control-expose-headers:
       - X-Generation-Id,cf-ray
     status:
@@ -419,21 +416,21 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//fFNdj9MwEPwrlp9ASkuaC/TIGw8gHRJFQjwg
-        KIocZ9v4mtjBu2mpqvx31k3Ty4lCHvIxnp3ZHTsnaUqZyS3Y2WJ5H6eLuzRJZiv7aXX81qWPH76s
-        ukR9//jw/o2MpCseQRPTdaVorl3T1kDGWV7SHhQBSz2pRLJxJdRMdy1YZV5tW5qlbtYYa7ii9W5v
-        SvC8/pnX3z0whkckaPKNsVvwrTc2mG3aHPRSl8kdFHEggd8bDTmZUGy7umb7yjGEMvvBA9kSfsss
-        jmTttuxS4MhiXYNVzq0iN51JJNeyoFVk9pD/Y7UBRLUFmZ2kdzU/pUI0SIqbY2NnCc5tntbSYK4V
-        KbbNf3Xgj2uZbVSNEK3loMpzMbaWXysQZ4YwKBTuGBcb54WxfG9UyFSownUklGjBc6V4QVzTekDO
-        zNLLSBwqo6tQbx0JD3WIX5ATCMrrihUjUXh3wPMba19sBlmOpew0ITsGi+FLXJqfr2XPo3nYdKjq
-        MbzrBAPQ9z8j2Y3JsELTUk5uB5bjXqT3IZrxfFzxlA8FOTZ5Yr6NAxM5wXge85Uu0ygEWRzdbozv
-        uXxeAilTY/DVSldQXtWCVkDygzcEU1h1pXFTIJy9CdAPXUy1uxaJh25y3hXwYPnI/dXoDc6l1yk1
-        CT/DTbkxIXzOf530N/KbNnfdjelMpuHt+M/Ufd//AQAA//8DABe40uoGBAAA
+        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//fFLRjtowEPwVy8+BBg4Bl7eqUnVPrVT1rVSW
+        cTaJi2PnvBuugPLvXR8XLqdeGyFFjCezM7O+SFvKQtbgZ4vNNl8tVvfr5Ux/O7v8oflate368fP5
+        YVN++iIzGfa/wBDTTaNpbkLbOSAbPB+ZCJqApV5VMtmGEhzTQwde2w91R7NVmLXWW/6ii+FoS4h8
+        /vHcR2AIT0jQqsr6GmIXrU+zqk7B/m4D+XoBJpEgHq0BRTZ963vneHoTGEJZ/OA8voTfssgz6ULN
+        Q/Y4sljXYqPYKbLnQiKFjgW9JnsE9Y/TFhB1DbK4yBgcv6VGtEiazfHg4AmebV520qIymjSPVY89
+        xNNOFpV2CNlOXlU5F2M7+b0B8cwQFoXeh54ELwCiduLgw5ODsgahfSl8IBHBpWYFBYGgo2lYRVQh
+        Cv5pPKR/VwnOWvaGUFgvtHhxMt/JgX1GqHrUbmziZucKDMPPTPZjTNZpO1IUDuC5u8Vqm3KOu77h
+        d7xgCjzklbnNExO5jnye88P3IEut7E/hMHbxVl6VQNo6THONNg2UN7WklRD1FC3BFNZ9acMUSPdo
+        AgxXF1PtvkPi0K2yvoIInu/PX0bf4bx4nVKXy2X2vtzYEL7hL+6Xwzv9Tc3dtjHNZFtex39SD8Pw
+        BwAA//8DAHngYAzSAwAA
     headers:
       Access-Control-Allow-Origin:
       - '*'
       CF-RAY:
-      - a0576c33bc1aa813-KHI
+      - a05791cc6887a813-KHI
       Connection:
       - keep-alive
       Content-Encoding:
@@ -441,7 +438,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 02 Jun 2026 15:17:03 GMT
+      - Tue, 02 Jun 2026 15:42:43 GMT
       Permissions-Policy:
       - payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
         "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
@@ -454,101 +451,7 @@ interactions:
       X-Content-Type-Options:
       - nosniff
       X-Generation-Id:
-      - gen-1780413422-NnMNyXu4jFRNu2aZJIE6
-      access-control-expose-headers:
-      - X-Generation-Id,cf-ray
-    status:
-      code: 200
-      message: OK
-- request:
-    body: '{"messages":[{"content":"You are a friendly catalog search assistant. Help
-      users find products by searching, browsing categories, and getting details.\n\nGuidelines:\n-
-      Use search_products when filtering by name, category, price, or rating\n- Use
-      get_product_details for more info on a specific product\n- Use list_categories
-      to show available categories\n- If a product is out of stock, mention it and
-      suggest alternatives\n- Be concise but helpful","role":"system"},{"role":"user","content":"how''s
-      the weather"}],"model":"openai/gpt-4o-mini","tools":[{"type":"function","function":{"name":"search_products","description":"Search
-      the product catalog. Returns matching products with full details.","parameters":{"properties":{"query":{"title":"Query","type":"string"},"category":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Category"},"max_price":{"anyOf":[{"type":"number"},{"type":"null"}],"title":"Max
-      Price"},"min_rating":{"anyOf":[{"type":"number"},{"type":"null"}],"title":"Min
-      Rating"}},"required":["query","category","max_price","min_rating"],"title":"search_products_args","type":"object","additionalProperties":false},"strict":true}},{"type":"function","function":{"name":"get_product_details","description":"Get
-      full details for a single product by its ID.","parameters":{"properties":{"product_id":{"title":"Product
-      Id","type":"integer"}},"required":["product_id"],"title":"get_product_details_args","type":"object","additionalProperties":false},"strict":true}},{"type":"function","function":{"name":"list_categories","description":"List
-      all available product categories in the catalog.","parameters":{"properties":{"dummy":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Dummy"}},"title":"list_categories_args","type":"object","additionalProperties":false,"required":["dummy"]},"strict":true}}]}'
-    headers:
-      Accept:
-      - application/json
-      Accept-Encoding:
-      - gzip, deflate
-      Authorization:
-      - Bearer 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
-      Connection:
-      - keep-alive
-      Content-Length:
-      - '1823'
-      Content-Type:
-      - application/json
-      Host:
-      - openrouter.ai
-      User-Agent:
-      - Agents/Python 0.17.3
-      X-Stainless-Arch:
-      - other:amd64
-      X-Stainless-Async:
-      - async:asyncio
-      X-Stainless-Lang:
-      - python
-      X-Stainless-OS:
-      - Windows
-      X-Stainless-Package-Version:
-      - 2.30.0
-      X-Stainless-Runtime:
-      - CPython
-      X-Stainless-Runtime-Version:
-      - 3.11.9
-      x-stainless-read-timeout:
-      - '600'
-      x-stainless-retry-count:
-      - '0'
-    method: POST
-    uri: https://openrouter.ai/api/v1/chat/completions
-  response:
-    body:
-      string: !!binary |
-        H4sIAAAAAAAA/+JSgAEuAAAAAP//fVLBbtswDP0VVZdenC6xnTTzrcAOC3YYht02DIZiU7YaWRRE
-        OWlW+N9Hp03jYtl8EfD4+Pge6WdpalnIBtxscb+e54ssT7PZgda/6923h6cs33x5/PH9s04/yUTi
-        9hGqyPSqVfGuws5biAYdl6oAKgJLXVQS2WENlunowSnzofFxluOsM85whw+4NzUErn/l+sOGMTpS
-        hK7UxjUQfDBuHKZ9ufi40st0pdLlSIKwNxWU0YzNrreWx7fIEMniJwdyNTzJYp5Iiw1P2dKZxbqG
-        2pKtEpsuJEX0LOhUNHso/1HtgEg1IItnGdDyKxWRoajYHA9GF+Fkc3PbiRYCiIj8Wi+O2AvWrAV7
-        qPsq0o3Y6BPaqj0I5Y6CPFRGm0oYjk0Cg6h4iw0GAzQyb1nOIu54H0JjSIQGsEIHOE3h5YsOxM7h
-        4YatBNA9KXsO+5KDO1+AYfiVyP6chC11PpYRd+B4PWmejVHO97zg60RGjMpekPvFyCROPL+b87fM
-        0mUiDZXbI+5koZUlSN7rlzVEZSyNgytVtVC/yfGRTkh5CLyCKaz62uAUGH+WCTC82Jhq954ip+5K
-        4zQfwvE/8rfTK6RXs1Nutsqvcy9LoncNi9V6uLLCqb23g0xTmY4v8p/cwzD8AbgvSRyuAwAA
-    headers:
-      Access-Control-Allow-Origin:
-      - '*'
-      CF-RAY:
-      - a0576c3bec31541f-KHI
-      Connection:
-      - keep-alive
-      Content-Encoding:
-      - gzip
-      Content-Type:
-      - application/json
-      Date:
-      - Tue, 02 Jun 2026 15:17:04 GMT
-      Permissions-Policy:
-      - payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
-        "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
-      Referrer-Policy:
-      - no-referrer, strict-origin-when-cross-origin
-      Server:
-      - cloudflare
-      Transfer-Encoding:
-      - chunked
-      X-Content-Type-Options:
-      - nosniff
-      X-Generation-Id:
-      - gen-1780413423-ws8zdkQAx34IKjZSHf2D
+      - gen-1780414962-aRzl0HhOfmm6qFzH7dCN
       access-control-expose-headers:
       - X-Generation-Id,cf-ray
     status:
@@ -603,22 +506,21 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//QmICAAAA//9CYgIAAAD//0JiAgAAAP//QmIC
-        AAAA//9CYgIAAAD//0JiAgAAAP//QmICAAAA//9CYgIAAAD//0JiAgAAAP//QmICAAAA//9CYgIA
-        AAD//0JiAgAAAP//QmICAAAA//98Uk2PmzAQ/SvIZ5ICSROWW3upKlXqpZe2qSzHDODG2NQzJI0i
-        /nuHZMmyVVouiDfP72PMRZhSFKIGt0i3ebJOV+tstUi/4ofTN22heo+Hepu7T5USsfD7n6CJ6bpR
-        tNS+7SyQ8Y5HOoAiYKkXlVi0vgTLdN+BU+ZN3dFi7RetcYZPdMEfTQmB5595/u4jY3hGglZWxtUQ
-        umDcaFZ1Mllv8qdEZfrtSIJwNBokmfGw661l+8YzhKL4zoVcCb9FkcTC+ppd9jixWNdgIzkqcuhC
-        IPmOBZ0icwT5j2kLiKoGUVxE8JbfQiEaJMXh2Ng7gmvMy04YlFqRYlv5q4dw3omiUhYh3ombKvdi
-        bCe+NBBdGZHBSO19TxExdOIdNhDi6NQY3Yyz3gWw42Ij8hF3KXtNGPkQqekrenZc7sTAeQJUPSo7
-        Nb7b3oBh+BGLfqrDCm1HkvwBHO8oXedjn+lS73jGMHk2eWFuNyMTuXayTPhZPcVj+f3ZH6bKr9Vl
-        CaSMxdFWK91AeRfje7oi8hQMwRxWfWn8HBj/lxkw3ELMtfsOiTu30rgKAjj+Tf7O+YDyHHXOzLIs
-        fqw27Qdf8dNNPjzY3jzb/S7mlUzLl/Gf0sMw/AEAAP//AwCQsbpaSAQAAA==
+        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//QmICAAAA//98Uk2v2jAQ/CuWL70EGiC8Qm5V
+        D1V7eVL1bqWyHGchWxLb9TrwEMp/74bPPD1aLkSzk9mZ2RwlljKXG7CjyadFmk2y5dN89Pp92X7R
+        5fyr2U+f/cuPzGOQiXTFbzCR6abScWxc42uI6CyPTAAdgaXuKolsXAk1050Hq/HjxsdR5kYNWuQ3
+        fHA7LCHw/Jnnn78xRgeK0Kg12g0EH9D2y9ZepdnTYpnqqZn3JAg7NKAi9i/btq55feUYIpn/5EC2
+        hFeZp4ms3Ya3FHRlsS5SpdgqselcUnSeBa2OuAP1j2kDRHoDMj/K4Gr+l5oIKWo2x4udjXCyeVxJ
+        JGV01LxW/WkhHFYyX+uaIFnJsyrnYmwlXyoQLef4QOJEFEhCF66NIvJkz1VWEBKxr9BU/ay1Aeq+
+        XxGd4Ehla6Ig0MFULJmIIrg9nZ5cEJq2/HjR0zf6xdl4JTv2HWDdkq6vzdzsnYGu+5XI9hqbFRof
+        VXRbsNzlJFv0ua/Hv+Ezvnh0vOTOXMx6JnE96TjlXzabJn1LxcFtr928lVclRI019XuNNhWUNzU+
+        6AlR+4ARhrBuS3RDoP+wBkB3djHUbj1FDt0otGsIYPl7emf0AefidUidTh9T7w3RW/6ke1Df0Nvt
+        GMNI2PA1/hO667q/AAAA//8DAPr1jfbtAwAA
     headers:
       Access-Control-Allow-Origin:
       - '*'
       CF-RAY:
-      - a0576c3bebfab7dc-KHI
+      - a05791dbbf33a813-KHI
       Connection:
       - keep-alive
       Content-Encoding:
@@ -626,7 +528,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 02 Jun 2026 15:17:09 GMT
+      - Tue, 02 Jun 2026 15:42:45 GMT
       Permissions-Policy:
       - payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
         "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
@@ -639,7 +541,7 @@ interactions:
       X-Content-Type-Options:
       - nosniff
       X-Generation-Id:
-      - gen-1780413423-1YsGwZclefBskg78nLfa
+      - gen-1780414965-xJ9uCad5Gcw2OpTR4pir
       access-control-expose-headers:
       - X-Generation-Id,cf-ray
     status:
@@ -699,19 +601,20 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAA/+JSgAEuAAAAAP//fFFNb9swDP0rgc5O5iR21vq223Zqi6anZRAUm3a4ypIq0mmL
-        wv99dLIkLtbOFwOPT++DfFNYqUI14Kbzr1dpNl9my3R6tc6e1+vs1jzd3W7xqczblweVKL/9DSUL
-        vdwZnpW+DRYYvZNRGcEwiNRFJVGtr8AK3QdwBr80gaeZn7boUF6E6PdYQZT5jcy//RCMXomh1TW6
-        BmKI6AazOuj59arOFyuzyAcSxD2WoBmHx66zVux3XiBSxU8p5Cp4UYX4W9+Iy5ZOLNFF2mmJShK6
-        UMQ+iKAzjHvQn0xbIDINqOJNRW/lrwwREhsJJ8beMRxibtR3sNZv1ATd5D6YQWyCNBHcWzPbKGFH
-        qDsy9pTnaCVlj0Df/0pUdzKT5G1gzf4RnDRYZMvB7bTyMz6XnuzZ2AszPzBJQqWzVL5skeWJQtLb
-        V/+oitpYguS9vq6ADVoajEtT7qA6y4n+AdHPERnGsOkq9GNguOcI6I8xxtpdIJbWrUZXQwQnZ/w3
-        6Qekv2HH3OXqE+5lSfTuQbrqP9jgON35HuNS2MpB/lO77/s/AAAA//8DAJHxMvxQAwAA
+        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//fFFNb9NAEP0r0ZydYKeOS32rhBD00Aq4IAha
+        beyxM3S9u+ysA1Xl/844IYmrtvhi6c3b9zHzCFRDCS3aeXb5Ns2z/Koo5rfWfn1/V9zEd92n7Ntl
+        /ct8DpCA2/zEKgq92uq4qFznDUZyVkZVQB1RpM4qCXSuRiN059FqetP6OM/dvCNL8sIHt6Mag8zv
+        ZH79UTB+4Iidasi2GHwgO5o1XmVXRbNaFnq5GkkYdlShijQ+tr0xYr91AjGU36WQrfEPlGkCxrXi
+        suEjS3SJt0qisoQugaPzImh1pB2qV6YdMusWoXyE4Iz8QTMTRy3hxNjZiPuYa/iAxrg1zMjOvng9
+        is2IZ4I7oxdrEHbApmdtjnkOVlL2AAzDjwT6o5kk73xU0d2jlQbL/GJ0O678hGfSM7qozZm52jNZ
+        QqWLVL58ma8SIFabB3cPZaMNY/JUX9UYNRkejStdbbE+yYn+HlG/A0WcwrqvyU2B8Z4TYDjEmGr3
+        nqO07hTZBgNaOePzpC+Q/oWdci+KV7jnJfGTB2kxvLDBabrTPaalqJOD/Kf2MAx/AQAA//8DANO3
+        BGdbAwAA
     headers:
       Access-Control-Allow-Origin:
       - '*'
       CF-RAY:
-      - a0576c65ee837eb3-KHI
+      - a05791e65cfc727e-KHI
       Connection:
       - keep-alive
       Content-Encoding:
@@ -719,7 +622,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 02 Jun 2026 15:17:11 GMT
+      - Tue, 02 Jun 2026 15:42:47 GMT
       Permissions-Policy:
       - payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
         "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
@@ -732,7 +635,7 @@ interactions:
       X-Content-Type-Options:
       - nosniff
       X-Generation-Id:
-      - gen-1780413430-8T4wTT4PaqQPbiqc5mxU
+      - gen-1780414966-NnnXFO6JtDmQ1Z7dqlRr
       access-control-expose-headers:
       - X-Generation-Id,cf-ray
     status:
@@ -787,21 +690,21 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//fVJNj9MwEP0rls9pSdrSbXNDCGmRkDgAKwRF
-        lutME7OOHTyTlqrKf2fSbrpZVMgl0Zvn9zHOSdpC5rIEP8nuVukimy/m6eTd+uFtPb+ff/vyIbuv
-        4GtrPz3IRIbtTzDEdFNpmppQNw7IBs8jE0ETsNSzSiLrUIBjemjAa/uqbGiyCJPaessnmhj2toDI
-        8488f/OeMTwiQa121pcQm2h9b7ZrVLpYrtapnpnXPQni3hpQZPvDvnWO7avAEMr8OxfyBfyWOfu7
-        ULLLFgcW61qsFEdFDp1LpNCwoNdk96D+Ma0BUZcg85OMwfFbakSLpDkcGwdPcI552kiLymjSbKt+
-        tRCPG5nvtENINvKiyr0Y28jPFYgzQ1gUehtaEhS1R8dJfCm0OIRYJOJQWVP1lNZHcP1+BQXBlYrW
-        kEDQ0VQ9P0SxjeGA/D3dyI5jRdi1qN1Q/Op+AbruRyLboRXr1Q0pCo/geVXZYtXXGu72is8YpsDt
-        npl3y56J3D6dpvzM10m/g+0xPA7NX6qrAkhbh72t0aaC4irG13VG1CFagjGs28KGMdD/NiOgu4QY
-        a7cNEneulfU7iOD5b/k75w3KU9QxczabJbfVhv3gC362XHU3tjfOdr2LcSVb82X8p3TXdX8ATPkN
-        kcADAAA=
+        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//fFJNr9MwEPwrli9c0pKG8Ghze6cHQgIOHJAo
+        slxnm5gmdvBu+qEq/531K2nzRCGXRLOT2Zmxz9KWspAVuNni3TLNF/nq4WHm33+rTubT49OXnTki
+        bvLj00eZSL/5CYaYbmpNc+PbrgGy3vHIBNAELHVTSWTrS2iY7jtw2r6uOprlftZaZ/mPLvi9LSHw
+        /DPPHz8whickaNXWugpCF6yLy7adSvOH5SrVmXkbSRD21oAiG392fdPw+tozhLL4zoFcCUdZpIls
+        fMVbNjiyWNdirdgqsulCIvmOBZ0muwf1j2kLiLoCWZxl8A2/pUa0SJrN8WLvCJ5tntfSojKaNK9V
+        v3oIp7UstrpBSNbyosq5GFvLrzWInnO8QvFMFBaF3vieBAXtsGFDrhJaHHwoE3GorakjxXkSAZpY
+        tCAvEHQwdWRufRCctOwNobh9C+t40up4RvO1HNhvgG2Puhkbudq6AMPwI5H9GJdV2o4U+R047nCR
+        L2Pe8dCv+JsskeQ59o25TCMTuZZ0nvLDFyKJ7WxOfjd28lJelUDaNhj3Gm1qKK9qUSsi6hAswRTW
+        fWn9FIgXagIMFxdT7b5D4tCt4moggON79JfRO5w/XqfULMuS+3JjQ/iCv1hlw53+puaupzHNZFs+
+        jv+kHobhNwAAAP//AwDbmtfz2wMAAA==
     headers:
       Access-Control-Allow-Origin:
       - '*'
       CF-RAY:
-      - a0576c65eeeba813-KHI
+      - a05791e659197eb3-KHI
       Connection:
       - keep-alive
       Content-Encoding:
@@ -809,7 +712,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 02 Jun 2026 15:17:11 GMT
+      - Tue, 02 Jun 2026 15:42:47 GMT
       Permissions-Policy:
       - payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
         "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
@@ -822,7 +725,7 @@ interactions:
       X-Content-Type-Options:
       - nosniff
       X-Generation-Id:
-      - gen-1780413430-E9VCm3H3ZUL1HheXuiSV
+      - gen-1780414966-oHXgycNAGPkcxssb4xGK
       access-control-expose-headers:
       - X-Generation-Id,cf-ray
     status:
@@ -877,22 +780,21 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//QmICAAAA//9CYgIAAAD//0JiAgAAAP//fFJd
-        a9tAEPwrx730RXblzyR+K7SUQEgpFPJQF3E+raytT7fK7cmpCfrvXdmRrdCkehHMzs7M7t6zxlyv
-        9Bb8aHJ1nc4ns/lsOvp8d1d+3YWrW/+Fvt9jtbvBe51o2vwGG4VuSxPHlqraQUTyUrIBTASRuqgk
-        uqIcnNCpBm/w47aOozmNKvQoHXWgPeYQpP5N6p9uBeMDR6iyAv0WQh3Qd2ZFnaXz5fVNaqZ20ZEg
-        7NFCFrFr9o1zYl+SQKxXP2Ugn8MfvUoT7WgrLhvuWaKLXGYSlSX0SnOkWgS9ibiH7J1qBcxmC3r1
-        rAM5+WvDjByNhBNj8hGOMZ/XGjmzJhqxzR4bCIe1XhXGMSRrfVKVuQRb6x8lqEbm+MDqSFTIyvBO
-        yspsqImqFAMKaI1TsBd9VgFct2AVST1QcLl6MEFNE/VUoi2V2DhW0smyUhVFnq1sXVGhZAN5Y6N6
-        SabQPzYYEDgRS4VR5QSsPEWp7MntpRVMsGUXpqDQ9wvdlmCPGeUytuuXqvEHReIXev3RJWiNlsdr
-        3cqaAhQNG9cf4ryNE9C2vxLd9FsWw6qOWaQdeDndZDHp1ty/tTO+WCQ6kniekWm67Jgs10jHqXyL
-        xVJIcpXNgXb9LV7rZzlEg447Y2tkwvwsJw/oiGRPASMMYdPkSEOge8gDoD3FGGo3NUeZusrQFxDA
-        y/v9N+kbpJewQ+50+g73siR+1TCbtW9scJjufI/hUFjJQf4zdtu2fwEAAP//AwDwi/VmdQQAAA==
+        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//QmICAAAA//98Uk2P0zAU/CuWL1zSklZp2eaG
+        KrECLeIA0iLRVeTar42p4xf8nJaqyn/npZ9ZUcglyXg882bsg7RG5nINfjB695Bmo2w2fRh8nz9O
+        Z09fm0+fmw/xcb418ycjE4nLn6Aj03Wp4lBjVTuIFj0v6QAqAkvdVBJZoQHHdKzBK/t2XcdBhoPK
+        ess76oBbayDw+hdef/+RMdpThKpYWb+GUAfrO7NVXaTZ9GGWqrGedCQIW6uhiLbb7Bvn2L5Ehkjm
+        PziQN/Bb5mkiHa7ZZUkXFutaKgselXjoXFLEmgW9inYLxT9WKyBSa5D5QQZ0/JaKyFJUPBwbo49w
+        HPOwkJYKraJi2+JXA2G/kPlKOYJkIU+qnIuxhfxWgmg4xxsSR6KwJNQSmyhKVsZgtXICtixMIoDr
+        mhURxTMGZ8SzCmKciF1pdSkMAgmPUdQQorK+oxGooEv2SsQy4I6OXxiEog1/no24GNNo1uc96vIn
+        zuMPF7LlcAFWDSl3qe+a4QS07Usim0s3rFDVsYi4Ac+FjyajrpzLDbniWZbIiGxyY84mHZO4w3SY
+        8pPNUka4y+UeN5cGX+sXBjiso85YK12CucrxsR+RYhdshD6sGmOxD3TXrwe0pzH62k1NkVNXhfUr
+        COD51v096R3Sedg+dzye3ufeSqLXG6ZZe6fC/njXA+mnshWfyH9yt237BwAA//8DAJp6HPkWBAAA
     headers:
       Access-Control-Allow-Origin:
       - '*'
       CF-RAY:
-      - a0576c700decb7dc-KHI
+      - a05791f28f0e99ec-KHI
       Connection:
       - keep-alive
       Content-Encoding:
@@ -900,7 +802,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Tue, 02 Jun 2026 15:17:13 GMT
+      - Tue, 02 Jun 2026 15:42:49 GMT
       Permissions-Policy:
       - payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
         "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
@@ -913,7 +815,7 @@ interactions:
       X-Content-Type-Options:
       - nosniff
       X-Generation-Id:
-      - gen-1780413432-DLLhGkr7InEoQNimk9iN
+      - gen-1780414968-XCG69LSuJMuFtGCvdCLd
       access-control-expose-headers:
       - X-Generation-Id,cf-ray
     status:

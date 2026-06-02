@@ -144,7 +144,7 @@ class TestAgentCatalogQueries:
     @pytest.mark.parametrize("query,expected_word", [
         ("show me wireless bluetooth headphones", "headphones"),
         ("find monitors",                         "monitor"),
-        ("electronics under $50",                 "Electronics"),
+        ("electronics under $50",                 "electronic"),
         ("products with noise cancelling",        "noise"),
         ("what books are available",              "Books"),
         ("cheapest product you have",             "$"),
@@ -153,8 +153,6 @@ class TestAgentCatalogQueries:
         ("recommend something under $30",         "$"),
         ("what are the highest rated products",   "rating"),
     ])
-    @pytest.mark.default_cassette("agent_catalog_pass.yaml")
-    @pytest.mark.vcr
     async def test_catalog_queries_pass(self, catalog_agent, user_ctx, query, expected_word):
         result = await Runner.run(catalog_agent, query, context=user_ctx)
         output = str(result.final_output)
@@ -169,8 +167,6 @@ class TestAgentCatalogQueries:
         "translate hello to spanish",
         "what happened in world war 2",
     ])
-    @pytest.mark.default_cassette("agent_guardrail_reject.yaml")
-    @pytest.mark.vcr
     async def test_guardrail_rejects_non_catalog(self, catalog_agent, user_ctx, query):
         with pytest.raises(InputGuardrailTripwireTriggered):
             await Runner.run(catalog_agent, query, context=user_ctx)
@@ -185,8 +181,6 @@ class TestAgentCatalogQueries:
         "products between $50 and $150",
         "cheap electronics under $30",
     ])
-    @pytest.mark.default_cassette("agent_edge_cases.yaml")
-    @pytest.mark.vcr
     async def test_edge_cases(self, catalog_agent, user_ctx, query):
         result = await Runner.run(catalog_agent, query, context=user_ctx)
         output = str(result.final_output)

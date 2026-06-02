@@ -15,7 +15,11 @@ def _to_product(d: dict) -> Product:
     )
 
 
-SAMPLE_PRODUCTS: list[Product] = [_to_product(p) for p in catalog_search(page_size=100)["products"]]
+def _load_sample_products() -> list[Product]:
+    return [_to_product(p) for p in catalog_search(page_size=100)["products"]]
+
+
+SAMPLE_PRODUCTS: list[Product] = _load_sample_products()
 
 
 def get_recommendations(prefs: UserPreferences) -> list[Product]:

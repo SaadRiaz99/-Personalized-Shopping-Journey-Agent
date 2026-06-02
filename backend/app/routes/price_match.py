@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Header, Query
 from app.models import Agent, Discount, PriceMatchRequest
 from app.services.agent_orchestrator import orchestrator
-from app.services.price_match import price_match_agent, get_price_history, get_price_drop_alerts
+from app.services.price_match import price_match_agent, get_price_history, get_price_drop_alerts, fetch_competitor_price
 from app.services.price_guardrail import price_guardrail
 from shared.products import ALL_PRODUCTS as CATALOG_PRODUCTS
 
@@ -37,7 +37,9 @@ async def check_price_match(body: PriceMatchRequest, x_user_id: str = Header("de
     if not input_check.allowed:
         return {"error": True, "guardrail": input_check.__dict__, "discount": None}
 
-    fraud_check = price_guardrail.detect_fraud(body.current_price, 0)
+    comp_result = fetch_competitor_price(body.sku)
+    comp_price = comp_result.get("price", 0) if "error" not in comp_result else 0
+    fraud_check = price_guardrail.detect_fraud(body.current_price, comp_price)
     if not fraud_check.allowed:
         return {"error": True, "guardrail": fraud_check.__dict__, "discount": None}
 

@@ -190,4 +190,6 @@ export const getPriceAlertsHistory = (userId?: string) =>
     headers: userId ? { 'x-user-id': userId } : undefined,
   }).then(r => r.data)
 
-export const WS_URL = 'ws://192.168.0.34:8000/ws/agents'
+const WS_BASE = window.location.host.includes('localhost') ? 'localhost:8000' : window.location.host
+const WS_PROTO = window.location.protocol === 'https:' ? 'wss' : 'ws'
+export const WS_URL = `${WS_PROTO}://${WS_BASE}/ws/agents`

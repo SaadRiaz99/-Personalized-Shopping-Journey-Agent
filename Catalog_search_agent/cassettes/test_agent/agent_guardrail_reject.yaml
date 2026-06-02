@@ -1,0 +1,922 @@
+interactions:
+- request:
+    body: '{"messages":[{"content":"You are a friendly catalog search assistant. Help
+      users find products by searching, browsing categories, and getting details.\n\nGuidelines:\n-
+      Use search_products when filtering by name, category, price, or rating\n- Use
+      get_product_details for more info on a specific product\n- Use list_categories
+      to show available categories\n- If a product is out of stock, mention it and
+      suggest alternatives\n- Be concise but helpful","role":"system"},{"role":"user","content":"what
+      is 2+2"}],"model":"openai/gpt-4o-mini","tools":[{"type":"function","function":{"name":"search_products","description":"Search
+      the product catalog. Returns matching products with full details.","parameters":{"properties":{"query":{"title":"Query","type":"string"},"category":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Category"},"max_price":{"anyOf":[{"type":"number"},{"type":"null"}],"title":"Max
+      Price"},"min_rating":{"anyOf":[{"type":"number"},{"type":"null"}],"title":"Min
+      Rating"}},"required":["query","category","max_price","min_rating"],"title":"search_products_args","type":"object","additionalProperties":false},"strict":true}},{"type":"function","function":{"name":"get_product_details","description":"Get
+      full details for a single product by its ID.","parameters":{"properties":{"product_id":{"title":"Product
+      Id","type":"integer"}},"required":["product_id"],"title":"get_product_details_args","type":"object","additionalProperties":false},"strict":true}},{"type":"function","function":{"name":"list_categories","description":"List
+      all available product categories in the catalog.","parameters":{"properties":{"dummy":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Dummy"}},"title":"list_categories_args","type":"object","additionalProperties":false,"required":["dummy"]},"strict":true}}]}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Bearer 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
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1817'
+      Content-Type:
+      - application/json
+      Host:
+      - openrouter.ai
+      User-Agent:
+      - Agents/Python 0.17.3
+      X-Stainless-Arch:
+      - other:amd64
+      X-Stainless-Async:
+      - async:asyncio
+      X-Stainless-Lang:
+      - python
+      X-Stainless-OS:
+      - Windows
+      X-Stainless-Package-Version:
+      - 2.30.0
+      X-Stainless-Runtime:
+      - CPython
+      X-Stainless-Runtime-Version:
+      - 3.11.9
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+    method: POST
+    uri: https://openrouter.ai/api/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//QmICAAAA//98Uk2PmzAQ/SuuryUpAfIhblW1
+        h2wr9dBjVVkODODG2MQzZItW/PcOm2bDqmm5IL15896bGT9LU8pc1uAWq+0uzlZpttosHr59+rJ+
+        1J/T/ZDFVJ8eyT3ISPrDTyiI6UWjaVn4trNAxjsuFQE0AUvdVCLZ+hIs030HTpsPdUeLzC9a4wx3
+        dMGfTQmB61+5/nHPGA5I0KrKuBpCF4ybzKpOZUmWFJskTquJBOFsClBkpmbXW8v2jWcIZf6dB3Il
+        /JJ5HEnra3Y54JXFugYbxVGRQ+cSyXcs6DSZM6h/VFtA1DXI/FkGb/kvNaJB0hyOjb0jeImZiPci
+        EXDqtUWRLcW+EoPvRaPPILQbxKkHnJaFQh98T4KTlX1BKHwQDqAUDdhOPBlqBPoWqOElCLAIkagA
+        rKgCgCAvNB7fsXGAqkdtr6NdUnPLBRjHH5Hsr7nZqu1IkT+C42Uk2XoKfr3eDd9Fkjxpe0O26cRE
+        ni9exvyt0zX3GlSHwR9lXukp31t9VQJpY3EyLnTRQPkqxyd5QdRTMARzWPel8XNgehozYLzEmGv3
+        HRJP3SrjKgjg+EX8nfQO6U/YOTfdbO9zb0vCNw2rzW68s8J5vNeDzKcyLV/kP3OP4/gbAAD//wMA
+        p5hSRbIDAAA=
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-RAY:
+      - a0576c0ca872c697-KHI
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 02 Jun 2026 15:16:57 GMT
+      Permissions-Policy:
+      - payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
+        "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
+      Referrer-Policy:
+      - no-referrer, strict-origin-when-cross-origin
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      X-Generation-Id:
+      - gen-1780413416-ESCL5JaK3Iy40tgqJtnE
+      access-control-expose-headers:
+      - X-Generation-Id,cf-ray
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"messages":[{"content":"Determine if the user''s query is about searching,
+      browsing, or asking about products in a product catalog. Topics include: finding
+      products, checking prices, filtering by category, product details, stock/availability,
+      ratings, recommendations, and comparing products. Reject math, coding, general
+      knowledge, or unrelated chat.","role":"system"},{"role":"user","content":"what
+      is 2+2"}],"model":"openai/gpt-4o-mini","response_format":{"type":"json_schema","json_schema":{"name":"final_output","strict":true,"schema":{"properties":{"is_catalog_query":{"description":"Whether
+      the user''s query is about the product catalog","title":"Is Catalog Query","type":"boolean"},"reasoning":{"description":"Reasoning
+      for the classification","title":"Reasoning","type":"string"}},"required":["is_catalog_query","reasoning"],"title":"CatalogQueryCheck","type":"object","additionalProperties":false}}}}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Bearer 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
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '910'
+      Content-Type:
+      - application/json
+      Host:
+      - openrouter.ai
+      User-Agent:
+      - Agents/Python 0.17.3
+      X-Stainless-Arch:
+      - other:amd64
+      X-Stainless-Async:
+      - async:asyncio
+      X-Stainless-Lang:
+      - python
+      X-Stainless-OS:
+      - Windows
+      X-Stainless-Package-Version:
+      - 2.30.0
+      X-Stainless-Runtime:
+      - CPython
+      X-Stainless-Runtime-Version:
+      - 3.11.9
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+    method: POST
+    uri: https://openrouter.ai/api/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//QmICAAAA//9CYgIAAAD//0JiAgAAAP//fVLL
+        ktMwEPwVlS5cnOBsHuvyjS0uFMWNA4RQLlkex9rYGqORE0LK/84oibNeCPhiudXu6W7pJE0hU7kF
+        O5k9JvFiNl/MVpPndXJcQ/G0ar4+vcf1pw/Hj19kJDF/Bu2ZrivlpxqbtgZv0PKWdqA8sNSLSiQb
+        LKBmOrZglXm7bf1kgZPGWMN/tA73pgDH++9+dQ4YoiN5aLLS2C241hkbZpVtBvn8EeLVDHQggdsb
+        DZk34V/b1TVPr5Ahkuk3zmML+CnTOJI1bnlITgOLdQ1VGTsl9pxK8tiyoFXe7CH7x24DRGoLMj1J
+        hzW/pSIy5BWb48FoPZxtnjbSUKaVVzw2+9GBO25kWqqaINrIiyrnYmwjP1cgOs7xhsSZKAwJJRrl
+        q/BNodJIHCqjK1EgkLDohYOaCxYeBYFyumKtSOQOD3ReoROKdrwUKsfOCw5edNqTMJalr1/iam+6
+        kT2bd1B2pOqhnpvHC9D33yPZDdlZoWl95nEHlgudLeMQfrgAN3yeRNIjD3lhJklgEncUT2N+Fst5
+        FKrKj7gbCnotnxXglakpzNVKV1Dc1MLUgGQHZzyMYdUVBsdAuFwjoL+4GGt3LXkO3WTGluDA8qX6
+        y+gdztXrmPrwsIzuyw0N0R/8pL/T39jc7TTGmUzDx/Gf1H3f/wa5gOq4CAQAAA==
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-RAY:
+      - a0576c0ca993b7dc-KHI
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 02 Jun 2026 15:16:58 GMT
+      Permissions-Policy:
+      - payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
+        "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
+      Referrer-Policy:
+      - no-referrer, strict-origin-when-cross-origin
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      X-Generation-Id:
+      - gen-1780413416-jZ8yZedB6mYBDoZMIyKX
+      access-control-expose-headers:
+      - X-Generation-Id,cf-ray
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"messages":[{"content":"Determine if the user''s query is about searching,
+      browsing, or asking about products in a product catalog. Topics include: finding
+      products, checking prices, filtering by category, product details, stock/availability,
+      ratings, recommendations, and comparing products. Reject math, coding, general
+      knowledge, or unrelated chat.","role":"system"},{"role":"user","content":"write
+      python code to sort a list"}],"model":"openai/gpt-4o-mini","response_format":{"type":"json_schema","json_schema":{"name":"final_output","strict":true,"schema":{"properties":{"is_catalog_query":{"description":"Whether
+      the user''s query is about the product catalog","title":"Is Catalog Query","type":"boolean"},"reasoning":{"description":"Reasoning
+      for the classification","title":"Reasoning","type":"string"}},"required":["is_catalog_query","reasoning"],"title":"CatalogQueryCheck","type":"object","additionalProperties":false}}}}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Bearer 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
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '931'
+      Content-Type:
+      - application/json
+      Host:
+      - openrouter.ai
+      User-Agent:
+      - Agents/Python 0.17.3
+      X-Stainless-Arch:
+      - other:amd64
+      X-Stainless-Async:
+      - async:asyncio
+      X-Stainless-Lang:
+      - python
+      X-Stainless-OS:
+      - Windows
+      X-Stainless-Package-Version:
+      - 2.30.0
+      X-Stainless-Runtime:
+      - CPython
+      X-Stainless-Runtime-Version:
+      - 3.11.9
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+    method: POST
+    uri: https://openrouter.ai/api/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//QmICAAAA//9CYgIAAAD//0JiAgAAAP//QmIC
+        AAAA//9CYgIAAAD//3xSTbPaMAz8Kx5fegk0QPjKrcee2mnfpVM6GccRifscO7UUKMPkv1fmPSBv
+        SsslzGq1Wq18lqaSuazBTWbrTZrNFtlsM1lVT6dMw7dsW66z9WbxdfVlIRPpy5+giem6UTTVvu0s
+        kPGOSzqAImCpu0oiW1+BZbrvwCnzvu5okvlJa5zhji74g6kgcP0T1z98ZAxPSNAWe+NqCF0wLg7b
+        d0WarTbbVM31MpIgHIyGgkxsdr21PL7xDKHMv/NCroLfMk8TaX3NU0q8sljXYFOwVWTTuUTyHQs6
+        ReYAxT+qLSCqGmR+lsFb/kqFaJAUm+PB3hFcbJ530mChFSkeW/zqIZx2Mt8ri5Ds5Isq78XYTj41
+        IHre4x2KC1EYFKr0PYljMMQs8flEjXdCc4KCvEAfSChheW4ijo3RzaVF8Hp1UG0bW1gJ4zWEcpVw
+        nkQAG29y6QcVdBNZPogy+CPG/9xd9ZpQGG4Sr9anOznwYgH2PSp7je7m/wUYhh+J7K+5sE7bUUH+
+        GRyHPVvOYjDX13HDM4bJ85A7czuPTOT80mnKv2w9XyYxx/Lkn6/pvdUvKiBlLMbBWukGqpscn/yC
+        FDFFGMOqr4wfA/HpjYDhxcZYu++QeOu2MG4PARy/uL+dPiC9mh1z5/PVY+49JHzbkK2GBxGO7d0O
+        Mt7KtHyR/+w9DMMfAAAA//8DALnUl6o+BAAA
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-RAY:
+      - a0576c1c3bf8c697-KHI
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 02 Jun 2026 15:17:01 GMT
+      Permissions-Policy:
+      - payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
+        "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
+      Referrer-Policy:
+      - no-referrer, strict-origin-when-cross-origin
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      X-Generation-Id:
+      - gen-1780413418-6dTy4ceY49b74783S6R3
+      access-control-expose-headers:
+      - X-Generation-Id,cf-ray
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"messages":[{"content":"You are a friendly catalog search assistant. Help
+      users find products by searching, browsing categories, and getting details.\n\nGuidelines:\n-
+      Use search_products when filtering by name, category, price, or rating\n- Use
+      get_product_details for more info on a specific product\n- Use list_categories
+      to show available categories\n- If a product is out of stock, mention it and
+      suggest alternatives\n- Be concise but helpful","role":"system"},{"role":"user","content":"who
+      is the president"}],"model":"openai/gpt-4o-mini","tools":[{"type":"function","function":{"name":"search_products","description":"Search
+      the product catalog. Returns matching products with full details.","parameters":{"properties":{"query":{"title":"Query","type":"string"},"category":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Category"},"max_price":{"anyOf":[{"type":"number"},{"type":"null"}],"title":"Max
+      Price"},"min_rating":{"anyOf":[{"type":"number"},{"type":"null"}],"title":"Min
+      Rating"}},"required":["query","category","max_price","min_rating"],"title":"search_products_args","type":"object","additionalProperties":false},"strict":true}},{"type":"function","function":{"name":"get_product_details","description":"Get
+      full details for a single product by its ID.","parameters":{"properties":{"product_id":{"title":"Product
+      Id","type":"integer"}},"required":["product_id"],"title":"get_product_details_args","type":"object","additionalProperties":false},"strict":true}},{"type":"function","function":{"name":"list_categories","description":"List
+      all available product categories in the catalog.","parameters":{"properties":{"dummy":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Dummy"}},"title":"list_categories_args","type":"object","additionalProperties":false,"required":["dummy"]},"strict":true}}]}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Bearer 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
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1826'
+      Content-Type:
+      - application/json
+      Host:
+      - openrouter.ai
+      User-Agent:
+      - Agents/Python 0.17.3
+      X-Stainless-Arch:
+      - other:amd64
+      X-Stainless-Async:
+      - async:asyncio
+      X-Stainless-Lang:
+      - python
+      X-Stainless-OS:
+      - Windows
+      X-Stainless-Package-Version:
+      - 2.30.0
+      X-Stainless-Runtime:
+      - CPython
+      X-Stainless-Runtime-Version:
+      - 3.11.9
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+    method: POST
+    uri: https://openrouter.ai/api/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//fFJNj9MwEP0rxpe9pKVJP7bktkIcChKsOIJW
+        ketMkqGObTxOd8sq/51JS7dZUcjFyvObN+/N+FliKXNZg52kt+vZIp0vsmxStr758P7b/dM2vfsY
+        u1/3nz99lYl02x+gI9N1o+JUu9YbiOgsX+kAKgJLXVQS2boSDNOdB6vwbe3jZOEmLVrkCh/cHksI
+        fP+F7+82jNGBIrRFhbaG4APaoVnli/TdqlpmK5UtBxKEPWooIg7FtjOG2zeOIZL5dw5kS3iS+SyR
+        xtXcZUtnFusiNQVbJTadS4rOs6BVEfdQ/OO2BSJVg8yfZXCGT6mIkKJic9zY2QhHm5ubVjQQQETH
+        p/Hi4DrBmqVgD2WnIwnFP6di8YixEQHMMDSB9meHAYGmYlMNdTcsY5zb8RxE5YIgDxor1BcpBjXX
+        1m4oS0QFYEQV4Nhd0e4NWwtQdaTMOfwpFyuegL5/SGR3Tsa6rY9FdDuwPK5sMR+infd7wdeJjC4q
+        c0Fu04FJPIHZdMbfcp4tE4lUbA9uJ/NKGYLktX5RQlRoaGislW6gfJHjpR2R4jFghDGsuhLdGBge
+        zwjoTzbG2p2nyKnbAm3Fi7H8Zv52eoX0x+yYO18trnMvQ6JXBelq3V8Z4djey0LGqbDljfwnd9/3
+        vwEAAP//AwB/5aTAyQMAAA==
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-RAY:
+      - a0576c33aebf3d3a-KHI
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 02 Jun 2026 15:17:03 GMT
+      Permissions-Policy:
+      - payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
+        "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
+      Referrer-Policy:
+      - no-referrer, strict-origin-when-cross-origin
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      X-Generation-Id:
+      - gen-1780413422-dmphECZPxb1AJtuzPNKR
+      access-control-expose-headers:
+      - X-Generation-Id,cf-ray
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"messages":[{"content":"Determine if the user''s query is about searching,
+      browsing, or asking about products in a product catalog. Topics include: finding
+      products, checking prices, filtering by category, product details, stock/availability,
+      ratings, recommendations, and comparing products. Reject math, coding, general
+      knowledge, or unrelated chat.","role":"system"},{"role":"user","content":"who
+      is the president"}],"model":"openai/gpt-4o-mini","response_format":{"type":"json_schema","json_schema":{"name":"final_output","strict":true,"schema":{"properties":{"is_catalog_query":{"description":"Whether
+      the user''s query is about the product catalog","title":"Is Catalog Query","type":"boolean"},"reasoning":{"description":"Reasoning
+      for the classification","title":"Reasoning","type":"string"}},"required":["is_catalog_query","reasoning"],"title":"CatalogQueryCheck","type":"object","additionalProperties":false}}}}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Bearer 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
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '919'
+      Content-Type:
+      - application/json
+      Host:
+      - openrouter.ai
+      User-Agent:
+      - Agents/Python 0.17.3
+      X-Stainless-Arch:
+      - other:amd64
+      X-Stainless-Async:
+      - async:asyncio
+      X-Stainless-Lang:
+      - python
+      X-Stainless-OS:
+      - Windows
+      X-Stainless-Package-Version:
+      - 2.30.0
+      X-Stainless-Runtime:
+      - CPython
+      X-Stainless-Runtime-Version:
+      - 3.11.9
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+    method: POST
+    uri: https://openrouter.ai/api/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//fFNdj9MwEPwrlp9ASkuaC/TIGw8gHRJFQjwg
+        KIocZ9v4mtjBu2mpqvx31k3Ty4lCHvIxnp3ZHTsnaUqZyS3Y2WJ5H6eLuzRJZiv7aXX81qWPH76s
+        ukR9//jw/o2MpCseQRPTdaVorl3T1kDGWV7SHhQBSz2pRLJxJdRMdy1YZV5tW5qlbtYYa7ii9W5v
+        SvC8/pnX3z0whkckaPKNsVvwrTc2mG3aHPRSl8kdFHEggd8bDTmZUGy7umb7yjGEMvvBA9kSfsss
+        jmTttuxS4MhiXYNVzq0iN51JJNeyoFVk9pD/Y7UBRLUFmZ2kdzU/pUI0SIqbY2NnCc5tntbSYK4V
+        KbbNf3Xgj2uZbVSNEK3loMpzMbaWXysQZ4YwKBTuGBcb54WxfG9UyFSownUklGjBc6V4QVzTekDO
+        zNLLSBwqo6tQbx0JD3WIX5ATCMrrihUjUXh3wPMba19sBlmOpew0ITsGi+FLXJqfr2XPo3nYdKjq
+        MbzrBAPQ9z8j2Y3JsELTUk5uB5bjXqT3IZrxfFzxlA8FOTZ5Yr6NAxM5wXge85Uu0ygEWRzdbozv
+        uXxeAilTY/DVSldQXtWCVkDygzcEU1h1pXFTIJy9CdAPXUy1uxaJh25y3hXwYPnI/dXoDc6l1yk1
+        CT/DTbkxIXzOf530N/KbNnfdjelMpuHt+M/Ufd//AQAA//8DABe40uoGBAAA
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-RAY:
+      - a0576c33bc1aa813-KHI
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 02 Jun 2026 15:17:03 GMT
+      Permissions-Policy:
+      - payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
+        "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
+      Referrer-Policy:
+      - no-referrer, strict-origin-when-cross-origin
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      X-Generation-Id:
+      - gen-1780413422-NnMNyXu4jFRNu2aZJIE6
+      access-control-expose-headers:
+      - X-Generation-Id,cf-ray
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"messages":[{"content":"You are a friendly catalog search assistant. Help
+      users find products by searching, browsing categories, and getting details.\n\nGuidelines:\n-
+      Use search_products when filtering by name, category, price, or rating\n- Use
+      get_product_details for more info on a specific product\n- Use list_categories
+      to show available categories\n- If a product is out of stock, mention it and
+      suggest alternatives\n- Be concise but helpful","role":"system"},{"role":"user","content":"how''s
+      the weather"}],"model":"openai/gpt-4o-mini","tools":[{"type":"function","function":{"name":"search_products","description":"Search
+      the product catalog. Returns matching products with full details.","parameters":{"properties":{"query":{"title":"Query","type":"string"},"category":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Category"},"max_price":{"anyOf":[{"type":"number"},{"type":"null"}],"title":"Max
+      Price"},"min_rating":{"anyOf":[{"type":"number"},{"type":"null"}],"title":"Min
+      Rating"}},"required":["query","category","max_price","min_rating"],"title":"search_products_args","type":"object","additionalProperties":false},"strict":true}},{"type":"function","function":{"name":"get_product_details","description":"Get
+      full details for a single product by its ID.","parameters":{"properties":{"product_id":{"title":"Product
+      Id","type":"integer"}},"required":["product_id"],"title":"get_product_details_args","type":"object","additionalProperties":false},"strict":true}},{"type":"function","function":{"name":"list_categories","description":"List
+      all available product categories in the catalog.","parameters":{"properties":{"dummy":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Dummy"}},"title":"list_categories_args","type":"object","additionalProperties":false,"required":["dummy"]},"strict":true}}]}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Bearer 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
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1823'
+      Content-Type:
+      - application/json
+      Host:
+      - openrouter.ai
+      User-Agent:
+      - Agents/Python 0.17.3
+      X-Stainless-Arch:
+      - other:amd64
+      X-Stainless-Async:
+      - async:asyncio
+      X-Stainless-Lang:
+      - python
+      X-Stainless-OS:
+      - Windows
+      X-Stainless-Package-Version:
+      - 2.30.0
+      X-Stainless-Runtime:
+      - CPython
+      X-Stainless-Runtime-Version:
+      - 3.11.9
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+    method: POST
+    uri: https://openrouter.ai/api/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/+JSgAEuAAAAAP//fVLBbtswDP0VVZdenC6xnTTzrcAOC3YYht02DIZiU7YaWRRE
+        OWlW+N9Hp03jYtl8EfD4+Pge6WdpalnIBtxscb+e54ssT7PZgda/6923h6cs33x5/PH9s04/yUTi
+        9hGqyPSqVfGuws5biAYdl6oAKgJLXVQS2WENlunowSnzofFxluOsM85whw+4NzUErn/l+sOGMTpS
+        hK7UxjUQfDBuHKZ9ufi40st0pdLlSIKwNxWU0YzNrreWx7fIEMniJwdyNTzJYp5Iiw1P2dKZxbqG
+        2pKtEpsuJEX0LOhUNHso/1HtgEg1IItnGdDyKxWRoajYHA9GF+Fkc3PbiRYCiIj8Wi+O2AvWrAV7
+        qPsq0o3Y6BPaqj0I5Y6CPFRGm0oYjk0Cg6h4iw0GAzQyb1nOIu54H0JjSIQGsEIHOE3h5YsOxM7h
+        4YatBNA9KXsO+5KDO1+AYfiVyP6chC11PpYRd+B4PWmejVHO97zg60RGjMpekPvFyCROPL+b87fM
+        0mUiDZXbI+5koZUlSN7rlzVEZSyNgytVtVC/yfGRTkh5CLyCKaz62uAUGH+WCTC82Jhq954ip+5K
+        4zQfwvE/8rfTK6RXs1Nutsqvcy9LoncNi9V6uLLCqb23g0xTmY4v8p/cwzD8AbgvSRyuAwAA
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-RAY:
+      - a0576c3bec31541f-KHI
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 02 Jun 2026 15:17:04 GMT
+      Permissions-Policy:
+      - payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
+        "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
+      Referrer-Policy:
+      - no-referrer, strict-origin-when-cross-origin
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      X-Generation-Id:
+      - gen-1780413423-ws8zdkQAx34IKjZSHf2D
+      access-control-expose-headers:
+      - X-Generation-Id,cf-ray
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"messages":[{"content":"Determine if the user''s query is about searching,
+      browsing, or asking about products in a product catalog. Topics include: finding
+      products, checking prices, filtering by category, product details, stock/availability,
+      ratings, recommendations, and comparing products. Reject math, coding, general
+      knowledge, or unrelated chat.","role":"system"},{"role":"user","content":"how''s
+      the weather"}],"model":"openai/gpt-4o-mini","response_format":{"type":"json_schema","json_schema":{"name":"final_output","strict":true,"schema":{"properties":{"is_catalog_query":{"description":"Whether
+      the user''s query is about the product catalog","title":"Is Catalog Query","type":"boolean"},"reasoning":{"description":"Reasoning
+      for the classification","title":"Reasoning","type":"string"}},"required":["is_catalog_query","reasoning"],"title":"CatalogQueryCheck","type":"object","additionalProperties":false}}}}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Bearer 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
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '916'
+      Content-Type:
+      - application/json
+      Host:
+      - openrouter.ai
+      User-Agent:
+      - Agents/Python 0.17.3
+      X-Stainless-Arch:
+      - other:amd64
+      X-Stainless-Async:
+      - async:asyncio
+      X-Stainless-Lang:
+      - python
+      X-Stainless-OS:
+      - Windows
+      X-Stainless-Package-Version:
+      - 2.30.0
+      X-Stainless-Runtime:
+      - CPython
+      X-Stainless-Runtime-Version:
+      - 3.11.9
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+    method: POST
+    uri: https://openrouter.ai/api/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//QmICAAAA//9CYgIAAAD//0JiAgAAAP//QmIC
+        AAAA//9CYgIAAAD//0JiAgAAAP//QmICAAAA//9CYgIAAAD//0JiAgAAAP//QmICAAAA//9CYgIA
+        AAD//0JiAgAAAP//QmICAAAA//98Uk2PmzAQ/SvIZ5ICSROWW3upKlXqpZe2qSzHDODG2NQzJI0i
+        /nuHZMmyVVouiDfP72PMRZhSFKIGt0i3ebJOV+tstUi/4ofTN22heo+Hepu7T5USsfD7n6CJ6bpR
+        tNS+7SyQ8Y5HOoAiYKkXlVi0vgTLdN+BU+ZN3dFi7RetcYZPdMEfTQmB5595/u4jY3hGglZWxtUQ
+        umDcaFZ1Mllv8qdEZfrtSIJwNBokmfGw661l+8YzhKL4zoVcCb9FkcTC+ppd9jixWNdgIzkqcuhC
+        IPmOBZ0icwT5j2kLiKoGUVxE8JbfQiEaJMXh2Ng7gmvMy04YlFqRYlv5q4dw3omiUhYh3ombKvdi
+        bCe+NBBdGZHBSO19TxExdOIdNhDi6NQY3Yyz3gWw42Ij8hF3KXtNGPkQqekrenZc7sTAeQJUPSo7
+        Nb7b3oBh+BGLfqrDCm1HkvwBHO8oXedjn+lS73jGMHk2eWFuNyMTuXayTPhZPcVj+f3ZH6bKr9Vl
+        CaSMxdFWK91AeRfje7oi8hQMwRxWfWn8HBj/lxkw3ELMtfsOiTu30rgKAjj+Tf7O+YDyHHXOzLIs
+        fqw27Qdf8dNNPjzY3jzb/S7mlUzLl/Gf0sMw/AEAAP//AwCQsbpaSAQAAA==
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-RAY:
+      - a0576c3bebfab7dc-KHI
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 02 Jun 2026 15:17:09 GMT
+      Permissions-Policy:
+      - payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
+        "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
+      Referrer-Policy:
+      - no-referrer, strict-origin-when-cross-origin
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      X-Generation-Id:
+      - gen-1780413423-1YsGwZclefBskg78nLfa
+      access-control-expose-headers:
+      - X-Generation-Id,cf-ray
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"messages":[{"content":"You are a friendly catalog search assistant. Help
+      users find products by searching, browsing categories, and getting details.\n\nGuidelines:\n-
+      Use search_products when filtering by name, category, price, or rating\n- Use
+      get_product_details for more info on a specific product\n- Use list_categories
+      to show available categories\n- If a product is out of stock, mention it and
+      suggest alternatives\n- Be concise but helpful","role":"system"},{"role":"user","content":"translate
+      hello to spanish"}],"model":"openai/gpt-4o-mini","tools":[{"type":"function","function":{"name":"search_products","description":"Search
+      the product catalog. Returns matching products with full details.","parameters":{"properties":{"query":{"title":"Query","type":"string"},"category":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Category"},"max_price":{"anyOf":[{"type":"number"},{"type":"null"}],"title":"Max
+      Price"},"min_rating":{"anyOf":[{"type":"number"},{"type":"null"}],"title":"Min
+      Rating"}},"required":["query","category","max_price","min_rating"],"title":"search_products_args","type":"object","additionalProperties":false},"strict":true}},{"type":"function","function":{"name":"get_product_details","description":"Get
+      full details for a single product by its ID.","parameters":{"properties":{"product_id":{"title":"Product
+      Id","type":"integer"}},"required":["product_id"],"title":"get_product_details_args","type":"object","additionalProperties":false},"strict":true}},{"type":"function","function":{"name":"list_categories","description":"List
+      all available product categories in the catalog.","parameters":{"properties":{"dummy":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Dummy"}},"title":"list_categories_args","type":"object","additionalProperties":false,"required":["dummy"]},"strict":true}}]}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Bearer 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
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1832'
+      Content-Type:
+      - application/json
+      Host:
+      - openrouter.ai
+      User-Agent:
+      - Agents/Python 0.17.3
+      X-Stainless-Arch:
+      - other:amd64
+      X-Stainless-Async:
+      - async:asyncio
+      X-Stainless-Lang:
+      - python
+      X-Stainless-OS:
+      - Windows
+      X-Stainless-Package-Version:
+      - 2.30.0
+      X-Stainless-Runtime:
+      - CPython
+      X-Stainless-Runtime-Version:
+      - 3.11.9
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+    method: POST
+    uri: https://openrouter.ai/api/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/+JSgAEuAAAAAP//fFFNb9swDP0rgc5O5iR21vq223Zqi6anZRAUm3a4ypIq0mmL
+        wv99dLIkLtbOFwOPT++DfFNYqUI14Kbzr1dpNl9my3R6tc6e1+vs1jzd3W7xqczblweVKL/9DSUL
+        vdwZnpW+DRYYvZNRGcEwiNRFJVGtr8AK3QdwBr80gaeZn7boUF6E6PdYQZT5jcy//RCMXomh1TW6
+        BmKI6AazOuj59arOFyuzyAcSxD2WoBmHx66zVux3XiBSxU8p5Cp4UYX4W9+Iy5ZOLNFF2mmJShK6
+        UMQ+iKAzjHvQn0xbIDINqOJNRW/lrwwREhsJJ8beMRxibtR3sNZv1ATd5D6YQWyCNBHcWzPbKGFH
+        qDsy9pTnaCVlj0Df/0pUdzKT5G1gzf4RnDRYZMvB7bTyMz6XnuzZ2AszPzBJQqWzVL5skeWJQtLb
+        V/+oitpYguS9vq6ADVoajEtT7qA6y4n+AdHPERnGsOkq9GNguOcI6I8xxtpdIJbWrUZXQwQnZ/w3
+        6Qekv2HH3OXqE+5lSfTuQbrqP9jgON35HuNS2MpB/lO77/s/AAAA//8DAJHxMvxQAwAA
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-RAY:
+      - a0576c65ee837eb3-KHI
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 02 Jun 2026 15:17:11 GMT
+      Permissions-Policy:
+      - payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
+        "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
+      Referrer-Policy:
+      - no-referrer, strict-origin-when-cross-origin
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      X-Generation-Id:
+      - gen-1780413430-8T4wTT4PaqQPbiqc5mxU
+      access-control-expose-headers:
+      - X-Generation-Id,cf-ray
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"messages":[{"content":"Determine if the user''s query is about searching,
+      browsing, or asking about products in a product catalog. Topics include: finding
+      products, checking prices, filtering by category, product details, stock/availability,
+      ratings, recommendations, and comparing products. Reject math, coding, general
+      knowledge, or unrelated chat.","role":"system"},{"role":"user","content":"translate
+      hello to spanish"}],"model":"openai/gpt-4o-mini","response_format":{"type":"json_schema","json_schema":{"name":"final_output","strict":true,"schema":{"properties":{"is_catalog_query":{"description":"Whether
+      the user''s query is about the product catalog","title":"Is Catalog Query","type":"boolean"},"reasoning":{"description":"Reasoning
+      for the classification","title":"Reasoning","type":"string"}},"required":["is_catalog_query","reasoning"],"title":"CatalogQueryCheck","type":"object","additionalProperties":false}}}}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Bearer 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
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '925'
+      Content-Type:
+      - application/json
+      Host:
+      - openrouter.ai
+      User-Agent:
+      - Agents/Python 0.17.3
+      X-Stainless-Arch:
+      - other:amd64
+      X-Stainless-Async:
+      - async:asyncio
+      X-Stainless-Lang:
+      - python
+      X-Stainless-OS:
+      - Windows
+      X-Stainless-Package-Version:
+      - 2.30.0
+      X-Stainless-Runtime:
+      - CPython
+      X-Stainless-Runtime-Version:
+      - 3.11.9
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+    method: POST
+    uri: https://openrouter.ai/api/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//fVJNj9MwEP0rls9pSdrSbXNDCGmRkDgAKwRF
+        lutME7OOHTyTlqrKf2fSbrpZVMgl0Zvn9zHOSdpC5rIEP8nuVukimy/m6eTd+uFtPb+ff/vyIbuv
+        4GtrPz3IRIbtTzDEdFNpmppQNw7IBs8jE0ETsNSzSiLrUIBjemjAa/uqbGiyCJPaessnmhj2toDI
+        8488f/OeMTwiQa121pcQm2h9b7ZrVLpYrtapnpnXPQni3hpQZPvDvnWO7avAEMr8OxfyBfyWOfu7
+        ULLLFgcW61qsFEdFDp1LpNCwoNdk96D+Ma0BUZcg85OMwfFbakSLpDkcGwdPcI552kiLymjSbKt+
+        tRCPG5nvtENINvKiyr0Y28jPFYgzQ1gUehtaEhS1R8dJfCm0OIRYJOJQWVP1lNZHcP1+BQXBlYrW
+        kEDQ0VQ9P0SxjeGA/D3dyI5jRdi1qN1Q/Op+AbruRyLboRXr1Q0pCo/geVXZYtXXGu72is8YpsDt
+        npl3y56J3D6dpvzM10m/g+0xPA7NX6qrAkhbh72t0aaC4irG13VG1CFagjGs28KGMdD/NiOgu4QY
+        a7cNEneulfU7iOD5b/k75w3KU9QxczabJbfVhv3gC362XHU3tjfOdr2LcSVb82X8p3TXdX8ATPkN
+        kcADAAA=
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-RAY:
+      - a0576c65eeeba813-KHI
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 02 Jun 2026 15:17:11 GMT
+      Permissions-Policy:
+      - payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
+        "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
+      Referrer-Policy:
+      - no-referrer, strict-origin-when-cross-origin
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      X-Generation-Id:
+      - gen-1780413430-E9VCm3H3ZUL1HheXuiSV
+      access-control-expose-headers:
+      - X-Generation-Id,cf-ray
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"messages":[{"content":"Determine if the user''s query is about searching,
+      browsing, or asking about products in a product catalog. Topics include: finding
+      products, checking prices, filtering by category, product details, stock/availability,
+      ratings, recommendations, and comparing products. Reject math, coding, general
+      knowledge, or unrelated chat.","role":"system"},{"role":"user","content":"what
+      happened in world war 2"}],"model":"openai/gpt-4o-mini","response_format":{"type":"json_schema","json_schema":{"name":"final_output","strict":true,"schema":{"properties":{"is_catalog_query":{"description":"Whether
+      the user''s query is about the product catalog","title":"Is Catalog Query","type":"boolean"},"reasoning":{"description":"Reasoning
+      for the classification","title":"Reasoning","type":"string"}},"required":["is_catalog_query","reasoning"],"title":"CatalogQueryCheck","type":"object","additionalProperties":false}}}}'
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - Bearer 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
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '927'
+      Content-Type:
+      - application/json
+      Host:
+      - openrouter.ai
+      User-Agent:
+      - Agents/Python 0.17.3
+      X-Stainless-Arch:
+      - other:amd64
+      X-Stainless-Async:
+      - async:asyncio
+      X-Stainless-Lang:
+      - python
+      X-Stainless-OS:
+      - Windows
+      X-Stainless-Package-Version:
+      - 2.30.0
+      X-Stainless-Runtime:
+      - CPython
+      X-Stainless-Runtime-Version:
+      - 3.11.9
+      x-stainless-read-timeout:
+      - '600'
+      x-stainless-retry-count:
+      - '0'
+    method: POST
+    uri: https://openrouter.ai/api/v1/chat/completions
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAA/+JSgAEuAAAAAP//4kIwAQAAAP//QmICAAAA//9CYgIAAAD//0JiAgAAAP//fFJd
+        a9tAEPwrx730RXblzyR+K7SUQEgpFPJQF3E+raytT7fK7cmpCfrvXdmRrdCkehHMzs7M7t6zxlyv
+        9Bb8aHJ1nc4ns/lsOvp8d1d+3YWrW/+Fvt9jtbvBe51o2vwGG4VuSxPHlqraQUTyUrIBTASRuqgk
+        uqIcnNCpBm/w47aOozmNKvQoHXWgPeYQpP5N6p9uBeMDR6iyAv0WQh3Qd2ZFnaXz5fVNaqZ20ZEg
+        7NFCFrFr9o1zYl+SQKxXP2Ugn8MfvUoT7WgrLhvuWaKLXGYSlSX0SnOkWgS9ibiH7J1qBcxmC3r1
+        rAM5+WvDjByNhBNj8hGOMZ/XGjmzJhqxzR4bCIe1XhXGMSRrfVKVuQRb6x8lqEbm+MDqSFTIyvBO
+        yspsqImqFAMKaI1TsBd9VgFct2AVST1QcLl6MEFNE/VUoi2V2DhW0smyUhVFnq1sXVGhZAN5Y6N6
+        SabQPzYYEDgRS4VR5QSsPEWp7MntpRVMsGUXpqDQ9wvdlmCPGeUytuuXqvEHReIXev3RJWiNlsdr
+        3cqaAhQNG9cf4ryNE9C2vxLd9FsWw6qOWaQdeDndZDHp1ty/tTO+WCQ6kniekWm67Jgs10jHqXyL
+        xVJIcpXNgXb9LV7rZzlEg447Y2tkwvwsJw/oiGRPASMMYdPkSEOge8gDoD3FGGo3NUeZusrQFxDA
+        y/v9N+kbpJewQ+50+g73siR+1TCbtW9scJjufI/hUFjJQf4zdtu2fwEAAP//AwDwi/VmdQQAAA==
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-RAY:
+      - a0576c700decb7dc-KHI
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 02 Jun 2026 15:17:13 GMT
+      Permissions-Policy:
+      - payment=(self "https://checkout.stripe.com" "https://connect-js.stripe.com"
+        "https://js.stripe.com" "https://*.js.stripe.com" "https://hooks.stripe.com")
+      Referrer-Policy:
+      - no-referrer, strict-origin-when-cross-origin
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      X-Generation-Id:
+      - gen-1780413432-DLLhGkr7InEoQNimk9iN
+      access-control-expose-headers:
+      - X-Generation-Id,cf-ray
+    status:
+      code: 200
+      message: OK
+version: 1

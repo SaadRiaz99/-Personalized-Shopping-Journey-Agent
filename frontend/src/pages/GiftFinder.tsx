@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { findGifts, addToWishlist } from '../services/api'
 import type { GiftRecipient, GiftFinderResult, GiftRecommendation } from '../types'
 

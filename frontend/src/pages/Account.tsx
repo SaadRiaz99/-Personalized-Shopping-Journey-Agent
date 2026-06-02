@@ -25,8 +25,6 @@ export default function Account() {
   const [history, setHistory] = useState<LoginHistoryEntry[]>([])
   const [historyLoading, setHistoryLoading] = useState(false)
 
-  const [emailMsg, setEmailMsg] = useState<string | null>(null)
-
   const loadSessions = async () => {
     setSessionsLoading(true)
     try {
@@ -83,11 +81,8 @@ export default function Account() {
 
   const handleVerifyEmail = async () => {
     try {
-      const res = await authVerifyEmail()
-      setEmailMsg(res.message)
-    } catch (err: unknown) {
-      setEmailMsg((err as { response?: { data?: { detail?: string } } })?.response?.data?.detail || 'Failed')
-    }
+      await authVerifyEmail()
+    } catch { /* ignore */ }
   }
 
   const handleRevokeSession = async (id: string) => {

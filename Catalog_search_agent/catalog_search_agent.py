@@ -33,10 +33,10 @@ set_tracing_disabled(disabled=True)
 
 def build_model():
     if key := os.environ.get("OPENROUTER_API_KEY", ""):
-        return OpenAIChatCompletionsModel(
-            model=os.environ.get("LLM_MODEL", "openai/gpt-4o-mini"),
-            openai_client=AsyncOpenAI(api_key=key, base_url="https://openrouter.ai/api/v1"),
-        ), f"OpenRouter ({os.environ.get('LLM_MODEL', 'openai/gpt-4o-mini')})"
+        clients["openrouter"] = provider_entry(
+            client=AsyncOpenAI(api_key=key, base_url="https://openrouter.ai/api/v1"),
+            model=os.environ.get("LLM_MODEL", "meta-llama/llama-3.3-70b-instruct:free"),
+        ), f"OpenRouter ({os.environ.get('LLM_MODEL', 'meta-llama/llama-3.3-70b-instruct:free')})"
 
     if key := os.environ.get("GROQ_API_KEY", ""):
         return OpenAIChatCompletionsModel(

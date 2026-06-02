@@ -141,6 +141,8 @@ class TestProductsData:
 
 class TestAgentCatalogQueries:
     @pytest.mark.needs_api
+    @pytest.mark.vcr
+    @pytest.mark.default_cassette("test_agent/agent_catalog_pass.yaml")
     @pytest.mark.parametrize("query,expected_word", [
         ("show me wireless bluetooth headphones", "headphones"),
         ("find monitors",                         "monitor"),
@@ -159,6 +161,8 @@ class TestAgentCatalogQueries:
         assert expected_word.lower() in output.lower(), f"Expected '{expected_word}' in '{output[:200]}'"
 
     @pytest.mark.needs_api
+    @pytest.mark.vcr
+    @pytest.mark.default_cassette("test_agent/agent_guardrail_reject.yaml")
     @pytest.mark.parametrize("query", [
         "what is 2+2",
         "write python code to sort a list",
@@ -172,6 +176,8 @@ class TestAgentCatalogQueries:
             await Runner.run(catalog_agent, query, context=user_ctx)
 
     @pytest.mark.needs_api
+    @pytest.mark.vcr
+    @pytest.mark.default_cassette("test_agent/agent_edge_cases.yaml")
     @pytest.mark.parametrize("query", [
         "find me a 27 inch monitor",
         "show me running shoes in stock",

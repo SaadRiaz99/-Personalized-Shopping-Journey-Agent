@@ -1,7 +1,10 @@
-import os
 import json
+import os
+from pathlib import Path
+
 import pytest
 from openai import AsyncOpenAI
+
 from agents import (
     Agent,
     GuardrailFunctionOutput,
@@ -24,24 +27,65 @@ from catalog_search_agent import (
 
 set_tracing_disabled(disabled=True)
 
+CASSETTE_DIR = Path(__file__).parent / "cassettes"
+
+
+@pytest.fixture(scope="session")
+def vcr_config():
+    return {
+        "cassette_library_dir": str(CASSETTE_DIR),
+        "record_mode": "none",
+        "filter_headers": ["authorization", "x-api-key"],
+        "filter_query_parameters": ["api_key"],
+        "match_on": ["method", "uri", "body"],
+    }
+
+
+def _api_key() -> tuple[str, str, str] | None:
+    candidates = [
+        ("OPENROUTER_API_KEY", "https://openrouter.ai/api/v1", os.environ.get("LLM_MODEL", "openai/gpt-4o-mini")),
+        ("GROQ_API_KEY", "https://api.groq.com/openai/v1", os.environ.get("LLM_MODEL", "llama-3.3-70b-versatile")),
+        ("GEMINI_API_KEY", "https://generativelanguage.googleapis.com/v1beta/openai/", os.environ.get("LLM_MODEL", "gemini-2.0-flash")),
+    ]
+    for var, base_url, model in candidates:
+        if key := os.environ.get(var):
+            return key, base_url, model
+    return None
+
+
+def _has_vcr_cassette(item) -> bool:
+    marker = item.get_closest_marker("default_cassette")
+    if not marker:
+        return False
+    name = marker.args[0] if marker.args else None
+    if not name:
+        return False
+    return (CASSETTE_DIR / name).exists()
+
 
 def pytest_collection_modifyitems(items):
     for item in items:
         if "needs_api" in item.keywords:
+            has_key = bool(_api_key())
+            has_cassette = _has_vcr_cassette(item)
             item.add_marker(pytest.mark.skipif(
-                not os.environ.get("OPENROUTER_API_KEY"),
-                reason="set $env:OPENROUTER_API_KEY to run API tests",
+                not has_key and not has_cassette,
+                reason="set an API key or ensure VCR cassettes exist",
             ))
 
 
 @pytest.fixture(scope="session")
 def model():
-    key = os.environ.get("OPENROUTER_API_KEY", "")
-    if not key:
-        pytest.skip("OPENROUTER_API_KEY not set")
+    info = _api_key()
+    if info:
+        key, base_url, model_name = info
+    else:
+        key = "sk-or-v1-dummy-vcr-replay"
+        base_url = "https://openrouter.ai/api/v1"
+        model_name = "openai/gpt-4o-mini"
     return OpenAIChatCompletionsModel(
-        model=os.environ.get("LLM_MODEL", "openai/gpt-4o-mini"),
-        openai_client=AsyncOpenAI(api_key=key, base_url="https://openrouter.ai/api/v1"),
+        model=model_name,
+        openai_client=AsyncOpenAI(api_key=key, base_url=base_url),
     )
 
 

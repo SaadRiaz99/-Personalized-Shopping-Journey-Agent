@@ -1,9 +1,0 @@
-node_modules
-.venv
-__pycache__
-.git
-.pytest_cache
-*.pyc
-.env
-.venv
-*.log

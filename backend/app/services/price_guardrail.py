@@ -3,7 +3,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Optional
 
-VALID_SKU_PATTERN = r'^SKU-[A-Z]{2}\d{3}$'
+VALID_SKU_PATTERN = r'^SKU-\d{4}$'
 MAX_PRICE = 100000.0
 MIN_PRICE = 0.01
 MAX_RATE_LIMIT_PER_HOUR = 50

@@ -139,8 +139,6 @@ class AgentOrchestrator:
         intent = await parse_intent(safe_query) if safe_query else QueryIntent(raw_query="")
         await self._notify("intent_parsed", intent.model_dump())
 
-        await asyncio.sleep(2)
-
         products = search_products(safe_query) if safe_query else []
         if not products and intent.category:
             from app.models import UserPreferences
@@ -214,8 +212,6 @@ class AgentOrchestrator:
             await self._notify("agent_update", agent.model_dump())
             await self._notify("agent_result", result)
             return result
-
-        await asyncio.sleep(1)
 
         discount = pm_agent.check_price(sku, product["price"], product_id, agent_id)
 

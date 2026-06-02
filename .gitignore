@@ -29,3 +29,6 @@ Thumbs.db
 
 
 backend/agent_store.db
+
+# Embedded repos
+-Personalized-Shopping-Journey-Agent/

@@ -30,5 +30,12 @@ Thumbs.db
 
 backend/agent_store.db
 
+# Generated artifacts
+*.coverage
+*.jsonl
+.python-version
+uv.lock
+node_modules/
+
 # Embedded repos
 -Personalized-Shopping-Journey-Agent/

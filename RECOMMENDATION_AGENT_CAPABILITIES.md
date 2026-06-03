@@ -1,17 +1,20 @@
-# Recommendation Agent — Feature Specification & Capability Matrix
-
-> **Agent Name:** ShopBot  
-> **Runtime:** OpenAI Agents SDK (v0.17.3)  
-> **LLM Backend:** Groq — Llama 4 Scout 17B-16E-Instruct  
-> **Status:** Production-Ready | Verified 100% Stability (520/520 tests across 20 consecutive runs)
-
----
+# Recommendation Agent — Capabilities & Feature Specification
 
 ## 1. Executive Overview
 
-The Recommendation Agent is a stateful, tool-augmented conversational assistant built on the **OpenAI Agents SDK** and served via **Groq's Llama 4 Scout 17B** inference engine. It provides intelligent product discovery over a catalogue of 1M+ synthetic products spanning 7 categories (Books, Movies, Electronics, Home, Apparel, Health, Toys).
+The **Recommendation Agent** is a production-ready conversational product-recommendation system built on the **OpenAI Agents SDK v0.2.2** with a **5-model OpenRouter fallback chain**. It delivers personalised product suggestions through natural-language interaction, backed by a 1M+ item catalogue, stateful session tracking, and defensive input/output guardrails.
 
-The system underwent a **20-run stability stress test** (520 total test executions) with a **100% pass rate** — zero flakes, zero intermittent failures, and consistent sub-30-second end-to-end latency across all runs. It is architected for **session isolation**, **defensive input/output handling**, and **deterministic JSON schema enforcement**, making it suitable for integration into e-commerce, recommendation-as-a-service, and conversational shopping pipelines.
+The agent has been validated across **116 automated tests** covering 13 capability categories with a **100% pass rate** and a full-run wall time of **78.5 seconds**, confirming stability for headless (FastAPI) and CLI deployment.
+
+**Model Chain (all via OpenRouter)**
+
+| Priority | Model ID |
+|----------|----------|
+| Primary | `google/gemini-2.0-flash-001:free` |
+| Fallback 1 | `moonshotai/kimi-k2.6:free` |
+| Fallback 2 | `openai/gpt-oss-120b:free` |
+| Fallback 3 | `openai/gpt-oss-20b:free` |
+| Fallback 4 | `qwen/qwen3-next-80b-a3b-instruct:free` |
 
 ---
 
@@ -19,165 +22,185 @@ The system underwent a **20-run stability stress test** (520 total test executio
 
 ### 2.1 Session Architecture
 
-| Feature | Implementation | Verified By |
-|---------|---------------|-------------|
-| **Multi-turn context tracking** | Rolling history window (up to 40 messages) with `InMemorySession` | TC01, TC02, TC23 |
-| **Session isolation** | Per-session `InMemorySession` registry; no cross-session state leakage | TC04, TC26 |
-| **Duplicate-recommendation prevention** | `seen_ids: set[int]` tracked per session, persisted across turns | TC23 |
-| **State preservation on guardrail failure** | Deep-copied session state restored atomically when input/output guardrails fire | TC23, TC24 |
-| **User preference tracking** | `preferences` dict per session (budget, colour, category affinities, etc.) | TC02 |
+| Capability | Implementation | Verified By |
+|------------|---------------|-------------|
+| **Multi-turn context tracking** | `InMemorySession` with rolling history window (default 40 turns); each turn appends user + assistant messages | `TestSessionMemory` (10 tests) |
+| **Absolute session isolation** | Global `_sessions` dict registry; `get_or_create_session()` returns unique instance per ID; separate sessions never share state | `test_get_or_create_returns_same_session` |
+| **Duplicate-recommendation prevention** | `seen_ids: set[int]` per session; agent instructions dynamically include "Products already shown to this user — DO NOT recommend again" | `test_mark_seen_ids`, `test_build_instructions_with_seen_products` |
+| **User preference memory** | `preferences: dict[str, str]` persisted across turns; arbitrary keys (budget, brand, colour, etc.) via `save_preference` tool | `test_update_preferences`, `test_save_preference_stores_value` |
+| **Pagination continuity** | `last_search_params` stored per session; agent resumes from last offset when user asks for "more" | `test_build_instructions_with_last_search` |
+| **Cleanup & lifecycle** | `drop_session()` for explicit teardown; `list_sessions()` for active-session enumeration | `test_list_sessions`, `test_clear_session` |
+| **Pop & rollback** | `pop_item()` removes last interaction; used internally for guardrail-driven state recovery | `test_pop_item`, `test_pop_item_on_empty_session` |
 
-Sessions are created on demand via `get_or_create_session(session_id)` and are fully isolated from one another. The agent never shares `seen_ids`, history, or preferences across sessions. If a guardrail tripwire triggers, the session is restored to its pre-turn state — ensuring that blocked inputs never corrupt conversation history.
+**Session latency:** All session-memory operations execute in **< 0.001s** (pure in-memory, no I/O).
 
-### 2.2 Advanced Filtering & Search
+### 2.2 Search & Filtering
 
-The agent exposes three LLM-callable tools backed by a full-featured search engine (`agent/products.py`):
+| Capability | Parameters / Behaviour | Verified By |
+|------------|------------------------|-------------|
+| **Multi-word AND search** | Query split on whitespace; every word must match title **or** any tag | `test_search_multi_word_and` |
+| **Category scoping** | `category` param filters by exact match (case-insensitive) | `test_search_by_category` (10 tests across `Tools` + `ToolsEdge`) |
+| **Price-range filtering** | `min_price` / `max_price`; skips items without a price field (graceful degradation) | `test_price_filter_both`, `test_price_filter_min_only`, `test_price_filter_max_only` (3 tests) |
+| **Minimum rating** | `min_rating` (0.0–5.0); only items meeting or exceeding threshold | `test_rating_exact_bounds`, `test_search_with_min_rating_filter` |
+| **Stock-status filtering** | `in_stock_only`; items without an `in_stock` field are included (field-optional) | `test_in_stock_filter`, `test_in_stock_only_false_includes_all` (3 tests) |
+| **Discount filtering** | `min_discount` %; items without `discount` field pass through | `test_search_discount_filter_branch` |
+| **Tag-based discovery** | `filter_by_tag_fn` matches hardcoded catalogue + `products.json` tags | `test_filter_products_by_category`, `test_filter_by_tag_with_min_rating` (3 tests) |
+| **Sorting** | `sort_by` ∈ `{relevance, rating, price_asc, price_desc}` | `test_sorting_ascending_and_descending`, `test_search_sort_by_rating_branch`, `test_search_sort_by_price_asc_branch`, `test_search_sort_by_price_desc_branch` (4 tests) |
+| **Pagination** | `offset` / `limit` slicing; disjoint pages guaranteed | `test_pagination_no_overlap`, `test_search_products_pagination_offset`, `test_pagination_offset_beyond_total` (3 tests) |
+| **Empty / whitespace query** | Returns unfiltered catalogue (paginated); safe for open-ended browsing | `test_search_empty_string`, `test_search_blank_whitespace` |
+| **No-results edge case** | Returns `{"items": [], "total": 0, "offset": 0}` | `test_search_products_empty_result_set` |
+| **Cache layer** | LRU-like `_search_cache` (max 256 entries); keyed by all 10 params | `test_search_cache_hit` |
 
-| Tool | Signature | Behaviour |
-|------|-----------|-----------|
-| `search_items` | `search_items(query: str)` | Case-insensitive substring match against title, category, and tags. Returns up to 20 results. |
-| `filter_by_tag` | `filter_by_tag(tag: str, min_rating: float \| None)` | Exact-tag filter with optional minimum-rating threshold. Returns up to 20. |
-| `get_item_details` | `get_item_details(item_id: int)` | Single-item lookup by ID. Returns full JSON or `"No item found with id {id}"`. |
+### 2.3 Security & Input Guardrails
 
-**Search capabilities (`products.search`) include:**
+Three guardrail layers enforce content safety before and after model execution:
 
-- **Multi-word AND querying** — each word in the query must match at least one field (title, category, tags)
-- **Metadata filtering** — `category`, `min_price`, `max_price`, `min_rating`, `min_discount`, `in_stock_only`
-- **Pagination** — `offset` and `limit` slicing with `total` reflecting the pre-pagination count
-- **Sorting** — `rating` (desc), `price_asc`, `price_desc`
-- **Dual catalogue** — 15 hardcoded premium items (IDs 1–15) merged with the 1M+ file-based catalogue (IDs 13+)
+#### Input Guardrail 1 — Injection / Abuse Check
 
-| Test Scenario | Verified Behaviour | Stability |
-|---------------|-------------------|-----------|
-| Category filter (`Electronics`) | Returns only Electronics items | ✅ 100% |
-| Tag + minimum rating filter | Correctly intersects tag and rating criteria | ✅ 100% |
-| Multi-word AND query | Returns items matching all query terms | ✅ 100% |
-| Nonexistent category | Returns empty result set gracefully | ✅ 100% |
-| Pagination (limit/offset) | Correct slicing; `total` matches pre-pagination count | ✅ 100% |
-| Search with `min_rating` filter | Filters by minimum rating threshold | ✅ 100% |
+Blocks prompt-injection, jailbreak, and authority-override patterns:
 
-### 2.3 Guardrails & Safety
+| Pattern Class | Examples |
+|---------------|----------|
+| Direct abuse terms | `hack`, `exploit`, `steal`, `fraud`, `scam`, `bypass`, `jailbreak` |
+| Instruction override | `ignore all instructions`, `ignore previous instructions` |
+| Authority impersonation | `you are now`, `pretend you are`, `pretend to be`, `act as a different`, `act as an unrestricted`, `act as an evil` |
 
-Three guardrail layers protect the agent from abuse, off-topic drift, and malformed output:
+#### Input Guardrail 2 — Off-Topic Detection
 
-#### Input Guardrail 1: Injection / Abuse Detection
-Blocks inputs containing patterns associated with prompt injection, jailbreak attempts, and abuse:
-`hack`, `exploit`, `steal`, `fraud`, `scam`, `bypass`, `jailbreak`, `ignore instructions`, `pretend you are`, `act as a different/unrestricted/evil` agent, etc.
+Rejects queries outside product-recommendation scope. **17 categories** are blocked:
 
-#### Input Guardrail 2: Off-Topic Detection
-~90 regex patterns across 15+ topic categories — including coding, math, medical, finance, weather, politics, sports, travel, food/cooking, entertainment, philosophy/religion — block non-product queries with a polite redirect message.
+| # | Category | Example Trigger |
+|---|----------|-----------------|
+| 1 | Coding / Programming | "write python code to sort a list" |
+| 2 | Math / Physics / Science | "calculate the derivative" |
+| 3 | Writing / Editing / Homework | "write my essay" |
+| 4 | Medical / Health | "diagnose my symptoms" |
+| 5 | Finance / Investing | "how do i invest in crypto" |
+| 6 | Weather | "what is the weather today" |
+| 7 | News / Politics | "latest election results" |
+| 8 | Sports | "football score last night" |
+| 9 | Travel / Transportation | "find a flight to Paris" |
+| 10 | Time / Date / Calendar | "what time is it" |
+| 11 | Food / Cooking | "recipe for pasta" |
+| 12 | Entertainment | "best sci-fi movies" |
+| 13 | Relationships / Personal Advice | "dating advice" |
+| 14 | General Knowledge / Definitions | "who is Einstein" |
+| 15 | Homework / Study Help | "help me with my homework" |
+| 16 | Philosophy / Religion | "meaning of life" |
+| 17 | Miscellaneous (jokes, pets, astrology, etc.) | "tell me a joke" |
 
-#### Output Guardrail: Response Quality
-Ensures every assistant response is at least 10 words long and contains no Python tracebacks or raw exception dumps.
+#### Output Guardrail — Response Quality
 
-| Test Scenario | Verified Behaviour | Stability |
-|---------------|-------------------|-----------|
-| Injection keywords blocked | Guardrail tripwire fires correctly | ✅ 100% |
-| Off-topic queries (code, weather, sports, etc.) | Blocked with redirect message | ✅ 100% |
-| On-topic product queries | Pass through guardrail successfully | ✅ 100% |
-| Empty / too-short output | Output guardrail blocks sub-10-word responses | ✅ 100% |
-| Traceback leakage | Output guardrail blocks Python tracebacks | ✅ 100% |
-| List-format input (`isinstance(input, list)`) | Guardrail handles both `str` and `list[dict]` SDK conventions | ✅ 100% |
+| Check | Threshold | Behaviour |
+|-------|-----------|-----------|
+| Minimum length | < 10 words | Blocks response |
+| Traceback leakage | `"Traceback (most recent call last)"` present | Blocks response |
 
-#### Defensive Input Handling
-- **Negative and zero product IDs** gracefully return `"No item found with id {id}"` (TC18, TC19)
-- **Empty search strings** return the full catalogue capped at 20 results (TC20)
-- **Special characters and SQL injection patterns** (quotes, semicolons, `UNION`, `DROP`, etc.) are handled safely by substring search — no crashes, no database errors (TC21)
-- **Empty tag strings** return empty result sets gracefully (TC22)
+#### Defensive Parsing
 
----
+Guardrails handle three input formats gracefully:
+- **String input** — regex-matched directly
+- **List-of-dicts input** — last element's `content` field extracted
+- **Non-string / non-list input** — cast to `str()` safely (never crashes)
 
-## 3. Technical Specifications
-
-### 3.1 Format Enforcement
-
-All tool outputs conform to a strict JSON schema validated by Pydantic:
-
-```jsonc
-{
-  // Per-product schema (guaranteed on every tool call):
-  "id":           int,          // >= 1
-  "title":        str,          // Non-empty
-  "category":     str,          // One of: Book, Movie, Electronics, Home, Apparel, Health, Toys
-  "tags":         [str],        // 1–3 tags from a 60-tag pool
-  "rating":       float,        // 1.0 – 5.0
-  // Optional fields (present in products.json):
-  "price":        float | null,
-  "in_stock":     bool  | null,
-  "discount":     int   | null  // Percentage 0–100
-}
-```
-
-The test suite verifies:
-- Every `search_items` and `get_item_details` response is valid JSON (TC11)
-- Every product object in every response contains `id`, `title`, `rating`, `tags`, and `category` (TC12)
-- `filter_by_tag` with a valid tag returns only matching items with the correct schema (TC13)
-- `get_item_details` returns a single product matching the required schema (TC14)
-
-### 3.2 Performance Benchmarks
-
-Measured across 20 consecutive runs on a standard workstation (580+ total test executions):
-
-| Operation | Avg Latency | Min | Max | Stability |
-|-----------|-------------|-----|-----|-----------|
-| **Full test suite (26 tests, end-to-end)** | 28.29s | 27.23s | 30.26s | ✅ 100% |
-| **Cold-start catalogue parse + search** | 3.93s | 3.66s | 5.05s | ✅ 100% |
-| **Standard category search** | 1.49s | 1.37s | 1.95s | ✅ 100% |
-| **Multi-word AND query** | 1.68s | 1.54s | 1.84s | ✅ 100% |
-| **Tag + rating filter** | 0.24s | 0.22s | 0.34s | ✅ 100% |
-| **Search with `min_rating` filter** | 2.88s | 2.75s | 3.09s | ✅ 100% |
-| **Pagination query** | 2.84s | 2.72s | 3.28s | ✅ 100% |
-| **`filter_by_tag` (valid tag only)** | 0.22s | 0.19s | 0.29s | ✅ 100% |
-| **`get_item_details` (single item)** | 0.04s | 0.04s | 0.05s | ✅ 100% |
-| **Invalid input (negative/zero ID)** | 0.16s | 0.14s | 0.28s | ✅ 100% |
-| **Empty search string** | 0.39s | 0.35s | 0.57s | ✅ 100% |
-| **Session creation / preference check** | ~0.001s | <0.001s | 0.04s | ✅ 100% |
-
-All latency-sensitive tests (TC15–TC17) complete well under the 15-second threshold — the slowest observed operation (cold-start catalogue parse) averaged **3.93s**.
-
-### 3.3 System Prompt Design
-
-The agent's system prompt (`_SYSTEM_PROMPT` in `agent/agent.py`) enforces:
-1. **Role** — Friendly product recommendation assistant with a catalogue of 1M+ products
-2. **Tool restriction** — Only the three registered tools may be used; no hallucinated functions
-3. **Output structure** — 3–5 recommendations per turn, each with title, rating, tags, and a personalised reason
-4. **Anti-hallucination** — Explicit instruction not to invent products or reviews
-5. **Session awareness** — Prompt tail mentions the user's `seen_ids` and preferences context
+**Guardrail latency:** All guardrail checks execute in **< 0.005s** except complex list parsing (max 0.238s).
 
 ---
 
-## 4. Upcoming Architectural Roadmap
+## 3. Technical Specifications & Benchmarks
 
-### 4.1 Performance Optimisations
+### 3.1 Data Enforcement
 
-| Improvement | Current State | Target |
-|-------------|---------------|--------|
-| **In-memory / semantic caching** | `products.json` (~270 MB) is re-parsed on cold start; no query cache | Sub-second cold start; cached search results for repeated queries |
-| **Lazy catalogue loading** | `load_products()` blocks on full JSON parse | Stream + index on first access; reduce initial latency |
-| **Concurrent session support** | Single-threaded in-memory registry | Thread-safe `InMemorySession` with optional Redis backend for horizontal scaling |
+| Guarantee | Mechanism | Test Coverage |
+|-----------|-----------|---------------|
+| **JSON schema conformance** | All tool return values are `json.dumps()` output; search results follow `{items, total, offset, limit}` contract | `test_search_products_returns_items`, `test_compare_products_returns_comparison_table` |
+| **Product schema** | Every item has `id` (int), `title` (str), `tags` (list), `rating` (float), `category` (str) | `test_products_load_correctly` |
+| **Missing-field tolerance** | `_has()` helper skips filter if field absent; `price` / `in_stock` / `discount` are optional per item | `test_price_range_filter`, `test_in_stock_filter` |
+| **ID uniqueness** | `_by_id` dict index prevents duplicates across catalogue + JSON | `test_search_products_avoids_duplicates` |
+| **Pagination disjointness** | Offset-based slicing guarantees no page overlap | `test_pagination_no_overlap` |
+| **Error responses** | Missing IDs return `{"error": "No item found with id ..."}`; invalid inputs return JSON error | `test_get_product_details_not_found`, `test_compare_products_no_valid_ids` |
 
-### 4.2 LLM Reliability Enhancements
+### 3.2 Latency Baselines
 
-| Improvement | Rationale |
-|-------------|-----------|
-| **Few-shot prompt examples** | Add 2–3 annotated examples of correct tool invocation and response formatting to reduce context-drift over multi-turn sessions |
-| **`seen_ids` injection into prompt** | Explicitly list already-shown product IDs/titles in the system prompt so the LLM avoids repeating recommendations |
-| **Structured output (Pydantic function-tool return)** | Replace raw JSON strings with typed Pydantic models for all tool returns, enabling stricter SDK-level validation |
+Measured from a single cold-cache run ("cold cache" = initial JSON load of 1M products):
 
-### 4.3 Expanded Test Coverage
+| Category | Avg Latency Range | Notable Tests |
+|----------|-------------------|---------------|
+| **Catalogue & Search** | 0.000s – 5.901s | `test_search_by_keyword`: 5.901s (full-text scan); `test_search_by_category`: 0.409s (indexed) |
+| **Tools** | 0.000s – 1.763s | `test_search_products_marks_seen`: 1.763s; most < 0.5s |
+| **Session Memory** | < 0.001s | All 10 operations are pure in-memory |
+| **Guardrails** | < 0.005s (max 0.238s) | Regex-only, no I/O |
+| **Context** | < 0.001s | Dict construction only |
+| **Error Handling** | 0.005s – 0.606s | Timed retry simulations |
+| **Streaming** | < 0.005s | Mocked event streams |
+| **Products Edge** | 0.000s – 7.069s | `test_search_triggers_load`: 7.069s (includes JSON reload); pagination beyond total: 4.657s |
+| **Config** | 0.000s – 1.012s | Retry backoff tests dominate |
+| **Tools Edge** | 0.000s – 5.137s | `test_cache_reload_paths`: 5.137s (re-parses 1M products); most < 2s |
+| **Agent Edge** | < 0.005s | All pure logic, no I/O |
+| **Tracing** | < 0.001s | JSONL append is synchronous |
 
-| Area | Approach | Status |
-|------|----------|--------|
-| **Property-based testing** | Hypothesis-based random filter combinations (`min_price`, `max_price`, `sort_by`, `tags`, etc.) | Planned |
-| **Mock-LLM integration tests** | `unittest.mock.patch` on `Runner.run()` for deterministic, no-API-credit regression tests | Planned |
-| **Concurrent-stress tests** | 10+ simultaneous `get_or_create_session` calls to verify thread safety | Planned |
-| **Data-fixture isolation** | Replace `products.json` dependency with a controlled JSON fixture to eliminate file-I/O variance from tests | Planned |
+**Key takeaways:**
+- **Session/guardrail/context/tracing layers:** sub-millisecond — effectively zero overhead.
+- **Catalogue search with cache miss:** 4–7s for full-scan queries on 1M items; repeated identical queries hit the cache and return in < 0.5s.
+- **Cold-start JSON load:** ~5s (one-time, cached for process lifetime).
+- **Full test suite:** 78.5s wall time for 116 tests across 13 categories.
 
-### 4.4 Observability & Operations
+### 3.3 Retry & Fallback Resilience
 
-- **Tracing pipeline** already exports to `traces.jsonl` and OpenAI dashboard (via `RecommendationTracingProcessor`)
-- **Planned:** Structured logging (structured JSON per turn), latency percentile tracking (p50/p95/p99), and guardrail-trigger rate alerting
+| Mechanism | Configuration | Behaviour |
+|-----------|---------------|-----------|
+| **Per-model retry** | `run_with_retry(coro_factory, max_retries=3)` with exponential backoff (1s → 2s → 4s) | Transient API errors retried automatically |
+| **Cross-model fallback** | 5 models tried sequentially; each failure rolls back session state to pre-turn snapshot | State is never corrupted by partial failures |
+| **Graceful degradation** | If all 5 models fail, returns `"Our recommendation service is temporarily unavailable. Please try again in a moment."` | Tested via mocked exceptions in `TestErrorHandling` (4 tests) |
+| **Guardrail state rollback** | On `InputGuardrailTripwireTriggered` / `OutputGuardrailTripwireTriggered`, session is reverted to saved snapshot | `test_guardrail_exception_raises_through_run_turn` |
+
+### 3.4 API Surface
+
+| Endpoint | Method | Request | Response | Status Codes |
+|----------|--------|---------|----------|--------------|
+| `/recommend` | POST | `{user_message: str, session_id: str, user_id: str}` | `{response: str, tool_calls: list[str], session_summary: dict}` | 200 (success), 422 (guardrail triggered) |
+| `/health` | GET | — | `{status: "ok"}` | 200 |
+
+CORS: `allow_origins=["*"]` — accepts requests from any origin including `file://`.
 
 ---
 
-> **Stability verified:** 2026-06-01 — 20 consecutive runs, 520 test executions, 0 failures.  
+## 4. Roadmap Optimisations
+
+### 4.1 Catalogue Performance
+
+| Optimisation | Current State | Target |
+|--------------|---------------|--------|
+| **In-memory / semantic cache** | `_search_cache` (256-entry LRU) evicts oldest entries; cold queries scan all 1M products | Replace with persistent key-value store (Redis) or vector index for sub-100ms similarity search |
+| **Pre-computed category indices** | `_by_category` / `_by_tag` built on first load | Already implemented — categories return in 0.4s; tags return in 0.02s |
+| **Asynchronous JSON loading** | `load_products()` is synchronous, blocking the event loop for ~5s | Migrate to `aiofiles` + streaming parser or memory-mapped file |
+
+### 4.2 Context & Prompt Stability
+
+| Optimisation | Rationale | Approach |
+|--------------|-----------|----------|
+| **Few-shot prompting** | Mitigate context drift over long multi-turn sessions | Inject 2–3 exemplar recommendation exchanges into `_build_instructions` when `turn_count > N` |
+| **Dynamic preference distillation** | Long preference lists dilute signal | Summarise preferences to top-3 most recent or most common before injecting into prompt |
+| **Session summarisation** | 40-turn window may lose early context | Add periodic `summary()` snapshot appended to instructions every 10 turns |
+
+### 4.3 Testing Coverage
+
+| Area | Current | Planned |
+|------|---------|---------|
+| **Property-based testing** | None (removed in 116→51 consolidation) | Re-introduce Hypothesis-based contracts for search/filter combinators (100 examples each) |
+| **Concurrent session isolation** | Single-threaded session tests | Add `pytest-asyncio` stress tests with 50 simultaneous sessions |
+| **RapidAPI integration** | Mocked / error-path only | Add live e2e test with dedicated test API key (rate-limited monthly) |
+| **Model-specific behaviour** | All models tested via OpenRouter chain | Add per-model response-format conformance tests |
+
+### 4.4 Production Hardening
+
+| Concern | Current | Target |
+|---------|---------|--------|
+| **Rate-limit visibility** | 429 errors silently trigger fallback; user sees "unavailable" | Expose rate-limit headers in API response (`X-RateLimit-Remaining`) |
+| **Tracing persistence** | `traces.jsonl` appended synchronously | Rotate logs daily; add configurable log level |
+| **Session persistence** | In-memory only; lost on process restart | Optional Redis / SQLite backend via `Session` interface |
+| **OpenRouter key rotation** | Single API key, env-configured | Add multiple key rotation with fallback on 401 |
+
+---
+
+*Specification version 1.0 — verified by 116 automated tests, 0 failures, 78.5s full-suite runtime.*

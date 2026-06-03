@@ -9,7 +9,7 @@ Run:
 
 import pytest
 from agents import InputGuardrailTripwireTriggered, Runner
-from catalog_search_agent import PRODUCTS
+from catalog_search_agent import FEEDBACK_STORE, PRODUCTS, _semantic_score
 
 # ===========================================================================
 # Unit tests — tools (no API needed)
@@ -49,9 +49,22 @@ class TestSearchProducts:
         result = _search("a", max_price=20.0)
         assert all(p["price"] <= 20.0 for p in result)
 
+    def test_min_price_filter(self):
+        result = _search("a", min_price=500.0)
+        assert all(p["price"] >= 500.0 for p in result)
+
     def test_min_rating_filter(self):
         result = _search("a", min_rating=4.8)
         assert all(p["rating"] >= 4.8 for p in result)
+
+    def test_semantic_singular_plural(self):
+        result = _search("headphone")
+        assert any("headphones" in p["name"].lower() for p in result)
+
+    def test_semantic_fuzzy(self):
+        result = _search("noise cancelling")
+        names = [p["name"].lower() for p in result]
+        assert any("headphones" in n or "earbuds" in n for n in names)
 
     def test_combined_filters(self):
         result = _search("a", category="Electronics", max_price=100.0, min_rating=4.0)
@@ -134,6 +147,22 @@ class TestProductsData:
         assert "Electronics" in cats
 
 
+class TestFeedback:
+    def test_store_and_retrieve(self):
+        uid = "test_feedback_user"
+        FEEDBACK_STORE[uid] = []
+        FEEDBACK_STORE[uid].append({"product_id": 1, "rating": 5, "comment": "Great!"})
+        assert len(FEEDBACK_STORE[uid]) == 1
+        assert FEEDBACK_STORE[uid][0]["rating"] == 5
+
+    def test_multiple_feedback(self):
+        uid = "test_multi_user"
+        FEEDBACK_STORE[uid] = []
+        for pid in [1, 2, 3]:
+            FEEDBACK_STORE[uid].append({"product_id": pid, "rating": 4, "comment": None})
+        assert len(FEEDBACK_STORE[uid]) == 3
+
+
 # ===========================================================================
 # Integration tests — agent with LLM (needs OPENROUTER_API_KEY)
 # ===========================================================================
@@ -209,18 +238,20 @@ class TestAgentCatalogQueries:
 # Helpers — raw logic (not @function_tool wrappers)
 # ===========================================================================
 
-def _search(query, category=None, max_price=None, min_rating=None):
+def _search(query, category=None, min_price=None, max_price=None, min_rating=None):
     """Mirror search_products logic as a plain callable for unit tests."""
     results = list(PRODUCTS)
-    q = query.lower()
-    results = [p for p in results if q in p["name"].lower() or q in p["description"].lower()]
     if category:
         results = [p for p in results if p["category"].lower() == category.lower()]
+    if min_price is not None:
+        results = [p for p in results if p["price"] >= min_price]
     if max_price is not None:
         results = [p for p in results if p["price"] <= max_price]
     if min_rating is not None:
         results = [p for p in results if p["rating"] >= min_rating]
-    return results
+    scored = [(p, _semantic_score(query, p)) for p in results]
+    scored.sort(key=lambda x: -x[1])
+    return [p for p, s in scored if s > 0]
 
 
 def _details(product_id):

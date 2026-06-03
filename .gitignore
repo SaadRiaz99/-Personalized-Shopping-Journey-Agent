@@ -1,41 +1,18 @@
-
+# Python-generated files
 __pycache__/
-.env
-
-# Node.js
-node_modules/
+*.py[oc]
+build/
 dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
 .env
 
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-venv/
-.venv/
-.env
-err.log
-out.log
-*_err.log
-*_out.log
-
-# IDEs
-.vscode/
-.idea/
-
-# OS
-.DS_Store
-Thumbs.db
-
-
-backend/agent_store.db
-
-# Generated artifacts
-*.coverage
-*.jsonl
-.python-version
-uv.lock
-node_modules/
-
-# Embedded repos
--Personalized-Shopping-Journey-Agent/
+# Generated data
+data/products.json
+.ruff_cache
+.pytest_cache
+.venv
+.hypothesis

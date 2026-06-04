@@ -5980,3 +5980,213 @@
 {"event": "trace_end", "trace_id": "trace_49213298b16545a99f2cbd98e672c3a3", "name": "recommendation_turn:stream-sess", "elapsed": 0.0}
 {"event": "trace_end", "trace_id": "trace_ae484c4ab03d4236b7f3fc369646c080", "name": "recommendation_turn:edge-guard", "elapsed": 0.0}
 {"event": "trace_end", "trace_id": "trace_317332226bc44d509efb3c7efc384bc3", "name": "recommendation_turn:default", "elapsed": 0.001}
+{"event": "span_end", "span_id": "span_e81fc816355f4154b6a1ade0", "trace_id": "trace_8ddd51dfd5734e37b10571ed7dc6fb28", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_65d1522704da4107a6cd3bb3", "trace_id": "trace_8ddd51dfd5734e37b10571ed7dc6fb28", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_58fb7b877e064cbe9c6498bf", "trace_id": "trace_8ddd51dfd5734e37b10571ed7dc6fb28", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_5af154c991014205b7896bbd", "trace_id": "trace_8ddd51dfd5734e37b10571ed7dc6fb28", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_8625c6cce6ea424a9453ab73", "trace_id": "trace_8ddd51dfd5734e37b10571ed7dc6fb28", "label": "AgentSpanData:RecommendationAgent", "error": "{'message': 'Error in agent run', 'data': {'error': \"Error code: 404 - {'error': {'message': 'No endpoints found for google/gemini-2.0-flash-001:free.', 'code': 404}, 'user_id': 'user_3EcgR2rGqWPfwPOSSTP3jRxjzhU'}\"}}"}
+{"event": "span_end", "span_id": "span_e69bd86479e64f08ae2cbab4", "trace_id": "trace_8ddd51dfd5734e37b10571ed7dc6fb28", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_8ddd51dfd5734e37b10571ed7dc6fb28", "name": "recommendation_turn:cli-session", "elapsed": 2.056}
+{"event": "span_end", "span_id": "span_3de96dff17204f81a1837c52", "trace_id": "trace_2932ae104673481f9b491a6c342f33be", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_33dd41961d4f486fbc8f0740", "trace_id": "trace_2932ae104673481f9b491a6c342f33be", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_bdf6652d901a47aa99537101", "trace_id": "trace_2932ae104673481f9b491a6c342f33be", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_483d7a6f9ab042e18bfb480f", "trace_id": "trace_2932ae104673481f9b491a6c342f33be", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_124b8d230e4c4814856a5052", "trace_id": "trace_2932ae104673481f9b491a6c342f33be", "label": "AgentSpanData:RecommendationAgent", "error": "{'message': 'Error in agent run', 'data': {'error': \"Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'moonshotai/kimi-k2.6:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'Crucible', 'is_byok': False}}, 'user_id': 'user_3EcgR2rGqWPfwPOSSTP3jRxjzhU'}\"}}"}
+{"event": "span_end", "span_id": "span_d5afd23305d64707a3d2c279", "trace_id": "trace_2932ae104673481f9b491a6c342f33be", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_2932ae104673481f9b491a6c342f33be", "name": "recommendation_turn:cli-session", "elapsed": 7.924}
+{"event": "span_end", "span_id": "span_2dd215c755e743da9b50be79", "trace_id": "trace_79146cac1d164ca6b8216bd3c4aba711", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_337df470ad2d4b49959aeea7", "trace_id": "trace_79146cac1d164ca6b8216bd3c4aba711", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_d6a9f6f9c4f747489cfefb9b", "trace_id": "trace_79146cac1d164ca6b8216bd3c4aba711", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_4183a93b695a411cacc21903", "trace_id": "trace_79146cac1d164ca6b8216bd3c4aba711", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_0e0d8bdd02ad488aafdd8523", "trace_id": "trace_79146cac1d164ca6b8216bd3c4aba711", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_9b7d5251b1564415a5cac8a4", "trace_id": "trace_79146cac1d164ca6b8216bd3c4aba711", "label": "AgentSpanData:RecommendationAgent", "error": null}
+{"event": "span_end", "span_id": "span_1dd49c0d0a9b49858eeb3039", "trace_id": "trace_79146cac1d164ca6b8216bd3c4aba711", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_79146cac1d164ca6b8216bd3c4aba711", "name": "recommendation_turn:cli-session", "elapsed": 2.511}
+{"event": "span_end", "span_id": "span_b91d595cde3e44698916f469", "trace_id": "trace_664fc4fa230c49b2acca254880be7b18", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_87a89c3baa954e108ccf12ac", "trace_id": "trace_664fc4fa230c49b2acca254880be7b18", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_4d03d4977444449c84177575", "trace_id": "trace_664fc4fa230c49b2acca254880be7b18", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_79699617c8f94360b379a01c", "trace_id": "trace_664fc4fa230c49b2acca254880be7b18", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_3e8985b1e6cd4b5f8005f414", "trace_id": "trace_664fc4fa230c49b2acca254880be7b18", "label": "AgentSpanData:RecommendationAgent", "error": "{'message': 'Error in agent run', 'data': {'error': \"Error code: 404 - {'error': {'message': 'No endpoints found for google/gemini-2.0-flash-001:free.', 'code': 404}, 'user_id': 'user_3EcgR2rGqWPfwPOSSTP3jRxjzhU'}\"}}"}
+{"event": "span_end", "span_id": "span_4ff954ae809e4100ae8b2c81", "trace_id": "trace_664fc4fa230c49b2acca254880be7b18", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_664fc4fa230c49b2acca254880be7b18", "name": "recommendation_turn:cli-session", "elapsed": 3.663}
+{"event": "span_end", "span_id": "span_f3cfbb8e59ef4567830c0c49", "trace_id": "trace_1aedc2769a17473ba170c7b76790bbc2", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_4bb3ee6f8b0446b7be4a8461", "trace_id": "trace_1aedc2769a17473ba170c7b76790bbc2", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_d8b9630a9a99442c8b648742", "trace_id": "trace_1aedc2769a17473ba170c7b76790bbc2", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_11d528f783bc48d99c801f66", "trace_id": "trace_1aedc2769a17473ba170c7b76790bbc2", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_215311dbe0654b86baba0aa6", "trace_id": "trace_1aedc2769a17473ba170c7b76790bbc2", "label": "AgentSpanData:RecommendationAgent", "error": "{'message': 'Error in agent run', 'data': {'error': \"Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'moonshotai/kimi-k2.6:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'Crucible', 'is_byok': False}}, 'user_id': 'user_3EcgR2rGqWPfwPOSSTP3jRxjzhU'}\"}}"}
+{"event": "span_end", "span_id": "span_1b53d72f7c9449798efb1500", "trace_id": "trace_1aedc2769a17473ba170c7b76790bbc2", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_1aedc2769a17473ba170c7b76790bbc2", "name": "recommendation_turn:cli-session", "elapsed": 6.901}
+{"event": "span_end", "span_id": "span_a5183492bc544eefafa6d276", "trace_id": "trace_0681e38e25e04de69f4ff76ee4065dd7", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_ca24eda3cb4f4c1685378d42", "trace_id": "trace_0681e38e25e04de69f4ff76ee4065dd7", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_0f52cc3a40b54d64a1675344", "trace_id": "trace_0681e38e25e04de69f4ff76ee4065dd7", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_3fda78082c414bba965ed60a", "trace_id": "trace_0681e38e25e04de69f4ff76ee4065dd7", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_476fbeea035e427789e8e72f", "trace_id": "trace_0681e38e25e04de69f4ff76ee4065dd7", "label": "GuardrailSpanData:response_quality_check", "error": null}
+{"event": "span_end", "span_id": "span_0f7ae97288df47348614e946", "trace_id": "trace_0681e38e25e04de69f4ff76ee4065dd7", "label": "AgentSpanData:RecommendationAgent", "error": null}
+{"event": "span_end", "span_id": "span_846fc9d0b0e14155a2971616", "trace_id": "trace_0681e38e25e04de69f4ff76ee4065dd7", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_0681e38e25e04de69f4ff76ee4065dd7", "name": "recommendation_turn:cli-session", "elapsed": 8.798}
+{"event": "span_end", "span_id": "span_b2bc77a3a1404d379923ea5d", "trace_id": "trace_6e77a28e5f8344a8ab23b803ac8ecc63", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_068b992da3fa488fb330b9c2", "trace_id": "trace_6e77a28e5f8344a8ab23b803ac8ecc63", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_1ded31d5fc4641098c827bf3", "trace_id": "trace_6e77a28e5f8344a8ab23b803ac8ecc63", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_1042aeffde2f42f094170243", "trace_id": "trace_6e77a28e5f8344a8ab23b803ac8ecc63", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_398c667e1f95459595aa5a80", "trace_id": "trace_6e77a28e5f8344a8ab23b803ac8ecc63", "label": "AgentSpanData:RecommendationAgent", "error": "{'message': 'Error in agent run', 'data': {'error': \"Error code: 404 - {'error': {'message': 'No endpoints found for google/gemini-2.0-flash-001:free.', 'code': 404}, 'user_id': 'user_3EcgR2rGqWPfwPOSSTP3jRxjzhU'}\"}}"}
+{"event": "span_end", "span_id": "span_7ab6c96f38c644bdb1d589b7", "trace_id": "trace_6e77a28e5f8344a8ab23b803ac8ecc63", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_6e77a28e5f8344a8ab23b803ac8ecc63", "name": "recommendation_turn:cli-session", "elapsed": 1.177}
+{"event": "span_end", "span_id": "span_d56a0a90cafd4d48946510e6", "trace_id": "trace_067b845cd9c745ff8681b003dac7081d", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_434e29f47b524ba49c5a7e62", "trace_id": "trace_067b845cd9c745ff8681b003dac7081d", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_92e830d539de4543b8fd3637", "trace_id": "trace_067b845cd9c745ff8681b003dac7081d", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_bf3546b1257b44d9b7e4c790", "trace_id": "trace_067b845cd9c745ff8681b003dac7081d", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_7c1617e5ae7d4f14baf0e942", "trace_id": "trace_067b845cd9c745ff8681b003dac7081d", "label": "AgentSpanData:RecommendationAgent", "error": "{'message': 'Error in agent run', 'data': {'error': \"Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'moonshotai/kimi-k2.6:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'Crucible', 'is_byok': False}}, 'user_id': 'user_3EcgR2rGqWPfwPOSSTP3jRxjzhU'}\"}}"}
+{"event": "span_end", "span_id": "span_018baaab9eb0420890ad121c", "trace_id": "trace_067b845cd9c745ff8681b003dac7081d", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_067b845cd9c745ff8681b003dac7081d", "name": "recommendation_turn:cli-session", "elapsed": 6.771}
+{"event": "span_end", "span_id": "span_f1b64cc77ac741a18ae6b6a2", "trace_id": "trace_3a90834231014cbcb997bcb90960563c", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_be3522346472481e8d192afb", "trace_id": "trace_3a90834231014cbcb997bcb90960563c", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_4f48d0c28184462faee6d24c", "trace_id": "trace_3a90834231014cbcb997bcb90960563c", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_0b3471cab27f49b9bce3791e", "trace_id": "trace_3a90834231014cbcb997bcb90960563c", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_78b35021d73e48f3b9701920", "trace_id": "trace_3a90834231014cbcb997bcb90960563c", "label": "AgentSpanData:RecommendationAgent", "error": "{'message': 'Guardrail tripwire triggered', 'data': {'guardrail': 'off_topic_check', 'type': 'input_guardrail'}}"}
+{"event": "span_end", "span_id": "span_a2ae76f01e2a4542b2cd36ee", "trace_id": "trace_3a90834231014cbcb997bcb90960563c", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_3a90834231014cbcb997bcb90960563c", "name": "recommendation_turn:cli-session", "elapsed": 3.635}
+{"event": "span_end", "span_id": "span_4d1fa3e236064e97a7f27c11", "trace_id": "trace_41be3d7358e24719a6d19dd6003eaebf", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_ccfc6e8fce314cfca5c6e187", "trace_id": "trace_41be3d7358e24719a6d19dd6003eaebf", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_517215202f8045aaa13426a2", "trace_id": "trace_41be3d7358e24719a6d19dd6003eaebf", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_f84838e6390e4c8c93cd7f4e", "trace_id": "trace_41be3d7358e24719a6d19dd6003eaebf", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_aa832399a6934a0cbebf7793", "trace_id": "trace_41be3d7358e24719a6d19dd6003eaebf", "label": "AgentSpanData:RecommendationAgent", "error": "{'message': 'Error in agent run', 'data': {'error': \"Error code: 404 - {'error': {'message': 'No endpoints found for google/gemini-2.0-flash-001:free.', 'code': 404}, 'user_id': 'user_3EcgR2rGqWPfwPOSSTP3jRxjzhU'}\"}}"}
+{"event": "span_end", "span_id": "span_56dac7eb29f547428b33b584", "trace_id": "trace_41be3d7358e24719a6d19dd6003eaebf", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_41be3d7358e24719a6d19dd6003eaebf", "name": "recommendation_turn:cli-session", "elapsed": 0.667}
+{"event": "span_end", "span_id": "span_8f0ad4ddfc154e7bbaffd19d", "trace_id": "trace_4ce05a0dff724eba9829ec01db271788", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_fd24de30941a4a4abec7fd33", "trace_id": "trace_4ce05a0dff724eba9829ec01db271788", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_5ef479f940f14e928eefecbc", "trace_id": "trace_4ce05a0dff724eba9829ec01db271788", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_28e71426491c410cb67cee9a", "trace_id": "trace_4ce05a0dff724eba9829ec01db271788", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_33236f9e41fe4a11b94998e1", "trace_id": "trace_4ce05a0dff724eba9829ec01db271788", "label": "AgentSpanData:RecommendationAgent", "error": "{'message': 'Guardrail tripwire triggered', 'data': {'guardrail': 'off_topic_check', 'type': 'input_guardrail'}}"}
+{"event": "span_end", "span_id": "span_547e0adfd6044de882de6551", "trace_id": "trace_4ce05a0dff724eba9829ec01db271788", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_4ce05a0dff724eba9829ec01db271788", "name": "recommendation_turn:cli-session", "elapsed": 8.366}
+{"event": "span_end", "span_id": "span_143fe8b4156f468ab4405d96", "trace_id": "trace_f6dad88f82fc434a82eebd6c80594bd2", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_ca6c5734b47e4bc68786b691", "trace_id": "trace_f6dad88f82fc434a82eebd6c80594bd2", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_00ba7b33aaaa4fe3a54d30b3", "trace_id": "trace_f6dad88f82fc434a82eebd6c80594bd2", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_1e727d5e83db4920931b3713", "trace_id": "trace_f6dad88f82fc434a82eebd6c80594bd2", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_f0ff7733bd904d369608f3ea", "trace_id": "trace_f6dad88f82fc434a82eebd6c80594bd2", "label": "AgentSpanData:RecommendationAgent", "error": "{'message': 'Error in agent run', 'data': {'error': \"Error code: 404 - {'error': {'message': 'No endpoints found for google/gemini-2.0-flash-001:free.', 'code': 404}, 'user_id': 'user_3EcgR2rGqWPfwPOSSTP3jRxjzhU'}\"}}"}
+{"event": "span_end", "span_id": "span_a6673a5d67d249928491e53c", "trace_id": "trace_f6dad88f82fc434a82eebd6c80594bd2", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_f6dad88f82fc434a82eebd6c80594bd2", "name": "recommendation_turn:cli-session", "elapsed": 0.508}
+{"event": "span_end", "span_id": "span_ce0cbcd25666449880c40cce", "trace_id": "trace_452385c4f7f8419491a58e25223a8e0e", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_9ae245038966411ea0180c2a", "trace_id": "trace_452385c4f7f8419491a58e25223a8e0e", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_5d10d80630df471db2ae3798", "trace_id": "trace_452385c4f7f8419491a58e25223a8e0e", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_1d65cdd1637a4e6388d1791f", "trace_id": "trace_452385c4f7f8419491a58e25223a8e0e", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_6051b779aa6c4193893c5acc", "trace_id": "trace_452385c4f7f8419491a58e25223a8e0e", "label": "AgentSpanData:RecommendationAgent", "error": "{'message': 'Error in agent run', 'data': {'error': \"Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'moonshotai/kimi-k2.6:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'Crucible', 'is_byok': False}}, 'user_id': 'user_3EcgR2rGqWPfwPOSSTP3jRxjzhU'}\"}}"}
+{"event": "span_end", "span_id": "span_4538897591e4437e9e68047b", "trace_id": "trace_452385c4f7f8419491a58e25223a8e0e", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_452385c4f7f8419491a58e25223a8e0e", "name": "recommendation_turn:cli-session", "elapsed": 4.224}
+{"event": "span_end", "span_id": "span_72a125f04bd9438f8893a864", "trace_id": "trace_565aa03b41674683914136a11327ecf8", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_b9492b15bc0f42138f6db101", "trace_id": "trace_565aa03b41674683914136a11327ecf8", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_4b66fe0702454c13894c2c8b", "trace_id": "trace_565aa03b41674683914136a11327ecf8", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_b5cd6ec4cc5b4c50ab1ba552", "trace_id": "trace_565aa03b41674683914136a11327ecf8", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_217a7c69013d41b48b65301e", "trace_id": "trace_565aa03b41674683914136a11327ecf8", "label": "AgentSpanData:RecommendationAgent", "error": "{'message': 'Guardrail tripwire triggered', 'data': {'guardrail': 'off_topic_check', 'type': 'input_guardrail'}}"}
+{"event": "span_end", "span_id": "span_ab5b9d0da73347ed9946c659", "trace_id": "trace_565aa03b41674683914136a11327ecf8", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_565aa03b41674683914136a11327ecf8", "name": "recommendation_turn:cli-session", "elapsed": 7.475}
+{"event": "span_end", "span_id": "span_1ef329bdaa584e6799a508bb", "trace_id": "trace_19ebfdada3ee4be580fdc0bfd1c11ad8", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_2b3fe80698394a7aa24a57dd", "trace_id": "trace_19ebfdada3ee4be580fdc0bfd1c11ad8", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_ca10b3dc8760435c90cf6d2d", "trace_id": "trace_19ebfdada3ee4be580fdc0bfd1c11ad8", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_870488bc4b684c3b868bd0db", "trace_id": "trace_19ebfdada3ee4be580fdc0bfd1c11ad8", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_9df91da749374709bdfae78a", "trace_id": "trace_19ebfdada3ee4be580fdc0bfd1c11ad8", "label": "AgentSpanData:RecommendationAgent", "error": "{'message': 'Error in agent run', 'data': {'error': \"Error code: 404 - {'error': {'message': 'No endpoints found for google/gemini-2.0-flash-001:free.', 'code': 404}, 'user_id': 'user_3EcgR2rGqWPfwPOSSTP3jRxjzhU'}\"}}"}
+{"event": "span_end", "span_id": "span_a493ba1e606146a8b0e1f583", "trace_id": "trace_19ebfdada3ee4be580fdc0bfd1c11ad8", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_19ebfdada3ee4be580fdc0bfd1c11ad8", "name": "recommendation_turn:cli-session", "elapsed": 0.401}
+{"event": "span_end", "span_id": "span_97aae63260ae45928a00716a", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_eb482b5360524e2cae264505", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_75f5e8bb0acc4a6a854dce8c", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_313eeb7bbfbf42f5a8fbb481", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "FunctionSpanData:save_preference", "error": null}
+{"event": "span_end", "span_id": "span_fb847b5d963d498e98c2f0d5", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "HandoffSpanData", "error": null}
+{"event": "span_end", "span_id": "span_16349b19e76b4420a65a93a1", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_d16fd8bdb4994d9cbcf3c717", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "AgentSpanData:RecommendationAgent", "error": null}
+{"event": "span_end", "span_id": "span_e8582b4ae74c4b8abd097e80", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_91d8132bdc094f0e9682da99", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_50118291d8684c07a419f4b3", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_9f3fe705f3274469832d1563", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_a402c14ea32f42bfb598710e", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_4269c5cfbbd14e659dbddbe8", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_5d4defcfdfc64564927719cb", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_dfc721a6e7714eefb9749f94", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "FunctionSpanData:get_item_details", "error": null}
+{"event": "span_end", "span_id": "span_d22a602cb6974556bcd26aa1", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "FunctionSpanData:get_item_details", "error": null}
+{"event": "span_end", "span_id": "span_192e2d8b77e54fc9bebcd219", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "FunctionSpanData:get_item_details", "error": null}
+{"event": "span_end", "span_id": "span_5110bcf1d8c3486b9afbf7fc", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "FunctionSpanData:get_item_details", "error": null}
+{"event": "span_end", "span_id": "span_d1a394c0346c494880e8462b", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_19ef75fd5a5743018d31e56c", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_7d6508298dea4e9694f1afe1", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "FunctionSpanData:rapidapi_search", "error": null}
+{"event": "span_end", "span_id": "span_8f1371a7ecd441758e1500ce", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_1a1e68156aed4a259d083389", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_ccc78d3f8d844e029d8104dc", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_971e35533be343459d1fee6e", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "AgentSpanData:SearchAgent", "error": null}
+{"event": "span_end", "span_id": "span_75cd3d8bb92a4447865522dd", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_0e8707d880a44ecaa342b24b68494b4e", "name": "recommendation_turn:cli-session", "elapsed": 53.953}
+{"event": "span_end", "span_id": "span_86ab1a761d454926bb486d95", "trace_id": "trace_60b90cd1e3c44af490834f714cfeed5e", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_1b664c0c9fe64a83a4cc9de4", "trace_id": "trace_60b90cd1e3c44af490834f714cfeed5e", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_3323960fb8664e8eb3f3f4ff", "trace_id": "trace_60b90cd1e3c44af490834f714cfeed5e", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_6235e10b5f204cb89df36ea8", "trace_id": "trace_60b90cd1e3c44af490834f714cfeed5e", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_5c97bc6f964e4c9ebea8561e", "trace_id": "trace_60b90cd1e3c44af490834f714cfeed5e", "label": "AgentSpanData:RecommendationAgent", "error": "{'message': 'Error in agent run', 'data': {'error': \"Error code: 404 - {'error': {'message': 'No endpoints found for google/gemini-2.0-flash-001:free.', 'code': 404}, 'user_id': 'user_3EcgR2rGqWPfwPOSSTP3jRxjzhU'}\"}}"}
+{"event": "span_end", "span_id": "span_19d5a93cc9c94153b8311f33", "trace_id": "trace_60b90cd1e3c44af490834f714cfeed5e", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_60b90cd1e3c44af490834f714cfeed5e", "name": "recommendation_turn:cli-session", "elapsed": 2.308}
+{"event": "span_end", "span_id": "span_ea6c8bd0d2c04343bedea5ad", "trace_id": "trace_0c824b07dcdd42f58e9d46c0a28abeb5", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_e770bec9c1154252a96a97c1", "trace_id": "trace_0c824b07dcdd42f58e9d46c0a28abeb5", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_3fcea93876f14e6ca3c301db", "trace_id": "trace_0c824b07dcdd42f58e9d46c0a28abeb5", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_b066051624224818ab48371e", "trace_id": "trace_0c824b07dcdd42f58e9d46c0a28abeb5", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_5802696ebc964e7e815437ba", "trace_id": "trace_0c824b07dcdd42f58e9d46c0a28abeb5", "label": "AgentSpanData:RecommendationAgent", "error": "{'message': 'Error in agent run', 'data': {'error': \"Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'moonshotai/kimi-k2.6:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'Crucible', 'is_byok': False}}, 'user_id': 'user_3EcgR2rGqWPfwPOSSTP3jRxjzhU'}\"}}"}
+{"event": "span_end", "span_id": "span_bb25b988c58443fb91c69152", "trace_id": "trace_0c824b07dcdd42f58e9d46c0a28abeb5", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_0c824b07dcdd42f58e9d46c0a28abeb5", "name": "recommendation_turn:cli-session", "elapsed": 6.5}
+{"event": "span_end", "span_id": "span_0b9324fb7bd1427fb05b06cb", "trace_id": "trace_133c0f8e850d4e14abe0afe3210e3a21", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_6ad15cc1ed964ba0befcab6c", "trace_id": "trace_133c0f8e850d4e14abe0afe3210e3a21", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_97305a52206b4b29b604df30", "trace_id": "trace_133c0f8e850d4e14abe0afe3210e3a21", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_89f4a717e5df4a68bafb7dfb", "trace_id": "trace_133c0f8e850d4e14abe0afe3210e3a21", "label": "FunctionSpanData:save_preference", "error": null}
+{"event": "span_end", "span_id": "span_b000b1c492b54f618693d219", "trace_id": "trace_133c0f8e850d4e14abe0afe3210e3a21", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_b2b813f666514e3ea2b89265", "trace_id": "trace_133c0f8e850d4e14abe0afe3210e3a21", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_4743e299be104229ac49f9f5", "trace_id": "trace_133c0f8e850d4e14abe0afe3210e3a21", "label": "HandoffSpanData", "error": null}
+{"event": "span_end", "span_id": "span_24f4b6e2f1214a99a2e0cc28", "trace_id": "trace_133c0f8e850d4e14abe0afe3210e3a21", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_bbb81a56b3f64b5489762beb", "trace_id": "trace_133c0f8e850d4e14abe0afe3210e3a21", "label": "AgentSpanData:RecommendationAgent", "error": null}
+{"event": "span_end", "span_id": "span_e1d331e2122c4a329a722aef", "trace_id": "trace_133c0f8e850d4e14abe0afe3210e3a21", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_681c67f1908b458596d54aec", "trace_id": "trace_133c0f8e850d4e14abe0afe3210e3a21", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_71e2f71f9e534afbb17c73fe", "trace_id": "trace_133c0f8e850d4e14abe0afe3210e3a21", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_cad72fa95cc7489a974d6130", "trace_id": "trace_133c0f8e850d4e14abe0afe3210e3a21", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_455edeb5a9404f21821d8f1c", "trace_id": "trace_133c0f8e850d4e14abe0afe3210e3a21", "label": "FunctionSpanData:rapidapi_search", "error": null}
+{"event": "span_end", "span_id": "span_37b7f662cc174634b608d4ef", "trace_id": "trace_133c0f8e850d4e14abe0afe3210e3a21", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_c4e4f035d69240db9dbc03db", "trace_id": "trace_133c0f8e850d4e14abe0afe3210e3a21", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_f8a17c3e5d454aa5a25ee062", "trace_id": "trace_133c0f8e850d4e14abe0afe3210e3a21", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_29f98ecc613c4f5589c288cb", "trace_id": "trace_133c0f8e850d4e14abe0afe3210e3a21", "label": "AgentSpanData:SearchAgent", "error": null}
+{"event": "span_end", "span_id": "span_ed4f042c57854ffc91d9fa62", "trace_id": "trace_133c0f8e850d4e14abe0afe3210e3a21", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_133c0f8e850d4e14abe0afe3210e3a21", "name": "recommendation_turn:cli-session", "elapsed": 48.608}
+{"event": "span_end", "span_id": "span_25d7b6c57e38459ab67bb90a", "trace_id": "trace_bbb938e8d76642ea8ea3dcd567f3d9c9", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_f64b9e75421b4f88958c04c2", "trace_id": "trace_bbb938e8d76642ea8ea3dcd567f3d9c9", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_9263a08163f1465a99443fba", "trace_id": "trace_bbb938e8d76642ea8ea3dcd567f3d9c9", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_e5b1c5c3373a42af91a740ae", "trace_id": "trace_bbb938e8d76642ea8ea3dcd567f3d9c9", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_02c245d9cad14f96aeb9e4d3", "trace_id": "trace_bbb938e8d76642ea8ea3dcd567f3d9c9", "label": "AgentSpanData:RecommendationAgent", "error": "{'message': 'Error in agent run', 'data': {'error': \"Error code: 404 - {'error': {'message': 'No endpoints found for google/gemini-2.0-flash-001:free.', 'code': 404}, 'user_id': 'user_3EcgR2rGqWPfwPOSSTP3jRxjzhU'}\"}}"}
+{"event": "span_end", "span_id": "span_38c46668afbb4e309261b250", "trace_id": "trace_bbb938e8d76642ea8ea3dcd567f3d9c9", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_bbb938e8d76642ea8ea3dcd567f3d9c9", "name": "recommendation_turn:cli-session", "elapsed": 0.654}
+{"event": "span_end", "span_id": "span_de6dacff9e5449dcb864ce64", "trace_id": "trace_fc739b36b7224d22b56e82da9a474a7c", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_b34fff505b6c4e7c851da049", "trace_id": "trace_fc739b36b7224d22b56e82da9a474a7c", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_6987a0342662463c8b6ed096", "trace_id": "trace_fc739b36b7224d22b56e82da9a474a7c", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_e23094c9a50f4b05a3f85030", "trace_id": "trace_fc739b36b7224d22b56e82da9a474a7c", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_369378ed757d469fb9f14534", "trace_id": "trace_fc739b36b7224d22b56e82da9a474a7c", "label": "AgentSpanData:RecommendationAgent", "error": "{'message': 'Error in agent run', 'data': {'error': \"Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'moonshotai/kimi-k2.6:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'Crucible', 'is_byok': False}}, 'user_id': 'user_3EcgR2rGqWPfwPOSSTP3jRxjzhU'}\"}}"}
+{"event": "span_end", "span_id": "span_432399d8473049229eb9a70b", "trace_id": "trace_fc739b36b7224d22b56e82da9a474a7c", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_fc739b36b7224d22b56e82da9a474a7c", "name": "recommendation_turn:cli-session", "elapsed": 6.422}
+{"event": "span_end", "span_id": "span_30bbfb6265c148249f4aa646", "trace_id": "trace_17b2eb1d234241ba83c229c647d33640", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_99ce5df358f745ec8072e55a", "trace_id": "trace_17b2eb1d234241ba83c229c647d33640", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_259f6dcf7d9a4bc7a3351c3f", "trace_id": "trace_17b2eb1d234241ba83c229c647d33640", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_ca9fdee654ee4d0cbff53127", "trace_id": "trace_17b2eb1d234241ba83c229c647d33640", "label": "TurnSpanData", "error": "{'message': 'Tool not found', 'data': {'tool_name': 'rapidapi_search'}}"}
+{"event": "span_end", "span_id": "span_0eb3f74f9ce6451fa5bb759d", "trace_id": "trace_17b2eb1d234241ba83c229c647d33640", "label": "AgentSpanData:RecommendationAgent", "error": null}
+{"event": "span_end", "span_id": "span_42961c4a80a84a36a00e8c7f", "trace_id": "trace_17b2eb1d234241ba83c229c647d33640", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_17b2eb1d234241ba83c229c647d33640", "name": "recommendation_turn:cli-session", "elapsed": 2.576}
+{"event": "span_end", "span_id": "span_30e935adf3264f4bbe8168ce", "trace_id": "trace_bc89c30c8b884dbeb7e9861225f8fe17", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_ee602ee9f71c4e7bba44530b", "trace_id": "trace_bc89c30c8b884dbeb7e9861225f8fe17", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_b98c9b24e28c456db9fea35b", "trace_id": "trace_bc89c30c8b884dbeb7e9861225f8fe17", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_6d0ba3b43968475fac344aed", "trace_id": "trace_bc89c30c8b884dbeb7e9861225f8fe17", "label": "HandoffSpanData", "error": null}
+{"event": "span_end", "span_id": "span_5d8e251d9c4f4d9fbddc1816", "trace_id": "trace_bc89c30c8b884dbeb7e9861225f8fe17", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_6f44386a5ff2482992a228b1", "trace_id": "trace_bc89c30c8b884dbeb7e9861225f8fe17", "label": "AgentSpanData:RecommendationAgent", "error": null}
+{"event": "span_end", "span_id": "span_56943bc15e9449bda6b24343", "trace_id": "trace_bc89c30c8b884dbeb7e9861225f8fe17", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_b870c4e55bc94921a48849f2", "trace_id": "trace_bc89c30c8b884dbeb7e9861225f8fe17", "label": "FunctionSpanData:search_items", "error": null}
+{"event": "span_end", "span_id": "span_15378fff41fb4d949cd24e73", "trace_id": "trace_bc89c30c8b884dbeb7e9861225f8fe17", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_f0056b9ccefb43ac979c2094", "trace_id": "trace_bc89c30c8b884dbeb7e9861225f8fe17", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_188fe007d694451c8a9a3032", "trace_id": "trace_bc89c30c8b884dbeb7e9861225f8fe17", "label": "TurnSpanData", "error": "{'message': 'Tool not found', 'data': {'tool_name': 'rapidapi_search<|channel|>commentary'}}"}
+{"event": "span_end", "span_id": "span_4f6a0cf56c6a426389e336fa", "trace_id": "trace_bc89c30c8b884dbeb7e9861225f8fe17", "label": "AgentSpanData:SearchAgent", "error": null}
+{"event": "span_end", "span_id": "span_af4dd9d1dd38497091398fa7", "trace_id": "trace_bc89c30c8b884dbeb7e9861225f8fe17", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_bc89c30c8b884dbeb7e9861225f8fe17", "name": "recommendation_turn:cli-session", "elapsed": 22.143}
+{"event": "span_end", "span_id": "span_e95c2f77e5ae445ab4131b6b", "trace_id": "trace_b133ea63bb504ed4acd2090c7b5b4f4b", "label": "GuardrailSpanData:injection_abuse_check", "error": null}
+{"event": "span_end", "span_id": "span_dcd807c7113a4ec5a0740a09", "trace_id": "trace_b133ea63bb504ed4acd2090c7b5b4f4b", "label": "GuardrailSpanData:off_topic_check", "error": null}
+{"event": "span_end", "span_id": "span_f05ad67f2f304e1da5ff916b", "trace_id": "trace_b133ea63bb504ed4acd2090c7b5b4f4b", "label": "GenerationSpanData", "error": null}
+{"event": "span_end", "span_id": "span_3b98f307486a406ebc55ca86", "trace_id": "trace_b133ea63bb504ed4acd2090c7b5b4f4b", "label": "TurnSpanData", "error": null}
+{"event": "span_end", "span_id": "span_1337516203694abba7daa87b", "trace_id": "trace_b133ea63bb504ed4acd2090c7b5b4f4b", "label": "AgentSpanData:RecommendationAgent", "error": "{'message': 'Error in agent run', 'data': {'error': \"Error code: 429 - {'error': {'message': 'Provider returned error', 'code': 429, 'metadata': {'raw': 'qwen/qwen3-next-80b-a3b-instruct:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate limits: https://openrouter.ai/settings/integrations', 'provider_name': 'Venice', 'is_byok': False, 'retry_after_seconds': 21, 'retry_after_seconds_raw': 20.022, 'headers': {'Retry-After': '21'}}}, 'user_id': 'user_3EcgR2rGqWPfwPOSSTP3jRxjzhU'}\"}}"}
+{"event": "span_end", "span_id": "span_b09df42d1d7c447ab2590520", "trace_id": "trace_b133ea63bb504ed4acd2090c7b5b4f4b", "label": "TaskSpanData:recommendation_turn:cli-session", "error": null}
+{"event": "trace_end", "trace_id": "trace_b133ea63bb504ed4acd2090c7b5b4f4b", "name": "recommendation_turn:cli-session", "elapsed": 16.986}

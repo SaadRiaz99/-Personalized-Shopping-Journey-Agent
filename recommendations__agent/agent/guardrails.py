@@ -32,6 +32,22 @@ _BLOCKED_INPUT_RE = re.compile(
     "|".join(_BLOCKED_INPUT_PATTERNS), re.IGNORECASE
 )
 
+# ── Commerce intent signals — if these match, skip off-topic check ────────────
+# Users often describe their use-case in programming/coding terms when shopping
+# for laptops, monitors, keyboards, etc. — that is ON-TOPIC.
+_COMMERCE_INTENT_PATTERNS = [
+    r"\b(laptop|notebook|monitor|keyboard|mouse|desktop|tablet|phone|smartphone)\b",
+    r"\b(buy|purchase|recommend|suggestion|looking for|need a|want a|get a|find a|search)\b",
+    r"\b(price|cost|budget|affordable|cheap|expensive|deal|offer|discount|sale)\b",
+    r"\b(screen|display|resolution|battery|battery life|processor|cpu|gpu|ram|storage|ssd|hdd)\b",
+    r"\b(brand|model|review|rating|compare|spec|specification|feature)\b",
+    r"\b(gaming|office|work|home|student|portable|lightweight|durable)\b",
+    r"\b(inch|gb|tb|ghz|mhz|hz|cores|threads)\b",
+]
+_COMMERCE_INTENT_RE = re.compile(
+    "|".join(_COMMERCE_INTENT_PATTERNS), re.IGNORECASE
+)
+
 # ── Off-topic patterns matched against every user message ──────────────────────
 # Only product-related queries should pass; everything else is redirected.
 _OFF_TOPIC_PATTERNS = [
@@ -68,7 +84,7 @@ _OFF_TOPIC_PATTERNS = [
     r"\b(share|market|trading|invest|investing|investment|portfolio)\b",
     r"\b(crypto|cryptocurrency|bitcoin|ethereum|blockchain|nft|token)\b",
     r"\b(tax|loan|mortgage|interest|credit|debt|banking|insurance)\b",
-    r"\b(budget|financial|finance|retirement|savings|401k|ira)\b",
+    r"\b(financial|finance|retirement|savings|401k|ira)\b",
     # Weather
     r"\b(weather|forecast|temperature|rain|snow|sunny|cloudy|wind|humidity)\b",
     r"\b(climate|climate change|global warming|season|storm|hurricane)\b",
@@ -174,6 +190,12 @@ async def off_topic_guardrail(
             text = str(last)
     else:
         text = str(input)
+
+    # Commerce-intent pre-check: if the user is clearly shopping for a product,
+    # allow even if the query contains off-topic keywords (e.g. "laptop for programming")
+    if _COMMERCE_INTENT_RE.search(text):
+        ctx.context.log_tool("GUARDRAIL:input", f"commerce intent detected — bypassing off-topic check")
+        return GuardrailFunctionOutput(output_info={"passed": True}, tripwire_triggered=False)
 
     if _OFF_TOPIC_RE.search(text):
         ctx.context.log_tool("GUARDRAIL:input", f"BLOCKED off-topic: '{text[:60]}'")

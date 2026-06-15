@@ -468,3 +468,133 @@ class TestIntegration:
         assert len(session._history) == history_after_turn1
         result3 = await run_turn("recommend a movie", session_id=session_id)
         assert len(session._history) > history_after_turn1
+
+
+class TestSemanticSearch:
+    """Qdrant-powered semantic search tests (local mode)."""
+
+    _local_client = None
+    _encoder = None
+
+    @classmethod
+    def _setup_local_qdrant(cls):
+        if cls._local_client is not None:
+            return cls._local_client
+        from qdrant_client import QdrantClient
+        from qdrant_client.http.models import VectorParams, Distance, PointStruct
+        from sentence_transformers import SentenceTransformer
+
+        cls._encoder = SentenceTransformer("all-MiniLM-L6-v2")
+        client = QdrantClient(location=":memory:")
+        client.create_collection(
+            collection_name="products",
+            vectors_config=VectorParams(size=384, distance=Distance.COSINE),
+        )
+        samples = [
+            {"id": 1, "title": "Wireless Bluetooth Headphones", "category": "Electronics", "tags": ["audio", "wireless"], "rating": 4.5, "price": 79.99},
+            {"id": 2, "title": "Running Shoes Ultra Comfort", "category": "Sports", "tags": ["running", "comfort"], "rating": 4.7, "price": 129.99},
+            {"id": 3, "title": "Python Programming Guide", "category": "Book", "tags": ["programming", "education"], "rating": 4.8, "price": 39.99},
+        ]
+        points = []
+        for s in samples:
+            text = f"{s['title']} {s['category']} {' '.join(s['tags'])}"
+            vec = cls._encoder.encode(text, normalize_embeddings=True).tolist()
+            points.append(PointStruct(
+                id=s["id"],
+                vector=vec,
+                payload=s,
+            ))
+        client.upsert(collection_name="products", points=points)
+        cls._local_client = client
+        return client
+
+    def _search_local(self, query, **filters):
+        client = self._setup_local_qdrant()
+        vec = self._encoder.encode(query, normalize_embeddings=True).tolist()
+        from agent.qdrant_search import _build_filter
+        qfilter = _build_filter(**filters)
+        hits = client.query_points(
+            collection_name="products",
+            query=vec,
+            query_filter=qfilter,
+            limit=10,
+            with_payload=True,
+        ).points
+        return [h.payload for h in hits]
+
+    def test_semantic_search_returns_results(self):
+        results = self._search_local("headphones audio")
+        assert len(results) >= 1
+        titles = [r["title"] for r in results]
+        assert any("Headphones" in t for t in titles)
+
+    def test_semantic_search_applies_filters(self):
+        results = self._search_local("book", category="Book")
+        assert len(results) >= 1
+        for r in results:
+            assert r["category"] == "Book"
+
+        results = self._search_local("book", min_price=30, max_price=50)
+        assert len(results) >= 1
+        for r in results:
+            assert 30 <= r["price"] <= 50
+
+    def test_semantic_search_fallback_unreachable(self):
+        from agent.tools import semantic_search_fn
+        from unittest.mock import MagicMock, patch
+        ctx = MagicMock()
+        from agent.session_memory import InMemorySession
+        session = InMemorySession("test-fallback-1")
+        ctx.context.session = session
+
+        with patch("agent.qdrant_search._get_client", return_value=None):
+            result = semantic_search_fn(ctx, query="wireless headphones", category="Electronics")
+        data = json.loads(result)
+        assert "items" in data
+
+    def test_semantic_search_fallback_no_url(self):
+        from agent.tools import semantic_search_fn
+        from unittest.mock import MagicMock, patch
+        ctx = MagicMock()
+        from agent.session_memory import InMemorySession
+        session = InMemorySession("test-fallback-2")
+        ctx.context.session = session
+
+        with patch("agent.qdrant_search.QDRANT_URL", ""):
+            with patch("agent.qdrant_search._get_client", return_value=None):
+                result = semantic_search_fn(ctx, query="running shoes")
+        data = json.loads(result)
+        assert "items" in data
+
+    def test_semantic_search_marks_seen(self):
+        from agent.tools import semantic_search_fn
+        from unittest.mock import MagicMock, patch
+        from agent.session_memory import InMemorySession
+        from agent.qdrant_search import search as qdrant_search
+
+        session = InMemorySession("test-seen")
+        ctx = MagicMock()
+        ctx.context.session = session
+
+        local = self._setup_local_qdrant()
+
+        with patch("agent.qdrant_search._get_client", return_value=local):
+            result = semantic_search_fn(ctx, query="headphones")
+        data = json.loads(result)
+        assert len(session.seen_ids) > 0
+        for item in data["items"]:
+            assert item["id"] in session.seen_ids
+
+    def test_embedding_model_produces_384_dims(self):
+        from sentence_transformers import SentenceTransformer
+        model = SentenceTransformer("all-MiniLM-L6-v2")
+        vec = model.encode("test query", normalize_embeddings=True)
+        assert len(vec) == 384
+        assert abs(sum(v * v for v in vec) - 1.0) < 0.01
+
+    def test_agent_has_semantic_search_tool(self):
+        from agent.tools import semantic_search, search_items
+        assert semantic_search is not None
+        assert search_items is not None
+        assert semantic_search.name == "semantic_search"
+        assert search_items.name == "search_items"

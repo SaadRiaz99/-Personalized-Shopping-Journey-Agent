@@ -27,6 +27,10 @@ OPENROUTER_MODEL_FALLBACK_4  = os.getenv("OPENROUTER_MODEL_FALLBACK_4", "qwen/qw
 RAPIDAPI_KEY  = os.getenv("RAPIDAPI_KEY", "")
 RAPIDAPI_HOST = os.getenv("RAPIDAPI_HOST", "real-time-amazon-data.p.rapidapi.com")
 
+# ── Qdrant ──────────────────────────────────────────────────────────────────
+QDRANT_URL     = os.getenv("QDRANT_URL", "")
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", "")
+
 # ── Tracing ─────────────────────────────────────────────────────────────────
 OPENAI_TRACING_KEY = os.getenv("OPENAI_API_KEY", "")
 

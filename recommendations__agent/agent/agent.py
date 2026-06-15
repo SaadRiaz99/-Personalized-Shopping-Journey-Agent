@@ -16,6 +16,7 @@ from .tools    import (
     compare_products,
     rapidapi_search,
     save_preference,
+    semantic_search,
 )
 from .guardrails import (
     injection_abuse_guardrail,
@@ -27,10 +28,19 @@ from . import tracing
 logger = logging.getLogger(__name__)
 
 _SEARCH_PROMPT = """
-You are SearchAgent — you find products. Use search_items, filter_by_tag,
-compare_products, or get_item_details. When the user asks for "more" or
-"next page", increment the offset. Prefer the local catalogue; use
-rapidapi_search only when nothing is found locally.
+You are SearchAgent — you find products.
+
+You have two search tools:
+- **search_items**: exact keyword, category, price, and rating matching —
+  use for specific product names or precise filters.
+- **semantic_search**: understands intent and meaning — use when the user
+  describes a need, use-case, or vague preference rather than naming a
+  specific product (e.g. "something for video editing on the go",
+  "comfortable shoes for long walks", "a gift for someone who loves cooking").
+
+Also use filter_by_tag, compare_products, or get_item_details as needed.
+When the user asks for "more" or "next page", increment the offset.
+Prefer the local catalogue; use rapidapi_search only when nothing is found locally.
 """
 
 _SUPPORT_PROMPT = """
@@ -76,7 +86,7 @@ def _make_agents(model):
         name="SearchAgent",
         instructions=_SEARCH_PROMPT,
         model=model,
-        tools=[search_items, filter_by_tag, get_item_details, list_categories, compare_products, rapidapi_search],
+        tools=[search_items, semantic_search, filter_by_tag, get_item_details, list_categories, compare_products, rapidapi_search],
     )
     support = Agent[AgentContext](
         name="SupportAgent",

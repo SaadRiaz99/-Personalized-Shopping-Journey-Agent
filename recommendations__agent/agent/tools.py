@@ -1,4 +1,5 @@
 import json
+import logging
 import httpx
 from typing import Optional
 
@@ -7,6 +8,8 @@ from agents import function_tool, RunContextWrapper
 from agent.products import load_products, get_categories, get_by_id, get_by_tag
 from agent.session_memory import InMemorySession
 from .config import RAPIDAPI_KEY, RAPIDAPI_HOST
+
+logger = logging.getLogger(__name__)
 
 # ── Hardcoded high-quality catalogue (always available) ──────────────────────
 CATALOGUE = [
@@ -190,6 +193,55 @@ def save_preference_fn(ctx: RunContextWrapper, key: str, value: str) -> str:
     return json.dumps({"saved": {key: value}})
 
 
+# ── Semantic search via Qdrant ──────────────────────────────────────────────
+
+def semantic_search_fn(
+    ctx: RunContextWrapper,
+    query: str,
+    category: Optional[str] = None,
+    min_price: Optional[float] = None,
+    max_price: Optional[float] = None,
+    min_rating: Optional[float] = None,
+    in_stock_only: bool = False,
+) -> str:
+    """Understands intent and meaning — use when the user describes a need,
+    use-case, or vague preference rather than naming a specific product.
+    Examples: "something for video editing on the go",
+    "comfortable shoes for long walks", "a gift for someone who loves cooking".
+    Falls back to keyword search if semantic search is unavailable."""
+    from .qdrant_search import search as qdrant_search
+
+    try:
+        results = qdrant_search(
+            query=query,
+            category=category,
+            min_price=min_price,
+            max_price=max_price,
+            min_rating=min_rating,
+            in_stock_only=in_stock_only,
+        )
+    except Exception:
+        results = None
+
+    if results is not None:
+        ids = [r["id"] for r in results if r["id"] is not None]
+        if ids:
+            session: InMemorySession = ctx.context.session
+            session.mark_seen(ids)
+        return json.dumps({"items": results, "total": len(results), "offset": 0})
+
+    # Fallback to keyword search
+        logger.warning("Qdrant unavailable, falling back to keyword search for: %s", query)
+    return search_items_fn(
+        query=query,
+        category=category,
+        min_price=min_price,
+        max_price=max_price,
+        min_rating=min_rating,
+        in_stock_only=in_stock_only,
+    )
+
+
 # ── Register as LLM-callable tools ──────────────────────────────────────────
 search_items     = function_tool(search_items_fn,     name_override="search_items",     strict_mode=False)
 filter_by_tag    = function_tool(filter_by_tag_fn,    name_override="filter_by_tag",    strict_mode=False)
@@ -198,3 +250,4 @@ list_categories  = function_tool(list_categories_fn,  name_override="list_catego
 compare_products = function_tool(compare_products_fn, name_override="compare_products", strict_mode=False)
 rapidapi_search  = function_tool(rapidapi_search_fn,  name_override="rapidapi_search",  strict_mode=False)
 save_preference  = function_tool(save_preference_fn,  name_override="save_preference",  strict_mode=False)
+semantic_search  = function_tool(semantic_search_fn,  name_override="semantic_search",  strict_mode=False)

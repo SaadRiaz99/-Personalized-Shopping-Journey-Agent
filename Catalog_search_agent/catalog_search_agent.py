@@ -157,13 +157,14 @@ def hybrid_search(
     scored = []
     for p in results:
         ss = semantic_scores[p["id"]] / max_ss if max_ss else 0
+        if ss == 0:
+            continue
         if p["id"] in vector_rank:
             vs = 1.0 - (vector_rank[p["id"]] / max_vr)
         else:
             vs = 0.0
         combined = semantic_weight * ss + (1 - semantic_weight) * vs
-        if combined > 0:
-            scored.append((p, combined))
+        scored.append((p, combined))
 
     scored.sort(key=lambda x: -x[1])
     return [p for p, _ in scored]

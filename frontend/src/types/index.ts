@@ -111,6 +111,10 @@ export interface CatalogProduct {
   description: string
 }
 
+export interface AgentQueryResponse {
+  response: string
+}
+
 export interface CatalogSearchResult {
   total: number
   page: number

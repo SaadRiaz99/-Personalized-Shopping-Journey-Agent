@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { catalogSearch, getCatalogCategories } from '../services/api'
+import { catalogSearch, getCatalogCategories, agentQuery } from '../services/api'
 import type { CatalogProduct, CatalogSearchResult } from '../types'
 
 export default function CatalogSearch() {
@@ -13,6 +13,14 @@ export default function CatalogSearch() {
   const [result, setResult] = useState<CatalogSearchResult | null>(null)
   const [categories, setCategories] = useState<string[]>([])
   const [selectedProduct, setSelectedProduct] = useState<CatalogProduct | null>(null)
+
+  // Agent chat state
+  const [agentInput, setAgentInput] = useState('')
+  const [agentMessages, setAgentMessages] = useState<{ role: string; text: string }[]>([
+    { role: 'assistant', text: 'Hi! I can help you find products. Ask me anything about products, categories, pricing, or availability.' }
+  ])
+  const [agentLoading, setAgentLoading] = useState(false)
+  const [showAgent, setShowAgent] = useState(false)
 
   useEffect(() => {
     getCatalogCategories().then(r => setCategories(r.categories)).catch(() => {})
@@ -37,6 +45,21 @@ export default function CatalogSearch() {
     setLoading(false)
   }
 
+  const askAgent = async () => {
+    const q = agentInput.trim()
+    if (!q || agentLoading) return
+    setAgentMessages(prev => [...prev, { role: 'user', text: q }])
+    setAgentInput('')
+    setAgentLoading(true)
+    try {
+      const res = await agentQuery(q)
+      setAgentMessages(prev => [...prev, { role: 'assistant', text: res.response }])
+    } catch {
+      setAgentMessages(prev => [...prev, { role: 'assistant', text: 'Agent not available — set ZEN_API_KEY' }])
+    }
+    setAgentLoading(false)
+  }
+
   const stockLabel = (p: CatalogProduct) => {
     if (p.stock === 0) return 'OUT OF STOCK'
     if (p.stock < 10) return `Only ${p.stock} left`
@@ -55,6 +78,12 @@ export default function CatalogSearch() {
         <div className="page-header-left">
           <h1 className="page-title">Catalog Search</h1>
           <p className="page-subtitle">Search 906 products across 9 categories</p>
+        </div>
+        <div className="page-header-right">
+          <button className="btn" onClick={() => setShowAgent(!showAgent)}
+            style={{ height: 36, fontSize: '0.85rem' }}>
+            {showAgent ? '✕ Close AI' : '🤖 AI Chat'}
+          </button>
         </div>
       </div>
 
@@ -105,7 +134,7 @@ export default function CatalogSearch() {
       </div>
 
       <div style={{ display: 'flex', gap: '1.5rem' }}>
-        <div style={{ flex: selectedProduct ? 1.5 : 1 }}>
+        <div style={{ flex: showAgent || selectedProduct ? 1.5 : 1 }}>
           {result && (
             <p style={{ color: '#a0aec0', fontSize: '0.85rem', marginBottom: '0.75rem' }}>
               {result.total} product{result.total !== 1 ? 's' : ''} found
@@ -156,7 +185,7 @@ export default function CatalogSearch() {
           )}
         </div>
 
-        {selectedProduct && (
+        {selectedProduct && !showAgent && (
           <div className="card animate-in" style={{ flex: 1, height: 'fit-content', position: 'sticky', top: '1rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
               <p className="section-title" style={{ margin: 0 }}>Product Details</p>
@@ -179,6 +208,50 @@ export default function CatalogSearch() {
             </p>
             <div style={{ fontSize: '0.85rem', color: stockColor(selectedProduct) }}>
               {stockLabel(selectedProduct)} · ID: #{selectedProduct.id}
+            </div>
+          </div>
+        )}
+
+        {showAgent && (
+          <div className="card" style={{
+            flex: 1, height: 'fit-content', position: 'sticky', top: '1rem',
+            display: 'flex', flexDirection: 'column', maxHeight: '80vh',
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+              <p className="section-title" style={{ margin: 0 }}>🤖 AI Assistant</p>
+              <button className="btn" onClick={() => setShowAgent(false)}
+                style={{ height: 28, width: 28, padding: 0, fontSize: '0.85rem' }}>✕</button>
+            </div>
+            <div style={{ flex: 1, overflowY: 'auto', marginBottom: '0.75rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              {agentMessages.map((m, i) => (
+                <div key={i} style={{
+                  padding: '0.5rem 0.75rem', borderRadius: 8, fontSize: '0.85rem',
+                  background: m.role === 'user' ? '#1e293b' : '#0f172a',
+                  color: m.role === 'user' ? '#e2e8f0' : '#a0aec0',
+                  alignSelf: m.role === 'user' ? 'flex-end' : 'flex-start',
+                  maxWidth: '90%',
+                }}>
+                  {m.text}
+                </div>
+              ))}
+              {agentLoading && (
+                <div style={{ padding: '0.5rem 0.75rem', fontSize: '0.85rem', color: '#6b7280' }}>
+                  Thinking...
+                </div>
+              )}
+            </div>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <input className="input" value={agentInput}
+                onChange={e => setAgentInput(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && askAgent()}
+                placeholder="Ask about products..."
+                style={{ flex: 1, fontSize: '0.85rem' }}
+              />
+              <button className="btn btn-primary" onClick={askAgent}
+                disabled={agentLoading || !agentInput.trim()}
+                style={{ height: 36, fontSize: '0.85rem', whiteSpace: 'nowrap' }}>
+                Send
+              </button>
             </div>
           </div>
         )}

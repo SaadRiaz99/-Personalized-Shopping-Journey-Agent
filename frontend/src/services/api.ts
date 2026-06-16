@@ -72,6 +72,9 @@ export const getCatalogProduct = (id: number) =>
 export const getCatalogCategories = () =>
   api.get<{ categories: string[]; total: number }>('/catalog/categories').then(r => r.data)
 
+export const agentQuery = (query: string, userId?: string) =>
+  api.post<{ response: string }>('/catalog/agent/query', { query, user_id: userId || 'anonymous' }).then(r => r.data)
+
 export const getPromotions = () =>
   api.get<Promotion[]>('/deals/promotions').then(r => r.data)
 

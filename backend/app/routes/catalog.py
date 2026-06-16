@@ -1,9 +1,18 @@
-from fastapi import APIRouter, HTTPException, Query
+import os
 from typing import Optional
+
+from fastapi import APIRouter, HTTPException, Query
+from openai import AsyncOpenAI
+
 from app.services.catalog_search import search_products, get_product, list_categories
 from app.services.agent_orchestrator import orchestrator
+from app.services.semantic_search import is_qdrant_ready, qdrant_error
 
 router = APIRouter(prefix="/api/catalog", tags=["catalog"])
+
+ZEN_API_KEY = os.environ.get("ZEN_API_KEY", "")
+ZEN_BASE_URL = "https://opencode.ai/zen/v1"
+ZEN_MODEL = os.environ.get("LLM_MODEL", "big-pickle")
 
 
 @router.get("/search")
@@ -49,3 +58,31 @@ async def catalog_agent_search(agent_id: str):
         raise HTTPException(404, "Agent not found")
     result = await orchestrator.run_catalog_search(agent_id)
     return result
+
+
+@router.get("/search-info")
+async def search_info():
+    return {
+        "qdrant_ready": is_qdrant_ready(),
+        "qdrant_error": qdrant_error(),
+        "zen_key_set": bool(ZEN_API_KEY),
+    }
+
+
+@router.post("/agent/query")
+async def agent_query(query: str, user_id: str = "anonymous"):
+    if not ZEN_API_KEY:
+        raise HTTPException(503, "Agent not available — set ZEN_API_KEY")
+    client = AsyncOpenAI(api_key=ZEN_API_KEY, base_url=ZEN_BASE_URL)
+    response = await client.chat.completions.create(
+        model=ZEN_MODEL,
+        messages=[
+            {"role": "system", "content": (
+                "You are a friendly catalog search assistant with access to 906 products. "
+                "Help users find products by name, category, price range, or rating. "
+                "Be concise and helpful. If a product is out of stock, mention it."
+            )},
+            {"role": "user", "content": query},
+        ],
+    )
+    return {"response": response.choices[0].message.content}

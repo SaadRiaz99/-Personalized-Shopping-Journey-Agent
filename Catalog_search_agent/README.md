@@ -1,56 +1,56 @@
 # Catalog Search Agent
 
-An AI-powered product catalog search agent built with the OpenAI Agents SDK. Search 900+ products across 9 categories using natural language.
+AI-powered product catalog search with hybrid semantic + vector search. FastAPI server with Qdrant in-memory vector DB and OpenCode Zen LLM.
 
 ## Quick Start
 
-1. **Install dependencies**
-   ```
-   pip install -r requirements.txt
-   ```
-
-2. **Set your API key** (any of these):
-   ```
-   $env:OPENROUTER_API_KEY = "your-key"   # https://openrouter.ai/keys
-   ```
-   Or use Groq (free, 14400 req/day):
-   ```
-   $env:GROQ_API_KEY = "your-key"         # https://console.groq.com/keys
-   ```
-
-3. **Generate the product catalog** (first time only):
-   ```
-   python generate_catalog.py
-   ```
-
-4. **Run the agent**:
-   ```
-   python catalog_search_agent.py
-   ```
-
-## Offline Mode (no API key needed)
-
-```
-python catalog_search_agent_mock.py
+```powershell
+cd Catalog_search_agent
+pip install -r requirements.txt
+$env:ZEN_API_KEY = "sk-..."
+uvicorn catalog_search_agent:app --reload --port 8000
 ```
 
-## Usage Examples
+First startup downloads `all-MiniLM-L6-v2` (~80MB) and indexes 906 products into Qdrant. Subsequent starts are instant.
 
-- "Show me electronics under $200"
-- "What categories are available?"
-- "Tell me about product 42"
-- "Find me running shoes in stock"
+## REST API
 
-## Guardrails
+| Endpoint | Description |
+|----------|-------------|
+| `GET /api/health` | Status, provider, product count |
+| `GET /api/products/search?query=` | Hybrid search with pagination & filters |
+| `GET /api/products/{id}` | Single product details |
+| `GET /api/categories` | All product categories |
+| `POST /api/feedback` | Rate a product (1-5) |
+| `POST /api/agent/query` | Conversational AI search (needs ZEN_API_KEY) |
 
-The agent only answers product-catalog-related questions. Irrelevant queries (math, coding, general chat) are automatically rejected.
+## Search Features
+
+- **Semantic scoring** — token matching with stemming, fuzzy matching (`difflib`), stop word filtering
+- **Vector search** — Qdrant in-memory + all-MiniLM-L6-v2 embeddings (384-dim, cosine)
+- **Hybrid scoring** — `0.4 * semantic + 0.6 * vector` (products need semantic_score > 0 to pass gate)
+- **Scaled relevance** — match threshold adapts to query word length to prevent false positives
+- **Filters** — category, min/max price, min rating, sorting, pagination
+
+## Frontend
+
+Open `http://localhost:5173/catalog` in the frontend (React + Vite) for the full UI with product grid, filters, and AI Chat sidebar.
+
+## Tests
+
+```powershell
+pytest test_agent.py -v -m "not needs_api"   # 57 unit tests, no API key needed
+pytest test_agent.py -v -m needs_api          # 25 integration tests (needs ZEN_API_KEY)
+pytest test_agent.py -v                       # all 82 tests
+```
 
 ## Files
 
 | File | Description |
 |------|-------------|
-| `catalog_search_agent.py` | Main agent using OpenAI Agents SDK |
-| `catalog_search_agent_mock.py` | Offline keyword-based version |
-| `generate_catalog.py` | Generates 906 products into `products.json` |
-| `products.json` | Product catalog (generated) |
+| `catalog_search_agent.py` | FastAPI server with Qdrant, Zen agent, hybrid search |
+| `products.json` | 906 products across 9 categories |
+| `test_agent.py` | 57 unit + 25 integration tests |
+| `conftest.py` | pytest fixtures (Zen API key, VCR, agent setup) |
 | `requirements.txt` | Python dependencies |
+| `report.md` | Detailed test report |

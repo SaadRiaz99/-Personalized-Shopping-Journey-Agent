@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.database import init_db
 from app.auth import seed_users
 from app.routes import agents, auth, catalog, deals, intent, preferences, price_match, privacy, products, recommendations, ws, gift_finder, cross_sell, wishlist
-
+from app.services.semantic_search import ensure_indexed
 
 load_dotenv(dotenv_path=Path(__file__).parents[2] / ".env")
 
@@ -14,9 +14,11 @@ app = FastAPI(title="Personalized Shopping Agent API", version="1.0.0")
 
 
 @app.on_event("startup")
-def on_startup():
+async def on_startup():
     init_db()
     seed_users()
+    print("Starting Qdrant vector index...")
+    await ensure_indexed()
 
 
 app.add_middleware(

@@ -6,7 +6,7 @@ from openai import AsyncOpenAI
 
 from app.services.catalog_search import search_products, get_product, list_categories
 from app.services.agent_orchestrator import orchestrator
-
+from app.services.semantic_search import is_qdrant_ready, qdrant_error
 
 router = APIRouter(prefix="/api/catalog", tags=["catalog"])
 
@@ -58,6 +58,15 @@ async def catalog_agent_search(agent_id: str):
         raise HTTPException(404, "Agent not found")
     result = await orchestrator.run_catalog_search(agent_id)
     return result
+
+
+@router.get("/search-info")
+async def search_info():
+    return {
+        "qdrant_ready": is_qdrant_ready(),
+        "qdrant_error": qdrant_error(),
+        "zen_key_set": bool(ZEN_API_KEY),
+    }
 
 
 @router.post("/agent/query")

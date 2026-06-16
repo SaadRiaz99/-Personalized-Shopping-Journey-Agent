@@ -2,7 +2,7 @@
 
 from typing import Optional
 from shared.products import ALL_PRODUCTS, CATEGORIES, get_product, list_categories, get_recommendations_by_category
-from app.services.semantic_search import hybrid_search
+from app.services.semantic_search import search as semantic_search
 
 
 def search_products(
@@ -16,7 +16,7 @@ def search_products(
     page_size: int = 20,
 ) -> dict:
     if query.strip():
-        results = hybrid_search(query, category, min_price, max_price, min_rating)
+        results = semantic_search(query, category, min_price, max_price, min_rating)
     else:
         results = list(ALL_PRODUCTS)
         if category:

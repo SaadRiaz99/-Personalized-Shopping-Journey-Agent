@@ -1,4 +1,3 @@
-import asyncio
 import difflib
 import json
 import os
@@ -12,8 +11,6 @@ from fastapi import Body, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from openai import AsyncOpenAI
 from pydantic import BaseModel, Field
-from qdrant_client import QdrantClient
-from qdrant_client.http import models as qdrant_models
 from agents import (
     Agent,
     GuardrailFunctionOutput,
@@ -47,89 +44,15 @@ PRODUCTS: list[dict] = json.load(open(DATA_DIR / "products.json"))
 FEEDBACK_STORE: dict[str, list[dict]] = {}
 
 # ---------------------------------------------------------------------------
-# Embedding / Qdrant (initialized at startup)
+# Semantic search — pure Python, no external ML
 # ---------------------------------------------------------------------------
 
-_embedder = None
-_qdrant: QdrantClient | None = None
-_qdrant_ready = False
-_qdrant_error: str | None = None
-COLLECTION_NAME = "catalog_products"
-EMBED_DIM = 384  # all-MiniLM-L6-v2
-
-
-def _init_embedder():
-    global _embedder
-    if _embedder is None:
-        from sentence_transformers import SentenceTransformer
-        _embedder = SentenceTransformer("all-MiniLM-L6-v2")
-
-
-def _embed_text(text: str) -> list[float]:
-    return _embedder.encode(text).tolist()
-
-
-def _product_text(p: dict) -> str:
-    return f"{p['name']} {p['description']} {p['category']}"
-
-
-def _build_index_sync():
-    global _qdrant, _qdrant_ready, _qdrant_error
-    try:
-        _init_embedder()
-        _qdrant = QdrantClient(":memory:")
-        _qdrant.create_collection(
-            collection_name=COLLECTION_NAME,
-            vectors_config=qdrant_models.VectorParams(
-                size=EMBED_DIM, distance=qdrant_models.Distance.COSINE
-            ),
-        )
-        points = []
-        for i, p in enumerate(PRODUCTS):
-            vec = _embed_text(_product_text(p))
-            points.append(qdrant_models.PointStruct(id=p["id"], vector=vec, payload=p))
-            if (i + 1) % 200 == 0:
-                print(f"  Indexed {i+1}/{len(PRODUCTS)} products")
-        _qdrant.upsert(collection_name=COLLECTION_NAME, points=points)
-        _qdrant_ready = True
-        print(f"  Qdrant vector search ready ({len(PRODUCTS)} products indexed)")
-    except Exception as e:
-        _qdrant_error = str(e)
-        print(f"  Qdrant indexing FAILED: {e}")
-
-
-async def ensure_qdrant_indexed():
-    if _qdrant_ready or _qdrant_error:
-        return
-    await asyncio.to_thread(_build_index_sync)
-
-
-def vector_search(query: str, top_k: int = 50) -> list[dict]:
-    if not _qdrant_ready:
-        return []
-    try:
-        vec = _embed_text(query)
-        hits = _qdrant.search(
-            collection_name=COLLECTION_NAME,
-            query_vector=vec,
-            limit=top_k,
-        )
-        return [h.payload for h in hits]
-    except Exception:
-        return []
-
-
-# ---------------------------------------------------------------------------
-# Hybrid search — combine semantic + vector
-# ---------------------------------------------------------------------------
-
-def hybrid_search(
+def _search_products(
     query: str,
     category: str | None = None,
     min_price: float | None = None,
     max_price: float | None = None,
     min_rating: float | None = None,
-    semantic_weight: float = 0.4,
 ) -> list[dict]:
     results = list(PRODUCTS)
     if category:
@@ -141,33 +64,9 @@ def hybrid_search(
     if min_rating is not None:
         results = [p for p in results if p["rating"] >= min_rating]
 
-    semantic_scores = {p["id"]: _semantic_score(query, p) for p in results}
-    max_ss = max(semantic_scores.values()) if semantic_scores else 1
-
-    try:
-        vector_results = vector_search(query, top_k=50)
-        vector_ids = {p["id"] for p in vector_results}
-        vector_rank = {pid: i for i, pid in enumerate(vector_ids)}
-        max_vr = len(vector_ids)
-    except Exception:
-        vector_ids = set()
-        vector_rank = {}
-        max_vr = 1
-
-    scored = []
-    for p in results:
-        ss = semantic_scores[p["id"]] / max_ss if max_ss else 0
-        if ss == 0:
-            continue
-        if p["id"] in vector_rank:
-            vs = 1.0 - (vector_rank[p["id"]] / max_vr)
-        else:
-            vs = 0.0
-        combined = semantic_weight * ss + (1 - semantic_weight) * vs
-        scored.append((p, combined))
-
+    scored = [(p, _semantic_score(query, p)) for p in results]
     scored.sort(key=lambda x: -x[1])
-    return [p for p, _ in scored]
+    return [p for p, s in scored if s > 0]
 
 
 # ---------------------------------------------------------------------------
@@ -260,9 +159,6 @@ def _token_similarity(a: str, b: str) -> float:
         return 1.0
     if _stem(a) == _stem(b):
         return 0.9
-    shorter, longer = (a, b) if len(a) <= len(b) else (b, a)
-    if len(shorter) >= len(longer) * 0.5 and shorter in longer:
-        return 0.8
     return difflib.SequenceMatcher(None, a, b).ratio()
 
 
@@ -329,8 +225,8 @@ def search_products(
     max_price: Optional[float] = None,
     min_rating: Optional[float] = None,
 ) -> SearchResults:
-    """Search the product catalog using hybrid semantic + vector search. Returns results sorted by relevance."""
-    results = hybrid_search(query, category, min_price, max_price, min_rating)
+    """Search the product catalog using semantic search. Returns results sorted by relevance."""
+    results = _search_products(query, category, min_price, max_price, min_rating)
     products = [
         ProductResult(
             id=p["id"], name=p["name"], category=p["category"],
@@ -411,9 +307,6 @@ _agent_instance: Agent[UserContext] | None = None
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global _agent_instance
-    print("  Starting Qdrant indexing...")
-    await ensure_qdrant_indexed()
-
     model, label = build_model()
     if model:
         guardrail_agent = Agent[UserContext](
@@ -479,8 +372,6 @@ async def health():
         "status": "ok",
         "provider": _provider_label or "none",
         "products": len(PRODUCTS),
-        "qdrant": _qdrant_ready,
-        "qdrant_error": _qdrant_error,
         "zen_key_set": bool(ZEN_API_KEY),
     }
 
@@ -495,7 +386,7 @@ async def api_search(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
 ):
-    results = hybrid_search(query, category, min_price, max_price, min_rating)
+    results = _search_products(query, category, min_price, max_price, min_rating)
     total = len(results)
     start = (page - 1) * page_size
     items = results[start: start + page_size]

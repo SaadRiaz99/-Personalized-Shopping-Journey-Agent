@@ -9,7 +9,7 @@ Run:
 
 import pytest
 from agents import InputGuardrailTripwireTriggered, Runner
-from catalog_search_agent import FEEDBACK_STORE, PRODUCTS, _semantic_score, hybrid_search
+from catalog_search_agent import FEEDBACK_STORE, PRODUCTS, _semantic_score, _search_products as hybrid_search
 
 # ===========================================================================
 # Unit tests — tools (no API needed)

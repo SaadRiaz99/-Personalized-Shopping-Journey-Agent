@@ -1,7 +1,7 @@
 import os
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Body, HTTPException, Query
 from openai import AsyncOpenAI
 
 from app.services.catalog_search import search_products, get_product, list_categories
@@ -70,9 +70,14 @@ async def search_info():
 
 
 @router.post("/agent/query")
-async def agent_query(query: str, user_id: str = "anonymous"):
+async def agent_query(
+    query: str = Body(..., description="Natural language query"),
+    user_id: str = Body("anonymous", description="User identifier"),
+):
     if not ZEN_API_KEY:
         raise HTTPException(503, "Agent not available — set ZEN_API_KEY")
+    if not query.strip():
+        return {"response": "Please ask me a question about products in the catalog."}
     client = AsyncOpenAI(api_key=ZEN_API_KEY, base_url=ZEN_BASE_URL)
     response = await client.chat.completions.create(
         model=ZEN_MODEL,

@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import Body, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from openai import AsyncOpenAI
 from pydantic import BaseModel, Field
@@ -545,14 +545,17 @@ async def api_feedback(product_id: int, rating: int, comment: str | None = None,
 
 @app.post("/api/agent/query")
 async def agent_query(
-    query: str,
-    user_id: str = "anonymous",
-    name: str = "User",
-    preferred_categories: str | None = None,
-    max_budget: float | None = None,
+    query: str = Body(..., description="Natural language query"),
+    user_id: str = Body("anonymous", description="User identifier"),
+    name: str = Body("User", description="User display name"),
+    preferred_categories: str | None = Body(None, description="Comma-separated preferred categories"),
+    max_budget: float | None = Body(None, description="Maximum budget"),
 ):
     if not _agent_instance:
         raise HTTPException(503, "Agent not available — set ZEN_API_KEY")
+
+    if not query.strip():
+        return {"response": "Please ask me a question about products in the catalog."}
 
     cats = preferred_categories.split(",") if preferred_categories else None
     ctx = UserContext(user_id=user_id, name=name, preferred_categories=cats, max_budget=max_budget)

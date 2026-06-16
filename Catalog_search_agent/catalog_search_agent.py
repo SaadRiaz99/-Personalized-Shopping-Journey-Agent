@@ -47,61 +47,76 @@ PRODUCTS: list[dict] = json.load(open(DATA_DIR / "products.json"))
 FEEDBACK_STORE: dict[str, list[dict]] = {}
 
 # ---------------------------------------------------------------------------
-# Embedding / Qdrant (initialized lazily)
+# Embedding / Qdrant (initialized at startup)
 # ---------------------------------------------------------------------------
 
 _embedder = None
 _qdrant: QdrantClient | None = None
 _qdrant_ready = False
+_qdrant_error: str | None = None
 COLLECTION_NAME = "catalog_products"
 EMBED_DIM = 384  # all-MiniLM-L6-v2
 
 
-def _get_embedder():
+def _init_embedder():
     global _embedder
     if _embedder is None:
         from sentence_transformers import SentenceTransformer
         _embedder = SentenceTransformer("all-MiniLM-L6-v2")
-    return _embedder
 
 
 def _embed_text(text: str) -> list[float]:
-    return _get_embedder().encode(text).tolist()
+    return _embedder.encode(text).tolist()
 
 
 def _product_text(p: dict) -> str:
     return f"{p['name']} {p['description']} {p['category']}"
 
 
-def ensure_qdrant_indexed():
-    global _qdrant, _qdrant_ready
-    if _qdrant_ready:
+def _build_index_sync():
+    global _qdrant, _qdrant_ready, _qdrant_error
+    try:
+        _init_embedder()
+        _qdrant = QdrantClient(":memory:")
+        _qdrant.create_collection(
+            collection_name=COLLECTION_NAME,
+            vectors_config=qdrant_models.VectorParams(
+                size=EMBED_DIM, distance=qdrant_models.Distance.COSINE
+            ),
+        )
+        points = []
+        for i, p in enumerate(PRODUCTS):
+            vec = _embed_text(_product_text(p))
+            points.append(qdrant_models.PointStruct(id=p["id"], vector=vec, payload=p))
+            if (i + 1) % 200 == 0:
+                print(f"  Indexed {i+1}/{len(PRODUCTS)} products")
+        _qdrant.upsert(collection_name=COLLECTION_NAME, points=points)
+        _qdrant_ready = True
+        print(f"  Qdrant vector search ready ({len(PRODUCTS)} products indexed)")
+    except Exception as e:
+        _qdrant_error = str(e)
+        print(f"  Qdrant indexing FAILED: {e}")
+
+
+async def ensure_qdrant_indexed():
+    if _qdrant_ready or _qdrant_error:
         return
-    _qdrant = QdrantClient(":memory:")
-    _qdrant.create_collection(
-        collection_name=COLLECTION_NAME,
-        vectors_config=qdrant_models.VectorParams(
-            size=EMBED_DIM, distance=qdrant_models.Distance.COSINE
-        ),
-    )
-    points = []
-    for p in PRODUCTS:
-        vec = _embed_text(_product_text(p))
-        points.append(qdrant_models.PointStruct(id=p["id"], vector=vec, payload=p))
-    _qdrant.upsert(collection_name=COLLECTION_NAME, points=points)
-    _qdrant_ready = True
+    await asyncio.to_thread(_build_index_sync)
 
 
 def vector_search(query: str, top_k: int = 50) -> list[dict]:
     if not _qdrant_ready:
-        ensure_qdrant_indexed()
-    vec = _embed_text(query)
-    hits = _qdrant.search(
-        collection_name=COLLECTION_NAME,
-        query_vector=vec,
-        limit=top_k,
-    )
-    return [h.payload for h in hits]
+        return []
+    try:
+        vec = _embed_text(query)
+        hits = _qdrant.search(
+            collection_name=COLLECTION_NAME,
+            query_vector=vec,
+            limit=top_k,
+        )
+        return [h.payload for h in hits]
+    except Exception:
+        return []
 
 
 # ---------------------------------------------------------------------------
@@ -395,6 +410,9 @@ _agent_instance: Agent[UserContext] | None = None
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global _agent_instance
+    print("  Starting Qdrant indexing...")
+    await ensure_qdrant_indexed()
+
     model, label = build_model()
     if model:
         guardrail_agent = Agent[UserContext](
@@ -435,7 +453,6 @@ async def lifespan(app: FastAPI):
         print(f"  Provider: {label}")
     else:
         print("  No ZEN_API_KEY set — agent queries will return 503")
-    print("  Qdrant vector search ready")
     yield
 
 
@@ -462,6 +479,7 @@ async def health():
         "provider": _provider_label or "none",
         "products": len(PRODUCTS),
         "qdrant": _qdrant_ready,
+        "qdrant_error": _qdrant_error,
         "zen_key_set": bool(ZEN_API_KEY),
     }
 

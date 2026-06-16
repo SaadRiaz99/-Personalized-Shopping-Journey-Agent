@@ -1,13 +1,13 @@
 # Catalog Search Agent - Test Report
 
 - **Date:** 2026-06-03
-- **Provider:** OpenRouter / Free models (meta-llama/llama-3.3-70b-instruct:free)
+- **Provider:** OpenRouter (openai/gpt-4o-mini)
 - **Product Catalog:** 906 products across 7 categories
 - **Framework:** pytest + pytest-asyncio + VCR.py
 - **Total Tests:** 71
 - **Unit Tests:** 46 (passed: 46, failed: 0)
-- **Integration Tests:** 25 (skipped: 25 — require API key for VCR re-recording)
-- **Pass Rate:** 100% of runnable tests
+- **Integration Tests:** 25 (require API key to run)
+- **Pass Rate:** 100% of runnable tests (46/46)
 
 ## Recent Enhancements
 
@@ -16,6 +16,8 @@
 | **Semantic Search** | Token-level scoring replaces exact substring matching. Handles stemming, singular/plural, fuzzy matching via `difflib`, stop word filtering, and relevance ranking. |
 | **Price Range Filter** | `search_products` now accepts `min_price` alongside `max_price` for price range queries (e.g. "products between $50 and $150"). |
 | **Feedback Tool** | New `add_feedback(product_id, rating, comment)` tool stores per-user ratings in `FEEDBACK_STORE`. Agent instructions include guidance to use it. |
+| **Guardrail Resilience** | Guardrail agent wraps `Runner.run()` in try/except to handle model hallucination tool calls gracefully, defaulting to allowing the query. |
+| **VCR Removed from Parametrized Tests** | Removed VCR cassettes from parametrized integration tests to avoid cassette sharing conflicts. Tests run live when API key is set. |
 
 ## Test Suite Structure
 
@@ -38,13 +40,9 @@
 # Unit tests only (no API key needed)
 pytest test_agent.py -v -m "not needs_api"
 
-# Integration tests (requires API key to re-record VCR cassettes)
+# Integration tests (requires API key)
 $env:OPENROUTER_API_KEY = "your-key"
 pytest test_agent.py -v -m needs_api
-
-# Record new VCR cassettes
-$env:OPENROUTER_API_KEY = "your-key"
-pytest test_agent.py -v --record-mode=once
 
 # All tests
 $env:OPENROUTER_API_KEY = "your-key"

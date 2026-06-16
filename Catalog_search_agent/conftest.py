@@ -28,48 +28,41 @@ from catalog_search_agent import (
 
 set_tracing_disabled(disabled=True)
 
+ZEN_API_KEY = os.environ.get("ZEN_API_KEY", "")
+ZEN_BASE_URL = "https://opencode.ai/zen/v1"
+ZEN_MODEL = os.environ.get("LLM_MODEL", "big-pickle")
+
 
 @pytest.fixture(scope="session")
 def vcr_config():
-    record_mode = "once" if bool(_api_key()) else "none"
+    record_mode = "once" if ZEN_API_KEY else "none"
     return {
         "record_mode": record_mode,
         "match_on": ["method", "scheme", "host", "port", "path", "query", "body"],
-        "filter_headers": ["authorization", "x-api-key"],
+        "filter_headers": ["authorization"],
         "filter_query_parameters": ["api_key"],
     }
-
-
-def _api_key() -> tuple[str, str, str] | None:
-    candidates = [
-        ("OPENROUTER_API_KEY", "https://openrouter.ai/api/v1", os.environ.get("LLM_MODEL", "openai/gpt-4o-mini")),
-        ("GROQ_API_KEY", "https://api.groq.com/openai/v1", os.environ.get("LLM_MODEL", "llama-3.3-70b-versatile")),
-        ("GEMINI_API_KEY", "https://generativelanguage.googleapis.com/v1beta/openai/", os.environ.get("LLM_MODEL", "gemini-2.0-flash")),
-    ]
-    for var, base_url, model in candidates:
-        if key := os.environ.get(var):
-            return key, base_url, model
-    return None
 
 
 def pytest_collection_modifyitems(items):
     for item in items:
         if "needs_api" in item.keywords:
             item.add_marker(pytest.mark.skipif(
-                not bool(_api_key()),
-                reason="set an API key (e.g. OPENROUTER_API_KEY) to run integration tests",
+                not ZEN_API_KEY,
+                reason="set ZEN_API_KEY to run integration tests",
             ))
 
 
 @pytest.fixture(scope="session")
 def model():
-    info = _api_key()
-    if info:
-        key, base_url, model_name = info
+    if ZEN_API_KEY:
+        key = ZEN_API_KEY
+        base_url = ZEN_BASE_URL
+        model_name = ZEN_MODEL
     else:
-        key = "sk-or-v1-dummy-vcr-replay"
-        base_url = "https://openrouter.ai/api/v1"
-        model_name = "openai/gpt-4o-mini"
+        key = "sk-zen-dummy-vcr-replay"
+        base_url = ZEN_BASE_URL
+        model_name = ZEN_MODEL
     return OpenAIChatCompletionsModel(
         model=model_name,
         openai_client=AsyncOpenAI(api_key=key, base_url=base_url),

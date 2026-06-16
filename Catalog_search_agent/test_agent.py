@@ -2,14 +2,14 @@
 
 Run:
     pytest test_agent.py -v                          # unit tests only
-    pytest test_agent.py -v -m needs_api             # integration tests (needs key)
+    pytest test_agent.py -v -m needs_api             # integration tests (needs ZEN_API_KEY)
     pytest test_agent.py -v -m "not needs_api"       # unit tests only
     pytest test_agent.py -v --record-mode=once       # record API cassettes
 """
 
 import pytest
 from agents import InputGuardrailTripwireTriggered, Runner
-from catalog_search_agent import FEEDBACK_STORE, PRODUCTS, _semantic_score
+from catalog_search_agent import FEEDBACK_STORE, PRODUCTS, _semantic_score, hybrid_search
 
 # ===========================================================================
 # Unit tests — tools (no API needed)
@@ -226,6 +226,61 @@ class TestAgentCatalogQueries:
         result = await Runner.run(catalog_agent, "are the running shoes in stock", context=user_ctx)
         output = str(result.final_output).lower()
         assert "stock" in output or "out of" in output or "available" in output
+
+
+# ===========================================================================
+# FastAPI endpoint tests
+# ===========================================================================
+
+
+class TestFastAPISearchEndpoint:
+    @pytest.mark.parametrize("query,min_expected", [
+        ("headphones",  1),
+        ("monitor",     1),
+        ("xyzabc123",   0),
+        ("water",       1),
+    ])
+    def test_search(self, query, min_expected):
+        result = hybrid_search(query)
+        assert len(result) >= min_expected
+
+    def test_search_with_category_filter(self):
+        result = hybrid_search("a", category="Electronics")
+        assert all(p["category"] == "Electronics" for p in result)
+
+    def test_search_with_price_filter(self):
+        result = hybrid_search("a", max_price=20.0)
+        assert all(p["price"] <= 20.0 for p in result)
+
+    def test_search_with_rating_filter(self):
+        result = hybrid_search("a", min_rating=4.8)
+        assert all(p["rating"] >= 4.8 for p in result)
+
+
+class TestFastAPIProductEndpoint:
+    def test_get_product(self):
+        p = next((p for p in PRODUCTS if p["id"] == 1), None)
+        assert p is not None
+        assert p["name"] == "Wireless Bluetooth Headphones"
+
+    def test_get_nonexistent_product(self):
+        p = next((p for p in PRODUCTS if p["id"] == 99999), None)
+        assert p is None
+
+
+class TestFastAPICategoriesEndpoint:
+    def test_all_categories(self):
+        cats = sorted(set(p["category"] for p in PRODUCTS))
+        expected = {"Electronics", "Home & Kitchen", "Furniture", "Sports & Fitness", "Groceries", "Clothing", "Books"}
+        assert expected.issubset(set(cats))
+
+
+class TestFastAPIFeedbackEndpoint:
+    def test_feedback_storage(self):
+        uid = "test_fastapi_feedback"
+        FEEDBACK_STORE[uid] = []
+        FEEDBACK_STORE[uid].append({"product_id": 5, "rating": 3, "comment": "OK"})
+        assert len(FEEDBACK_STORE[uid]) == 1
 
 
 # ===========================================================================

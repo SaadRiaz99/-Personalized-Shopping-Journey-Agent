@@ -2,12 +2,18 @@ import asyncio
 import difflib
 import json
 import os
+import time
+from contextlib import asynccontextmanager
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Optional
 
+from fastapi import FastAPI, HTTPException, Query
+from fastapi.middleware.cors import CORSMiddleware
 from openai import AsyncOpenAI
 from pydantic import BaseModel, Field
-
+from qdrant_client import QdrantClient
+from qdrant_client.http import models as qdrant_models
 from agents import (
     Agent,
     GuardrailFunctionOutput,
@@ -23,49 +29,148 @@ from agents.models.openai_chatcompletions import OpenAIChatCompletionsModel
 
 set_tracing_disabled(disabled=True)
 
-
 # ---------------------------------------------------------------------------
-# Provider setup
+# Configuration
 # ---------------------------------------------------------------------------
-# Set one of these env vars:
-#   GROQ_API_KEY  -> https://console.groq.com/keys  (free: 14400 req/day)
-#   GEMINI_API_KEY -> https://aistudio.google.com/apikey (free tier)
-#   OPENAI_API_KEY -> https://platform.openai.com/api-keys
 
-def build_model():
-    if key := os.environ.get("OPENROUTER_API_KEY", ""):
-        clients["openrouter"] = provider_entry(
-            client=AsyncOpenAI(api_key=key, base_url="https://openrouter.ai/api/v1"),
-            model=os.environ.get("LLM_MODEL", "meta-llama/llama-3.3-70b-instruct:free"),
-        ), f"OpenRouter ({os.environ.get('LLM_MODEL', 'meta-llama/llama-3.3-70b-instruct:free')})"
+ZEN_API_KEY = os.environ.get("ZEN_API_KEY", "")
+ZEN_BASE_URL = "https://opencode.ai/zen/v1"
+ZEN_MODEL = os.environ.get("LLM_MODEL", "big-pickle")
 
-    if key := os.environ.get("GROQ_API_KEY", ""):
-        return OpenAIChatCompletionsModel(
-            model=os.environ.get("LLM_MODEL", "llama-3.3-70b-versatile"),
-            openai_client=AsyncOpenAI(api_key=key, base_url="https://api.groq.com/openai/v1"),
-        ), "Groq (llama-3.3-70b) [free]"
-
-    if key := os.environ.get("GEMINI_API_KEY", ""):
-        return OpenAIChatCompletionsModel(
-            model=os.environ.get("LLM_MODEL", "gemini-2.0-flash"),
-            openai_client=AsyncOpenAI(api_key=key, base_url="https://generativelanguage.googleapis.com/v1beta/openai/"),
-        ), "Google Gemini (gemini-2.0-flash) [free tier]"
-
-    if key := os.environ.get("OPENAI_API_KEY", ""):
-        return OpenAIChatCompletionsModel(
-            model=os.environ.get("LLM_MODEL", "gpt-4o-mini"),
-            openai_client=AsyncOpenAI(api_key=key),
-        ), "OpenAI"
-
-    return None, None
-
+DATA_DIR = Path(__file__).parent
 
 # ---------------------------------------------------------------------------
 # Product catalog
 # ---------------------------------------------------------------------------
 
-PRODUCTS: list[dict] = json.load(open("products.json"))
+PRODUCTS: list[dict] = json.load(open(DATA_DIR / "products.json"))
 FEEDBACK_STORE: dict[str, list[dict]] = {}
+
+# ---------------------------------------------------------------------------
+# Embedding / Qdrant (initialized lazily)
+# ---------------------------------------------------------------------------
+
+_embedder = None
+_qdrant: QdrantClient | None = None
+_qdrant_ready = False
+COLLECTION_NAME = "catalog_products"
+EMBED_DIM = 384  # all-MiniLM-L6-v2
+
+
+def _get_embedder():
+    global _embedder
+    if _embedder is None:
+        from sentence_transformers import SentenceTransformer
+        _embedder = SentenceTransformer("all-MiniLM-L6-v2")
+    return _embedder
+
+
+def _embed_text(text: str) -> list[float]:
+    return _get_embedder().encode(text).tolist()
+
+
+def _product_text(p: dict) -> str:
+    return f"{p['name']} {p['description']} {p['category']}"
+
+
+def ensure_qdrant_indexed():
+    global _qdrant, _qdrant_ready
+    if _qdrant_ready:
+        return
+    _qdrant = QdrantClient(":memory:")
+    _qdrant.create_collection(
+        collection_name=COLLECTION_NAME,
+        vectors_config=qdrant_models.VectorParams(
+            size=EMBED_DIM, distance=qdrant_models.Distance.COSINE
+        ),
+    )
+    points = []
+    for p in PRODUCTS:
+        vec = _embed_text(_product_text(p))
+        points.append(qdrant_models.PointStruct(id=p["id"], vector=vec, payload=p))
+    _qdrant.upsert(collection_name=COLLECTION_NAME, points=points)
+    _qdrant_ready = True
+
+
+def vector_search(query: str, top_k: int = 50) -> list[dict]:
+    if not _qdrant_ready:
+        ensure_qdrant_indexed()
+    vec = _embed_text(query)
+    hits = _qdrant.search(
+        collection_name=COLLECTION_NAME,
+        query_vector=vec,
+        limit=top_k,
+    )
+    return [h.payload for h in hits]
+
+
+# ---------------------------------------------------------------------------
+# Hybrid search — combine semantic + vector
+# ---------------------------------------------------------------------------
+
+def hybrid_search(
+    query: str,
+    category: str | None = None,
+    min_price: float | None = None,
+    max_price: float | None = None,
+    min_rating: float | None = None,
+    semantic_weight: float = 0.4,
+) -> list[dict]:
+    results = list(PRODUCTS)
+    if category:
+        results = [p for p in results if p["category"].lower() == category.lower()]
+    if min_price is not None:
+        results = [p for p in results if p["price"] >= min_price]
+    if max_price is not None:
+        results = [p for p in results if p["price"] <= max_price]
+    if min_rating is not None:
+        results = [p for p in results if p["rating"] >= min_rating]
+
+    semantic_scores = {p["id"]: _semantic_score(query, p) for p in results}
+    max_ss = max(semantic_scores.values()) if semantic_scores else 1
+
+    try:
+        vector_results = vector_search(query, top_k=50)
+        vector_ids = {p["id"] for p in vector_results}
+        vector_rank = {pid: i for i, pid in enumerate(vector_ids)}
+        max_vr = len(vector_ids)
+    except Exception:
+        vector_ids = set()
+        vector_rank = {}
+        max_vr = 1
+
+    scored = []
+    for p in results:
+        ss = semantic_scores[p["id"]] / max_ss if max_ss else 0
+        if p["id"] in vector_rank:
+            vs = 1.0 - (vector_rank[p["id"]] / max_vr)
+        else:
+            vs = 0.0
+        combined = semantic_weight * ss + (1 - semantic_weight) * vs
+        if combined > 0:
+            scored.append((p, combined))
+
+    scored.sort(key=lambda x: -x[1])
+    return [p for p, _ in scored]
+
+
+# ---------------------------------------------------------------------------
+# Provider setup — Zen (OpenCode)
+# ---------------------------------------------------------------------------
+
+_zen_client: AsyncOpenAI | None = None
+_zen_model: OpenAIChatCompletionsModel | None = None
+_provider_label: str | None = None
+
+
+def build_model():
+    global _zen_client, _zen_model, _provider_label
+    if not ZEN_API_KEY:
+        return None, None
+    _zen_client = AsyncOpenAI(api_key=ZEN_API_KEY, base_url=ZEN_BASE_URL)
+    _zen_model = OpenAIChatCompletionsModel(model=ZEN_MODEL, openai_client=_zen_client)
+    _provider_label = f"OpenCode Zen ({ZEN_MODEL})"
+    return _zen_model, _provider_label
 
 
 # ---------------------------------------------------------------------------
@@ -114,6 +219,7 @@ class CatalogQueryCheck(BaseModel):
 # ---------------------------------------------------------------------------
 # Semantic search helpers
 # ---------------------------------------------------------------------------
+
 
 def _tokenize(text: str) -> list[str]:
     text = text.lower()
@@ -197,6 +303,7 @@ def _semantic_score(query: str, product: dict) -> float:
 # Tools
 # ---------------------------------------------------------------------------
 
+
 @function_tool
 def search_products(
     ctx: RunContextWrapper[UserContext],
@@ -206,26 +313,15 @@ def search_products(
     max_price: Optional[float] = None,
     min_rating: Optional[float] = None,
 ) -> SearchResults:
-    """Search the product catalog using semantic matching. Returns results sorted by relevance."""
-    results = list(PRODUCTS)
-    if category:
-        results = [p for p in results if p["category"].lower() == category.lower()]
-    if min_price is not None:
-        results = [p for p in results if p["price"] >= min_price]
-    if max_price is not None:
-        results = [p for p in results if p["price"] <= max_price]
-    if min_rating is not None:
-        results = [p for p in results if p["rating"] >= min_rating]
-
-    scored = [(p, _semantic_score(query, p)) for p in results]
-    scored.sort(key=lambda x: -x[1])
-    scored = [(p, s) for p, s in scored if s > 0]
-
-    products = [ProductResult(
-        id=p["id"], name=p["name"], category=p["category"],
-        price=p["price"], rating=p["rating"],
-        in_stock=p["stock"] > 0, description=p["description"],
-    ) for p, _ in scored]
+    """Search the product catalog using hybrid semantic + vector search. Returns results sorted by relevance."""
+    results = hybrid_search(query, category, min_price, max_price, min_rating)
+    products = [
+        ProductResult(
+            id=p["id"], name=p["name"], category=p["category"],
+            price=p["price"], rating=p["rating"],
+            in_stock=p["stock"] > 0, description=p["description"],
+        ) for p in results
+    ]
     return SearchResults(query=query, total_found=len(products), products=products)
 
 
@@ -265,6 +361,7 @@ def add_feedback(
 # Agent
 # ---------------------------------------------------------------------------
 
+
 def dynamic_instructions(ctx: RunContextWrapper[UserContext], agent: Agent[UserContext]) -> str:
     base = (
         "You are a friendly catalog search assistant. "
@@ -289,84 +386,172 @@ def dynamic_instructions(ctx: RunContextWrapper[UserContext], agent: Agent[UserC
 
 
 # ---------------------------------------------------------------------------
-# Main
+# FastAPI app
 # ---------------------------------------------------------------------------
 
-async def main():
-    agent_model, provider_label = build_model()
-    if not agent_model:
-        print("=" * 60)
-        print("  Catalog Search Agent")
-        print("=" * 60)
-        print("  No API key found. Set one of these:")
-        print("    $env:OPENROUTER_API_KEY = \"...\"  (many free models)")
-        print("    $env:GROQ_API_KEY = \"...\"        (free, 14400 req/day)")
-        print("    $env:GEMINI_API_KEY = \"...\"      (free tier)")
-        print("    $env:OPENAI_API_KEY = \"...\"")
-        print("=" * 60)
-        print("  Or run: python catalog_search_agent_mock.py")
-        print("=" * 60)
-        return
+_agent_instance: Agent[UserContext] | None = None
 
-    user_ctx = UserContext(user_id="user_001", name="Ali", preferred_categories=["Electronics", "Sports & Fitness"], max_budget=200.0)
 
-    guardrail_agent = Agent[UserContext](
-        name="CatalogGuardrail",
-        instructions=(
-            "Determine if the user's query is about the product catalog. "
-            "You must NOT use any tools. Only return a JSON object with "
-            "'is_catalog_query' (bool) and 'reasoning' (str). "
-            "Reject math, coding, general knowledge, or unrelated chat."
-        ),
-        output_type=CatalogQueryCheck,
-        model=agent_model,
-    )
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global _agent_instance
+    model, label = build_model()
+    if model:
+        guardrail_agent = Agent[UserContext](
+            name="CatalogGuardrail",
+            instructions=(
+                "Determine if the user's query is about the product catalog. "
+                "You must NOT use any tools. Only return a JSON object with "
+                "'is_catalog_query' (bool) and 'reasoning' (str). "
+                "Reject math, coding, general knowledge, or unrelated chat."
+            ),
+            output_type=CatalogQueryCheck,
+            model=model,
+        )
 
-    @input_guardrail
-    async def catalog_relevance_guardrail(
-        ctx: RunContextWrapper[UserContext], agent: Agent[UserContext], input: str | list[TResponseInputItem]
-    ) -> GuardrailFunctionOutput:
-        try:
-            result = await Runner.run(guardrail_agent, input, context=ctx.context)
-            return GuardrailFunctionOutput(
-                output_info=result.final_output,
-                tripwire_triggered=not result.final_output.is_catalog_query,
-            )
-        except Exception:
-            return GuardrailFunctionOutput(
-                output_info=CatalogQueryCheck(is_catalog_query=True, reasoning="Guardrail error, allowing query by default"),
-                tripwire_triggered=False,
-            )
+        @input_guardrail
+        async def catalog_relevance_guardrail(
+            ctx: RunContextWrapper[UserContext], agent: Agent[UserContext], input: str | list[TResponseInputItem]
+        ) -> GuardrailFunctionOutput:
+            try:
+                result = await Runner.run(guardrail_agent, input, context=ctx.context)
+                return GuardrailFunctionOutput(
+                    output_info=result.final_output,
+                    tripwire_triggered=not result.final_output.is_catalog_query,
+                )
+            except Exception:
+                return GuardrailFunctionOutput(
+                    output_info=CatalogQueryCheck(is_catalog_query=True, reasoning="Guardrail error, allowing query by default"),
+                    tripwire_triggered=False,
+                )
 
-    agent = Agent[UserContext](
-        name="CatalogSearchAgent",
-        instructions=dynamic_instructions,
-        model=agent_model,
-        tools=[search_products, get_product_details, list_categories, add_feedback],
-        input_guardrails=[catalog_relevance_guardrail],
-    )
+        _agent_instance = Agent[UserContext](
+            name="CatalogSearchAgent",
+            instructions=dynamic_instructions,
+            model=model,
+            tools=[search_products, get_product_details, list_categories, add_feedback],
+            input_guardrails=[catalog_relevance_guardrail],
+        )
+        print(f"  Provider: {label}")
+    else:
+        print("  No ZEN_API_KEY set — agent queries will return 503")
+    print("  Qdrant vector search ready")
+    yield
 
-    print("=" * 60)
-    print("  Catalog Search Agent")
-    print(f"  Provider: {provider_label}")
-    print("  Type 'exit' to quit")
-    print("=" * 60)
 
-    while True:
-        try:
-            user_input = input("\nYou: ").strip()
-        except (EOFError, KeyboardInterrupt):
-            print()
-            break
-        if not user_input or user_input.lower() in ("exit", "quit"):
-            break
+app = FastAPI(title="Catalog Search Agent", version="2.0.0", lifespan=lifespan)
 
-        try:
-            result = await Runner.run(agent, user_input, context=user_ctx)
-            print(f"\nAssistant: {result.final_output}")
-        except InputGuardrailTripwireTriggered:
-            print("\nAssistant: I can only answer questions about the product catalog. Please ask me about products, categories, pricing, or availability.")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
+
+# ---------------------------------------------------------------------------
+# REST endpoints
+# ---------------------------------------------------------------------------
+
+
+@app.get("/api/health")
+async def health():
+    return {
+        "status": "ok",
+        "provider": _provider_label or "none",
+        "products": len(PRODUCTS),
+        "qdrant": _qdrant_ready,
+        "zen_key_set": bool(ZEN_API_KEY),
+    }
+
+
+@app.get("/api/products/search")
+async def api_search(
+    query: str = "",
+    category: Optional[str] = None,
+    min_price: Optional[float] = None,
+    max_price: Optional[float] = None,
+    min_rating: Optional[float] = None,
+    page: int = Query(1, ge=1),
+    page_size: int = Query(20, ge=1, le=100),
+):
+    results = hybrid_search(query, category, min_price, max_price, min_rating)
+    total = len(results)
+    start = (page - 1) * page_size
+    items = results[start: start + page_size]
+    return {
+        "query": query,
+        "total_found": total,
+        "page": page,
+        "page_size": page_size,
+        "products": [
+            {
+                "id": p["id"], "name": p["name"], "category": p["category"],
+                "price": p["price"], "rating": p["rating"],
+                "in_stock": p["stock"] > 0, "description": p["description"],
+            }
+            for p in items
+        ],
+    }
+
+
+@app.get("/api/products/{product_id}")
+async def api_product(product_id: int):
+    p = next((p for p in PRODUCTS if p["id"] == product_id), None)
+    if not p:
+        raise HTTPException(404, f"Product {product_id} not found")
+    return {
+        "id": p["id"], "name": p["name"], "category": p["category"],
+        "price": p["price"], "rating": p["rating"],
+        "in_stock": p["stock"] > 0, "description": p["description"],
+    }
+
+
+@app.get("/api/categories")
+async def api_categories():
+    cats = sorted(set(p["category"] for p in PRODUCTS))
+    return {"categories": cats, "total": len(cats)}
+
+
+@app.post("/api/feedback")
+async def api_feedback(product_id: int, rating: int, comment: str | None = None, user_id: str = "anonymous"):
+    if rating < 1 or rating > 5:
+        raise HTTPException(422, "Rating must be between 1 and 5")
+    if user_id not in FEEDBACK_STORE:
+        FEEDBACK_STORE[user_id] = []
+    entry = {"product_id": product_id, "rating": rating, "comment": comment}
+    FEEDBACK_STORE[user_id].append(entry)
+    return {"status": "ok", "message": f"Thanks! Your {rating}/5 rating for product {product_id} has been saved."}
+
+
+@app.post("/api/agent/query")
+async def agent_query(
+    query: str,
+    user_id: str = "anonymous",
+    name: str = "User",
+    preferred_categories: str | None = None,
+    max_budget: float | None = None,
+):
+    if not _agent_instance:
+        raise HTTPException(503, "Agent not available — set ZEN_API_KEY")
+
+    cats = preferred_categories.split(",") if preferred_categories else None
+    ctx = UserContext(user_id=user_id, name=name, preferred_categories=cats, max_budget=max_budget)
+
+    try:
+        result = await Runner.run(_agent_instance, query, context=ctx)
+        return {"response": str(result.final_output)}
+    except InputGuardrailTripwireTriggered:
+        return {
+            "response": "I can only answer questions about the product catalog. Please ask me about products, categories, pricing, or availability."
+        }
+
+
+# ---------------------------------------------------------------------------
+# Main entry
+# ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    import uvicorn
+    uvicorn.run("catalog_search_agent:app", host="0.0.0.0", port=8000, reload=True)

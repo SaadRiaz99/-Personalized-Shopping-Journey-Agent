@@ -157,17 +157,22 @@ def _semantic_score(query: str, product: dict) -> float:
             s = _token_similarity(qt, pt) * 0.7
             if s > best:
                 best = s
-        if best >= 0.7:
+        threshold = 0.7
+        if len(qt) <= 5:
+            threshold = 0.9
+        elif len(qt) <= 8:
+            threshold = 0.8
+        if best >= threshold:
             matched_strong += 1
             any_strong = True
         score += best
+
     if not any_strong:
         return 0.0
+
     coverage = matched_strong / len(relevant)
     score *= (1 + coverage * 0.5)
     return score
-
-
 # ---------------------------------------------------------------------------
 # Hybrid search
 # ---------------------------------------------------------------------------

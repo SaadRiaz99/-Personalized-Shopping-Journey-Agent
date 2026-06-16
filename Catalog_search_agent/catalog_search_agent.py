@@ -299,7 +299,12 @@ def _semantic_score(query: str, product: dict) -> float:
             if s > best:
                 best = s
 
-        if best >= 0.7:
+        threshold = 0.7
+        if len(qt) <= 5:
+            threshold = 0.9
+        elif len(qt) <= 8:
+            threshold = 0.8
+        if best >= threshold:
             matched_strong += 1
             any_strong = True
         score += best

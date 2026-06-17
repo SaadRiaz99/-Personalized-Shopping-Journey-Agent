@@ -12,6 +12,9 @@ from app.auth import (
     seed_users,
     validate_password,
     _hash_password,
+    generate_2fa_secret,
+    generate_2fa_code,
+    verify_2fa_code,
 )
 from app.database import (
     get_db,
@@ -133,6 +136,50 @@ async def revoke_session(session_id: str, current_user: dict = Depends(get_curre
     with get_db() as conn:
         deactivate_session(conn, session_id)
     return {"message": "Session revoked"}
+
+
+@router.post("/verify-email/confirm")
+async def verify_email(current_user: dict = Depends(get_current_user)):
+    with get_db() as conn:
+        user = get_user_by_id(conn, current_user["id"])
+        if user.email_verified:
+            return {"message": "Email already verified"}
+        user.email_verified = True
+        update_user(conn, user)
+    return {"message": "Email verified successfully"}
+
+
+@router.post("/2fa/enable")
+async def enable_2fa(current_user: dict = Depends(get_current_user)):
+    secret = generate_2fa_secret()
+    demo_code = generate_2fa_code(secret)
+    with get_db() as conn:
+        user = get_user_by_id(conn, current_user["id"])
+        user.twofa_secret = secret
+        user.twofa_enabled = True
+        update_user(conn, user)
+    return {"message": "2FA enabled", "secret": secret, "demo_code": demo_code}
+
+
+@router.post("/2fa/disable")
+async def disable_2fa(current_user: dict = Depends(get_current_user)):
+    with get_db() as conn:
+        user = get_user_by_id(conn, current_user["id"])
+        user.twofa_secret = None
+        user.twofa_enabled = False
+        update_user(conn, user)
+    return {"message": "2FA disabled"}
+
+
+@router.post("/2fa/verify")
+async def verify_2fa(body: dict, current_user: dict = Depends(get_current_user)):
+    code = body.get("code", "")
+    with get_db() as conn:
+        user = get_user_by_id(conn, current_user["id"])
+        if not user.twofa_secret:
+            raise HTTPException(status_code=400, detail="2FA not enabled")
+        valid = verify_2fa_code(user.twofa_secret, code)
+    return {"message": "2FA verified" if valid else "Invalid code", "valid": valid}
 
 
 @router.get("/users")

@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 from typing import Optional
 
@@ -11,6 +10,8 @@ from app.config import settings
 class VectorStore:
     _instance: Optional["VectorStore"] = None
     _client: Optional[chromadb.ClientAPI] = None
+
+    DEFAULT_COLLECTION = "documents"
 
     def __new__(cls):
         if cls._instance is None:
@@ -27,19 +28,46 @@ class VectorStore:
             )
         return self._client
 
-    def get_or_create_collection(self, name: str = "documents"):
+    def health_check(self) -> dict:
+        try:
+            client = self._get_client()
+            heartbeat = client.heartbeat()
+            return {
+                "status": "healthy",
+                "heartbeat": heartbeat,
+                "persist_dir": settings.chroma_persist_dir,
+            }
+        except Exception as e:
+            return {"status": "unhealthy", "error": str(e)}
+
+    def list_collections(self) -> list[dict]:
+        client = self._get_client()
+        collections = client.list_collections()
+        result = []
+        for c in collections:
+            try:
+                result.append({"name": c.name, "count": c.count()})
+            except Exception:
+                result.append({"name": c.name, "count": 0})
+        return result
+
+    def get_or_create_collection(self, name: str = DEFAULT_COLLECTION):
         client = self._get_client()
         try:
             return client.get_collection(name)
         except ValueError:
-            return client.create_collection(name)
+            return client.create_collection(
+                name=name,
+                metadata={"hnsw:space": "cosine"},
+            )
 
-    def add_chunks(self, chunks: list[dict], embeddings: list[list[float]], collection_name: str = "documents"):
+    def add_chunks(self, chunks: list[dict], embeddings: list[list[float]], collection_name: str = DEFAULT_COLLECTION):
+        if not chunks or not embeddings:
+            return
         collection = self.get_or_create_collection(collection_name)
         ids = [c["id"] for c in chunks]
         documents = [c["content"] for c in chunks]
         metadatas = [c.get("metadata", {}) for c in chunks]
-
         collection.add(
             ids=ids,
             embeddings=embeddings,
@@ -47,7 +75,7 @@ class VectorStore:
             metadatas=metadatas,
         )
 
-    def search(self, query_embedding: list[float], n_results: int = 5, collection_name: str = "documents") -> dict:
+    def search(self, query_embedding: list[float], n_results: int = 5, collection_name: str = DEFAULT_COLLECTION) -> dict:
         collection = self.get_or_create_collection(collection_name)
         results = collection.query(
             query_embeddings=[query_embedding],
@@ -55,20 +83,33 @@ class VectorStore:
         )
         return results
 
-    def delete_document_chunks(self, document_id: str, collection_name: str = "documents"):
+    def search_with_filter(self, query_embedding: list[float], where: dict, n_results: int = 5, collection_name: str = DEFAULT_COLLECTION) -> dict:
+        collection = self.get_or_create_collection(collection_name)
+        results = collection.query(
+            query_embeddings=[query_embedding],
+            n_results=n_results,
+            where=where,
+        )
+        return results
+
+    def delete_document_chunks(self, document_id: str, collection_name: str = DEFAULT_COLLECTION):
         collection = self.get_or_create_collection(collection_name)
         results = collection.get(where={"document_id": document_id})
         if results and results["ids"]:
             collection.delete(ids=results["ids"])
 
-    def delete_collection(self, name: str = "documents"):
+    def delete_by_ids(self, ids: list[str], collection_name: str = DEFAULT_COLLECTION):
+        collection = self.get_or_create_collection(collection_name)
+        collection.delete(ids=ids)
+
+    def delete_collection(self, name: str = DEFAULT_COLLECTION):
         client = self._get_client()
         try:
             client.delete_collection(name)
         except ValueError:
             pass
 
-    def get_collection_stats(self, collection_name: str = "documents") -> dict:
+    def get_collection_stats(self, collection_name: str = DEFAULT_COLLECTION) -> dict:
         try:
             collection = self.get_or_create_collection(collection_name)
             count = collection.count()

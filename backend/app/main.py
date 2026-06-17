@@ -40,7 +40,13 @@ app.include_router(admin.router)
 
 @app.get("/api/health")
 async def health():
-    return {"status": "ok", "version": "2.0.0"}
+    from app.services.vector_store import vector_store
+    vs_health = vector_store.health_check()
+    return {
+        "status": "ok",
+        "version": "2.0.0",
+        "vector_store": vs_health,
+    }
 
 
 @app.get("/api/auth/verify")

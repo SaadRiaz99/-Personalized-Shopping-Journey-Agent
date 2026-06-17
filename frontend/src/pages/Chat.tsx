@@ -1,8 +1,14 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import ChatMessage from '../components/ChatMessage'
-import { sendChat, getConversationMessages, getDocuments } from '../services/api'
-import type { Message, Document } from '../types'
+import { getDocuments, sendChat } from '../services/api'
+import type { Message, Document, Source } from '../types'
+
+const API_BASE = 'http://localhost:8000/api'
+
+function getToken(): string | null {
+  return localStorage.getItem('access_token')
+}
 
 export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([])
@@ -13,6 +19,7 @@ export default function Chat() {
   const [selectedDocIds, setSelectedDocIds] = useState<string[]>([])
   const [showDocs, setShowDocs] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const abortRef = useRef<AbortController | null>(null)
 
   useEffect(() => {
     getDocuments().then(res => setDocuments(res.documents)).catch(() => {})
@@ -22,7 +29,7 @@ export default function Chat() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
-  const handleSend = async () => {
+  const handleSend = useCallback(async () => {
     if (!input.trim() || loading) return
     const msg = input.trim()
     setInput('')
@@ -38,34 +45,111 @@ export default function Chat() {
     setMessages(prev => [...prev, userMsg])
     setLoading(true)
 
+    const assistantId = (Date.now() + 1).toString()
+    const assistantMsg: Message = {
+      id: assistantId,
+      conversation_id: conversationId || '',
+      role: 'assistant',
+      content: '',
+      sources: [],
+      created_at: new Date().toISOString(),
+    }
+    setMessages(prev => [...prev, assistantMsg])
+
+    const body = JSON.stringify({
+      conversation_id: conversationId || undefined,
+      message: msg,
+      document_ids: selectedDocIds.length > 0 ? selectedDocIds : undefined,
+    })
+
+    const controller = new AbortController()
+    abortRef.current = controller
+
     try {
-      const res = await sendChat({
-        conversation_id: conversationId || undefined,
-        message: msg,
-        document_ids: selectedDocIds.length > 0 ? selectedDocIds : undefined,
+      const response = await fetch(`${API_BASE}/chat/stream`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${getToken()}`,
+        },
+        body,
+        signal: controller.signal,
       })
-      setConversationId(res.conversation_id)
-      const assistantMsg: Message = {
-        id: Date.now().toString() + '-a',
-        conversation_id: res.conversation_id,
-        role: 'assistant',
-        content: res.message,
-        sources: res.sources,
-        created_at: new Date().toISOString(),
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`)
       }
-      setMessages(prev => [...prev, assistantMsg])
-    } catch (err) {
-      setMessages(prev => [...prev, {
-        id: Date.now().toString() + '-e',
-        conversation_id: conversationId || '',
-        role: 'assistant',
-        content: 'Error sending message. Make sure the backend is running.',
-        sources: [],
-        created_at: new Date().toISOString(),
-      }])
+
+      const reader = response.body?.getReader()
+      if (!reader) throw new Error('No reader')
+
+      const decoder = new TextDecoder()
+      let buffer = ''
+      let sources: Source[] = []
+      let fullContent = ''
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        buffer += decoder.decode(value, { stream: true })
+        const lines = buffer.split('\n')
+        buffer = lines.pop() || ''
+
+        for (const line of lines) {
+          if (!line.trim()) continue
+          try {
+            const data = JSON.parse(line)
+            if (data.type === 'token') {
+              fullContent += data.content
+              setMessages(prev => prev.map(m =>
+                m.id === assistantId ? { ...m, content: fullContent } : m
+              ))
+            } else if (data.type === 'done') {
+              sources = data.sources || []
+              setMessages(prev => prev.map(m =>
+                m.id === assistantId ? { ...m, sources, content: fullContent } : m
+              ))
+              if (data.conversation_id) {
+                setConversationId(data.conversation_id)
+              }
+            }
+          } catch { /* ignore parse errors */ }
+        }
+      }
+
+      if (!fullContent) {
+        const fallbackRes = await sendChat({
+          conversation_id: conversationId || undefined,
+          message: msg,
+          document_ids: selectedDocIds.length > 0 ? selectedDocIds : undefined,
+        })
+        setConversationId(fallbackRes.conversation_id)
+        setMessages(prev => prev.map(m =>
+          m.id === assistantId ? { ...m, content: fallbackRes.message, sources: fallbackRes.sources } : m
+        ))
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === 'AbortError') return
+      try {
+        const fallbackRes = await sendChat({
+          conversation_id: conversationId || undefined,
+          message: msg,
+          document_ids: selectedDocIds.length > 0 ? selectedDocIds : undefined,
+        })
+        setConversationId(fallbackRes.conversation_id)
+        setMessages(prev => prev.map(m =>
+          m.id === assistantId ? { ...m, content: fallbackRes.message, sources: fallbackRes.sources } : m
+        ))
+      } catch {
+        setMessages(prev => prev.map(m =>
+          m.id === assistantId ? { ...m, content: 'Error sending message. Make sure the backend is running.' } : m
+        ))
+      }
     }
     setLoading(false)
-  }
+    abortRef.current = null
+  }, [input, loading, conversationId, selectedDocIds])
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -129,11 +213,6 @@ export default function Chat() {
         {messages.map(msg => (
           <ChatMessage key={msg.id} message={msg} />
         ))}
-        {loading && (
-          <div className="message assistant" style={{ alignSelf: 'flex-start' }}>
-            <div className="typing-indicator"><span /><span /><span /></div>
-          </div>
-        )}
         <div ref={messagesEndRef} />
       </div>
 
@@ -167,11 +246,6 @@ export default function Chat() {
         .chat-messages { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding: 16px 0; }
         .chat-welcome { text-align: center; margin: auto; max-width: 400px; }
         .welcome-icon { color: var(--primary); opacity: 0.5; margin-bottom: 16px; }
-        .typing-indicator { display: flex; gap: 4px; padding: 12px 16px; background: var(--glass-card); border-radius: 16px; border: 1px solid var(--glass-border); }
-        .typing-indicator span { width: 8px; height: 8px; border-radius: 50%; background: var(--text-dim); animation: bounce 1.4s infinite ease-in-out; }
-        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
         .chat-input-bar { display: flex; gap: 8px; padding: 12px 0; border-top: 1px solid var(--glass-border); margin-top: 12px; }
         .chat-input {
           flex: 1;

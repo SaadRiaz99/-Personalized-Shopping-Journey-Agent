@@ -1,41 +1,32 @@
-
-__pycache__/
-.env
-
-# Node.js
-node_modules/
-dist/
-.env
-
-# Python
 __pycache__/
 *.py[cod]
 *$py.class
+.env
 venv/
 .venv/
-.env
-err.log
-out.log
-*_err.log
-*_out.log
+*.egg-info/
+dist/
+build/
+.eggs/
 
-# IDEs
+node_modules/
+dist/
+
 .vscode/
 .idea/
 
-# OS
 .DS_Store
 Thumbs.db
 
+*.db
+*.sqlite
+*.sqlite3
 
-backend/agent_store.db
-
-# Generated artifacts
+*.log
 *.coverage
-*.jsonl
-.python-version
-uv.lock
-node_modules/
+.coverage
+htmlcov/
 
-# Embedded repos
--Personalized-Shopping-Journey-Agent/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/

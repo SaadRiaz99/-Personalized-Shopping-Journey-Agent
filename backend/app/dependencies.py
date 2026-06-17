@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import Depends, HTTPException, Request, status
+from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from app.auth import verify_token
@@ -34,21 +34,18 @@ async def require_user(
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Not authenticated",
-            headers={"WWW-Authenticate": "Bearer"},
         )
     payload = verify_token(credentials.credentials, "access")
     if payload is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid token",
-            headers={"WWW-Authenticate": "Bearer"},
         )
     user_id = payload.get("sub")
     if user_id is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid token",
-            headers={"WWW-Authenticate": "Bearer"},
         )
     with get_db() as conn:
         user = get_user_by_id(conn, user_id)
@@ -56,6 +53,5 @@ async def require_user(
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="User not found",
-            headers={"WWW-Authenticate": "Bearer"},
         )
-    return {"id": user.id, "username": user.username, "disabled": user.disabled}
+    return {"id": user.id, "username": user.username, "disabled": user.disabled, "role": user.role.value if hasattr(user, 'role') else 'user'}

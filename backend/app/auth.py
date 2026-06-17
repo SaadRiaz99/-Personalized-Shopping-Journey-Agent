@@ -9,7 +9,6 @@ from typing import Optional
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import JWTError, jwt
-from pydantic import BaseModel
 
 from app.database import (
     get_db,
@@ -28,14 +27,13 @@ from app.models import AuthUser, LoginHistoryEntry, UserSession, UserRole
 
 SECRET_KEY = os.getenv("JWT_SECRET_KEY", "dev-secret-key-change-in-production")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", "15"))
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", "30"))
 REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("JWT_REFRESH_EXPIRE_DAYS", "7"))
 MAX_FAILED_LOGIN_ATTEMPTS = 5
 LOCKOUT_DURATION_MINUTES = 15
 
 security = HTTPBearer(auto_error=False)
 
-# ── Password Helpers ────────────────────────────────────────
 
 def _hash_password(password: str) -> str:
     salt = secrets.token_hex(16)
@@ -70,8 +68,6 @@ def validate_password(password: str) -> Optional[str]:
     return None
 
 
-# ── Token Helpers ───────────────────────────────────────────
-
 def create_access_token(data: dict) -> str:
     to_encode = data.copy()
     expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -100,8 +96,6 @@ def verify_token(token: str, expected_type: str = "access") -> Optional[dict]:
         return None
 
 
-# ── Auth Dependencies ───────────────────────────────────────
-
 async def get_optional_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
 ) -> Optional[dict]:
@@ -120,14 +114,12 @@ async def get_current_user(
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Not authenticated",
-            headers={"WWW-Authenticate": "Bearer"},
         )
     payload = verify_token(credentials.credentials, "access")
     if payload is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid or expired access token",
-            headers={"WWW-Authenticate": "Bearer"},
         )
     with get_db() as conn:
         user = get_user_by_id(conn, payload.get("sub"))
@@ -168,8 +160,6 @@ class RoleChecker:
 require_role = RoleChecker
 
 
-# ── 2FA Simulation ──────────────────────────────────────────
-
 def generate_2fa_secret() -> str:
     return secrets.token_hex(16)
 
@@ -182,8 +172,6 @@ def verify_2fa_code(secret: str, code: str) -> bool:
 def generate_2fa_code(secret: str) -> str:
     return hashlib.sha256(secret.encode()).hexdigest()[:6]
 
-
-# ── Account Lockout ─────────────────────────────────────────
 
 def is_account_locked(user: AuthUser) -> bool:
     if user.locked_until is None:
@@ -202,8 +190,6 @@ def lock_account(user: AuthUser) -> AuthUser:
     user.locked_until = (now + timedelta(minutes=LOCKOUT_DURATION_MINUTES)).isoformat()
     return user
 
-
-# ── Login Logic ─────────────────────────────────────────────
 
 async def perform_login(
     username: str,
@@ -238,7 +224,7 @@ async def perform_login(
             ))
             raise HTTPException(
                 status_code=423,
-                detail=f"Account locked due to too many failed attempts. Try again after {LOCKOUT_DURATION_MINUTES} minutes.",
+                detail=f"Account locked. Try again after {LOCKOUT_DURATION_MINUTES} minutes.",
             )
 
         if not _verify_password(password, user.hashed_password):
@@ -372,14 +358,11 @@ async def refresh_access_token(refresh_token: str) -> dict:
     }
 
 
-# ── Seed Default Users ──────────────────────────────────────
-
 def seed_users():
     from app.database import create_user
     default_users = [
-        ("admin", "admin@shoporch.com", "Admin@123", UserRole.admin),
-        ("premium_user", "premium@shoporch.com", "Premium@123", UserRole.premium),
-        ("user1", "user1@shoporch.com", "User@1234", UserRole.user),
+        ("admin", "admin@ragapp.com", "Admin@123", UserRole.admin),
+        ("user1", "user1@ragapp.com", "User@1234", UserRole.user),
     ]
     with get_db() as conn:
         for username, email, password, role in default_users:

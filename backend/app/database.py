@@ -107,6 +107,14 @@ def init_db():
                 sources TEXT NOT NULL DEFAULT '[]',
                 created_at TEXT NOT NULL
             );
+
+            CREATE TABLE IF NOT EXISTS document_chunks (
+                id TEXT PRIMARY KEY,
+                document_id TEXT NOT NULL,
+                content TEXT NOT NULL,
+                chunk_index INTEGER NOT NULL,
+                metadata TEXT NOT NULL DEFAULT '{}'
+            );
         """)
 
 

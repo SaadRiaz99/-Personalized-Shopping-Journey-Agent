@@ -24,6 +24,13 @@ _tier_config = {"platinum": {"count": 50, "points_range": (5000, 10000), "mult_r
                 "gold": {"count": 100, "points_range": (2000, 5000), "mult_range": (1.5, 2.0)},
                 "silver": {"count": 150, "points_range": (500, 2000), "mult_range": (1.0, 1.5)},
                 "bronze": {"count": 150, "points_range": (0, 500), "mult_range": (0.5, 1.0)}}
+
+TIER_BENEFITS = {
+    "platinum": "PLAT50 coupon (25% off $100+), free shipping, priority support, gift wrap, 2.0x-3.0x points",
+    "gold": "LOYAL20 coupon (20% off $50+), free shipping, birthday reward, double points days, 1.5x-2.0x points",
+    "silver": "Free shipping, early sale access, birthday reward, 1.0x-1.5x points",
+    "bronze": "WELCOME10 coupon (10% off $20+), birthday reward, standard points, 0.5x-1.0x points",
+}
 import random; random.seed(42)
 _names = ["Alice","Bob","Charlie","Diana","Eve","Frank","Grace","Henry","Ivy","Jack","Kate","Leo","Mia","Noah","Olivia","Pete","Quinn","Rose","Sam","Tina","Uma","Vince","Wendy","Xander","Yara","Zack",
           "Aiden","Bella","Carter","Daisy","Eli","Faith","Gabe","Hazel","Ian","Jade","Kai","Luna","Milo","Nora","Owen","Piper","Rex","Sage","Theo","Violet","Wade","Xena","Yuki","Zara",
@@ -118,6 +125,16 @@ Add items to your cart and I will find the best deal for you.
 
 User: "help me"
 You: I can help you save money. Tell me your user ID and cart items, ask about your loyalty tier, or name some items and I will find deals for you. What would you like?
+
+User: "what are my loyalty benefits" (Gold tier)
+Cart: Alice, Gold tier, 3338 points, 1.9x multiplier
+Benefits: LOYAL20 coupon (20% off $50+), free shipping, birthday reward, double points days, 1.5x-2.0x points
+You: Alice, as a Gold member you get LOYAL20 (20% off $50+), free shipping, birthday reward, and double points days. You earn points at 1.9x and have 3338 points.
+
+User: "what perks do I get" (Platinum tier)
+Cart: Bob, Platinum tier, 7721 points, 2.8x multiplier
+Benefits: PLAT50 coupon (25% off $100+), free shipping, priority support, gift wrap, 2.0x-3.0x points
+You: Bob, your Platinum perks include PLAT50 (25% off $100+), free shipping, priority support, gift wrap, and 2.8x points. You have 7721 points.
 
 Now respond to the user below. Follow the patterns above exactly."""
 
@@ -246,10 +263,15 @@ def build_prompt(parsed: dict, data: dict, user_message: str = "") -> dict:
     else:
         lines.append("User: Guest")
 
-    is_loyalty_q = any(w in user_message.lower() for w in ["loyalty", "tier", "level", "points", "status", "member", "rank"])
+    is_loyalty_q = any(w in user_message.lower() for w in ["loyalty", "tier", "level", "points", "status", "member", "rank", "benefits", "perks"])
+    if is_loyalty_q and loyalty and loyalty.get("user"):
+        u = loyalty["user"]
+        benefits = TIER_BENEFITS.get(u["tier"], "")
+        if benefits:
+            lines.append(f"Benefits of {u['tier'].title()} tier: {benefits}")
     if not items:
         if is_loyalty_q and loyalty and loyalty.get("user"):
-            lines.append("\nCart is empty. Answer their loyalty question above. Then mention the cart is empty.")
+            lines.append("\nCart is empty. Answer their loyalty question including the benefits. Then mention the cart is empty.")
         else:
             lines.append("\nCart is empty. Do not list any coupons or deals. Just tell the user their cart is empty.")
     else:
@@ -308,7 +330,7 @@ class DealAgent:
             for f in as_completed(fut):
                 collected[fut[f]] = f.result()
 
-        is_loyalty_query = any(w in user_message.lower() for w in ["loyalty", "tier", "level", "points", "status", "member", "rank", "guest"])
+        is_loyalty_query = any(w in user_message.lower() for w in ["loyalty", "tier", "level", "points", "status", "member", "rank", "guest", "benefits", "perks"])
 
         off_topic_keywords = [
             "poem", "poetry", "weather", "temperature", "forecast", "rain", "sunny",

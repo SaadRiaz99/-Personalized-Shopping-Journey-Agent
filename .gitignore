@@ -12,3 +12,5 @@ node_modules/
 data/
 backend/app/data/
 .vite/
+_commit_build/
+_build_commits.py

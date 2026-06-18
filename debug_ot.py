@@ -1,0 +1,36 @@
+msg = "user_003 what are my cart items"
+off_topic_keywords = [
+    "poem", "poetry", "weather", "temperature", "forecast", "rain", "sunny",
+    "code", "python", "javascript", "java", "rust", "cpp", "program",
+    "cooking", "recipe", "bake", "food", "dinner", "lunch", "breakfast",
+    "movie", "film", "song", "music", "album", "artist",
+    "joke", "funny", "humor", "comedy",
+    "math", "physics", "chemistry", "biology", "history", "geography",
+    "sport", "game", "football", "soccer", "basketball", "tennis",
+    "travel", "hotel", "flight", "vacation", "trip",
+    "health", "doctor", "hospital", "medicine", "exercise", "workout",
+    "how to", "tutorial", "guide", "explain",
+    "hello", "hi", "hey", "how are you", "what is your name",
+    "who made you", "who created you",
+    "meaning of life", "philosophy", "religion",
+    "age", "birthday", "date", "time",
+    "news", "current events", "politics", "election",
+    "vehicle", "driver license",
+    "love", "relationship", "advice",
+    "email", "phone", "address", "contact",
+    "write", "essay", "story", "article",
+    "translate", "language", "spanish", "french",
+    "draw", "art", "design", "photo", "picture",
+    "homework", "assignment", "school", "college", "exam",
+    "salary", "job", "career", "resume", "interview",
+    "stock", "investment", "crypto", "bitcoin",
+    "fact", "did you know", "trivia", "random",
+    "why is", "how does", "what is the", "tell me about",
+    "compare", "difference between",
+    "recommend", "suggestion", "opinion",
+    "think", "believe", "feel about",
+    "will you", "can you", "could you",
+]
+for kw in off_topic_keywords:
+    if kw in msg.lower():
+        print(f"MATCH: '{kw}' in '{msg}'")

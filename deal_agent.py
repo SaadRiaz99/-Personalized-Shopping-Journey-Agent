@@ -68,3 +68,43 @@ COUPONS_DB = [
 ]
 
 NAME_TO_ITEM = {v["name"].lower(): k for k, v in CATALOG.items()}
+
+def query_promotions(min_spend: float | None = None, active_only: bool = True) -> dict:
+    results = [p for p in PROMOTIONS_DB.values() if not active_only or p["active"]]
+    if min_spend is not None:
+        results = [p for p in results if p["min_spend"] <= min_spend]
+    return {"promotions": results, "count": len(results)}
+
+def check_loyalty_tier(user_id: str) -> dict:
+    user = LOYALTY_DB.get(user_id)
+    return {"user": user} if user else {"error": "User not found"}
+
+def optimize_bundles(cart_items: list[str] | None = None) -> dict:
+    if not cart_items:
+        return {"bundles": BUNDLE_DB, "note": "All available bundles"}
+    cart_set = set(cart_items)
+    matches = []
+    for b in BUNDLE_DB:
+        overlap = cart_set & set(b["items"])
+        match_pct = len(overlap) / len(b["items"]) * 100 if b["items"] else 0
+        matches.append({**b, "cart_overlap_pct": round(match_pct, 1)})
+    matches.sort(key=lambda x: x["cart_overlap_pct"], reverse=True)
+    return {"bundles": matches}
+
+def apply_coupons(user_id: str, subtotal: float) -> dict:
+    user = LOYALTY_DB.get(user_id)
+    user_tier = user["tier"] if user else "bronze"
+    valid = []
+    for c in COUPONS_DB:
+        if c["used"] >= c["max_uses"]:
+            continue
+        if subtotal < c["min_spend"]:
+            continue
+        min_tier = c.get("min_tier", "bronze")
+        tier_rank = {"bronze": 0, "silver": 1, "gold": 2, "platinum": 3}
+        if tier_rank.get(user_tier, 0) < tier_rank.get(min_tier, 0):
+            continue
+        valid.append(c)
+    valid.sort(key=lambda x: x["value"], reverse=True)
+    return {"available_coupons": valid, "count": len(valid)}
+

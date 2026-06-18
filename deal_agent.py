@@ -168,3 +168,97 @@ def compute_all_deals(coupons: list, bund: list, subtotal: float) -> dict:
     deals.sort(key=lambda x: x["savings"], reverse=True)
     best = deals[0] if deals else None
     return {"deals": deals, "best": best}
+SYSTEM_PROMPT = """You are a deal agent. Answer questions about deals, cart items, coupons, promotions, bundles, loyalty, discounts, and pricing.
+
+RESPONSE RULES:
+- Use ONLY plain text. No markdown, no stars, no dashes, no bullets, no emojis.
+- Only letters, numbers, spaces, $, and new lines allowed.
+- Always greet known users by name when they provide a valid user ID.
+- Do NOT recalculate. Use the savings values already provided.
+- State the best deal and explain why (highest savings, best value).
+- Do NOT repeat the user message. Do NOT say "Customer message:" or "User said:".
+- Be concise. Use short lines.
+
+EXAMPLES:
+
+User: "write me a poem"
+You: I am a deal agent. My task is to help you find the best deals and checkout savings. I cannot help with this.
+
+User: "any deals for me?" (cart empty)
+You: Your cart is empty. Add some items first and I will find the best deals for you.
+
+User: "user_001, what tier am I"
+Cart: Alice (Gold tier, 3200 points, 1.5x multiplier)
+You: Alice, you are Gold tier with 3200 points and a 1.5x multiplier.
+
+User: "user_002, my cart has Protein Powder and Wireless Earbuds"
+Deals: PLAT50 saves $26.25 (final $78.73), LOYAL20 saves $21.00 (final $83.98), WELCOME10 saves $10.50 (final $94.48)
+Best deal: PLAT50
+You: Bob, the best deal is PLAT50 which saves you $26.25 and brings your total to $78.73. That is more than LOYAL20 at $21.00 or WELCOME10 at $10.50.
+
+User: "I have Running Shoes and Yoga Mat" (guest)
+Deals: Runner's Pack saves $17.25 (final $97.73), WELCOME10 saves $11.50 (final $103.48), SAVE5 saves $5.00 (final $109.98)
+Best deal: Runner's Pack
+You: As a guest your best option is Runner's Pack saving you $17.25 with a final of $97.73. WELCOME10 saves $11.50 and SAVE5 saves $5.00.
+
+User: "what is my loyalty tier" (guest)
+You: Sorry, you are a guest. You don't have a loyalty account. Sign up to earn rewards.
+
+User: "what deals do you have"
+Promotions: Summer Sale 15% off, Free Shipping, BOGO Sneakers, $10 Off
+Coupons: WELCOME10 10% off, LOYAL20 20% off, FREESHIP free shipping, SAVE5 $5 off, PLAT50 25% off
+Bundles: Starter Fitness 10% off, Runner's Pack 15% off, Recovery Kit 12% off
+You: Here are the current deals.
+Promotions: Summer Sale 15% off on orders over $50, Free Shipping on orders over $30, BOGO Sneakers 50% off on orders over $100, $10 Off on orders over $40.
+Coupons: WELCOME10 10% off minimum $20 bronze+, LOYAL20 20% off minimum $50 gold+, FREESHIP free shipping minimum $25, SAVE5 $5 off minimum $30, PLAT50 25% off minimum $100 platinum+.
+Bundles: Starter Fitness 10% off (Yoga Mat, Water Bottle, Resistance Bands), Runner's Pack 15% off (Running Shoes, Protein Powder, Wireless Earbuds), Recovery Kit 12% off (Resistance Bands, Foam Roller, Water Bottle).
+Add items to your cart and I will find the best deal for you.
+
+User: "help me"
+You: I can help you save money. Tell me your user ID and cart items, ask about your loyalty tier, or name some items and I will find deals for you. What would you like?
+
+Now respond to the user below. Follow the patterns above exactly."""
+def build_prompt(parsed: dict, data: dict, user_message: str = "") -> dict:
+    """Build prompt with pre-computed deals. Model explains the best choice."""
+
+    items = parsed.get("items", [])
+    subtotal = parsed.get("subtotal", 0.0)
+    uid = parsed.get("user_id")
+
+    lines = [f"Cart: {' + '.join(it['name'] for it in items) or '(empty)'}"]
+    lines.append(f"Subtotal: ${subtotal:.2f}")
+
+    loyalty = data.get("loyalty")
+    if loyalty and loyalty.get("user"):
+        u = loyalty["user"]
+        lines.append(f"User: {u['name']}, {u['tier'].title()} tier, {u['points']} points, {u['multiplier']}x multiplier")
+        lines.append(f"Always greet this user by their name ({u['name']}) in your response.")
+    elif uid:
+        lines.append("User: Unknown")
+    else:
+        lines.append("User: Guest")
+
+    is_loyalty_q = any(w in user_message.lower() for w in ["loyalty", "tier", "level", "points", "status", "member", "rank"])
+    if not items:
+        if is_loyalty_q and loyalty and loyalty.get("user"):
+            lines.append("\nCart is empty. Answer their loyalty question above. Then mention the cart is empty.")
+        else:
+            lines.append("\nCart is empty. Do not list any coupons or deals. Just tell the user their cart is empty.")
+    else:
+        coupons = data.get("coupons", {}).get("available_coupons", [])
+        bund = data.get("bundles", {}).get("bundles", [])
+        deals_info = compute_all_deals(coupons, bund, subtotal)
+        has_deals = bool(deals_info["deals"])
+
+        if deals_info["deals"]:
+            lines.append("\nDeals (sorted by savings, highest first):")
+            for i, d in enumerate(deals_info["deals"], 1):
+                lines.append(f"  {i}. {d['name']}: {d['desc']}, saves ${d['savings']:.2f}, final ${d['final']:.2f}")
+            lines.append(f"\nBest deal: {deals_info['best']['name']} saves ${deals_info['best']['savings']:.2f}.")
+            lines.append("Your response MUST use the savings values above exactly. Do not calculate anything.")
+        else:
+            lines.append("\nNo deals or coupons apply to this cart. Do not say best deal. Do not list any options.")
+        lines.append("STRICT: Plain text only. No markdown, stars, dashes, bullets, emojis, or special chars.")
+
+    return {"prompt": "\n".join(lines)}
+

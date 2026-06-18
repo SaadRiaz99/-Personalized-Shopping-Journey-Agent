@@ -144,3 +144,27 @@ def parse_user_message(msg: str) -> dict:
     info["subtotal"] = round(sum(CATALOG[i]["price"] for i in found_items), 2)
     return info
 
+
+def format_currency(amount: float) -> str:
+    return f"${amount:.2f}"
+
+
+def compute_all_deals(coupons: list, bund: list, subtotal: float) -> dict:
+    """Pre-compute all deal savings. Returns sorted list + best deal."""
+    deals = []
+    for c in coupons:
+        if c["type"] == "free_shipping":
+            continue
+        if c["type"] == "percent_off":
+            sav = round(subtotal * c["value"] / 100, 2)
+            deals.append({"name": c["code"], "savings": sav, "final": round(subtotal - sav, 2), "desc": f"{c['value']}% off"})
+        elif c["type"] == "flat_off":
+            sav = min(float(c["value"]), subtotal)
+            deals.append({"name": c["code"], "savings": sav, "final": round(subtotal - sav, 2), "desc": f"${c['value']} off"})
+    for b in bund:
+        if b.get("cart_overlap_pct", 0) > 0:
+            sav = round(subtotal * b["discount"] / 100, 2)
+            deals.append({"name": b["name"], "savings": sav, "final": round(subtotal - sav, 2), "desc": f"{b['discount']}% off"})
+    deals.sort(key=lambda x: x["savings"], reverse=True)
+    best = deals[0] if deals else None
+    return {"deals": deals, "best": best}

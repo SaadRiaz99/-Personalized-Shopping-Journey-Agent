@@ -108,3 +108,39 @@ def apply_coupons(user_id: str, subtotal: float) -> dict:
     valid.sort(key=lambda x: x["value"], reverse=True)
     return {"available_coupons": valid, "count": len(valid)}
 
+NAME_TO_USER = {v["name"].lower(): k for k, v in LOYALTY_DB.items()}
+def parse_user_message(msg: str) -> dict:
+    info: dict[str, Any] = {"user_id": None, "name": None, "name_mentioned": False, "invalid_user_id": False, "cart_item_ids": [], "items": [], "subtotal": 0.0}
+    msg_lower = msg.lower()
+
+    # Detect user ID attempt: user_XXX, user XXX, or userXXX
+    uid_attempt = re.search(r'user_\w+|\buser \d+|\buser\d{3}\b', msg_lower)
+    if uid_attempt:
+        uid_raw = uid_attempt.group(0)
+        uid = uid_raw.replace(" ", "_")
+        info["user_id"] = uid
+        valid_format = bool(re.match(r'user_\d{3}$', uid))
+        if valid_format:
+            num = int(uid.split("_")[1])
+            if num < 1 or num > 450:
+                info["invalid_user_id"] = True
+            elif uid in LOYALTY_DB:
+                info["name"] = LOYALTY_DB[uid]["name"]
+        else:
+            info["invalid_user_id"] = True
+    for name, uid in NAME_TO_USER.items():
+        if name in msg_lower:
+            info["name_mentioned"] = True
+            if not info["user_id"]:
+                info["user_id"] = uid
+                info["name"] = LOYALTY_DB[uid]["name"]
+            break
+    found_items = []
+    for name, item_id in NAME_TO_ITEM.items():
+        if name in msg_lower:
+            found_items.append(item_id)
+    info["cart_item_ids"] = found_items
+    info["items"] = [CATALOG[i] for i in found_items]
+    info["subtotal"] = round(sum(CATALOG[i]["price"] for i in found_items), 2)
+    return info
+

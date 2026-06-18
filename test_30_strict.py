@@ -29,11 +29,11 @@ tests = [
     ("user_001 Running Shoes Protein Powder Wireless Earbuds", ["Alice", "PLAT50"]),
     ("user_050 Yoga Mat Water Bottle Resistance Bands", ["Zara", "Recovery Kit"]),
     ("user_450 Running Shoes", ["Zion", "Runner's Pack"]),
-    # 7-9: Name only (no user ID)
-    ("my name is Alice what tier", ["Alice", "Gold"]),
-    ("my name is Zara am I platinum", ["Zara", "Gold"]),
-    ("my name is Zion what is my tier", ["Zion"]),
-    # 10-12: Loyalty queries
+    # 7-9: Name-only requires user ID
+    ("my name is Alice what tier", ["provide your user ID"]),
+    ("my name is Zara am I platinum", ["provide your user ID"]),
+    ("my name is Zion what is my tier", ["provide your user ID"]),
+    # 10-12: Valid user ID loyalty queries
     ("user_002 what tier", ["Bob", "Platinum"]),
     ("user_003 check my points", ["Charlie"]),
     ("user_004 what is my loyalty", ["Diana"]),
@@ -60,10 +60,11 @@ tests = [
     ("I have Running Shoes and Yoga Mat get deals", ["Runner's Pack"]),
     # 27: User asking about cart items (was false-positive off-topic)
     ("user_003 what are my cart items", ["cart is empty"]),
-    # 28-30: Edge cases
+    # 28-31: Edge cases
     ("how old are you", ["deal agent"]),
     ("help me", ["help"]),
     ("what can you do for me", ["help you save money"]),
+    ("user_001 what are my loyalty benefits", ["Alice", "Platinum"]),
 ]
 
 passed = failed = 0

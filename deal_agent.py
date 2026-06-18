@@ -204,9 +204,6 @@ def parse_user_message(msg: str) -> dict:
     for name, uid in NAME_TO_USER.items():
         if name in msg_lower:
             info["name_mentioned"] = True
-            if not info["user_id"]:
-                info["user_id"] = uid
-                info["name"] = LOYALTY_DB[uid]["name"]
             break
     found_items = []
     for name, item_id in NAME_TO_ITEM.items():
@@ -263,7 +260,7 @@ def build_prompt(parsed: dict, data: dict, user_message: str = "") -> dict:
     else:
         lines.append("User: Guest")
 
-    is_loyalty_q = any(w in user_message.lower() for w in ["loyalty", "tier", "level", "points", "status", "member", "rank", "benefits", "perks"])
+    is_loyalty_q = any(w in user_message.lower() for w in ["loyalty", "tier", "level", "points", "status", "member", "rank", "benefits", "perks", "bronze", "silver", "gold", "platinum"])
     if is_loyalty_q and loyalty and loyalty.get("user"):
         u = loyalty["user"]
         benefits = TIER_BENEFITS.get(u["tier"], "")
@@ -330,7 +327,7 @@ class DealAgent:
             for f in as_completed(fut):
                 collected[fut[f]] = f.result()
 
-        is_loyalty_query = any(w in user_message.lower() for w in ["loyalty", "tier", "level", "points", "status", "member", "rank", "guest", "benefits", "perks"])
+        is_loyalty_query = any(w in user_message.lower() for w in ["loyalty", "tier", "level", "points", "status", "member", "rank", "guest", "benefits", "perks", "bronze", "silver", "gold", "platinum"])
 
         off_topic_keywords = [
             "poem", "poetry", "weather", "temperature", "forecast", "rain", "sunny",
@@ -370,6 +367,9 @@ class DealAgent:
         msg_lower = user_message.lower()
         if re.search(r'\b(image|\.png|\.jpg|\.jpeg|\.gif|\.svg|\.webp)\b', msg_lower) or 'cannot read' in msg_lower:
             prompt = f"User: \"{user_message}\". They referenced an image file. This model only supports text. Say exactly: \"I can only process text. Please describe your cart or question in words.\" Do not add anything else."
+            suppress_cards = True
+        elif is_loyalty_query and not uid:
+            prompt = f"User: \"{user_message}\". They want to know about loyalty but did not provide a user ID. Say exactly: \"Please provide your user ID (e.g., user_001, user_002) to check your loyalty status.\" Do not add anything else."
             suppress_cards = True
         elif parsed["invalid_user_id"]:
             prompt = f"User: \"{user_message}\". They provided a user ID that does not exist. Say exactly: \"Please provide a valid user ID (e.g., user_001, user_002, user_003, user_004).\" Do not add anything else."

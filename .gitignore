@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+*.exe
+*.bat
+*.log
+*.txt
+*.json
+dist/
+node_modules/
+.env
+data/
+backend/app/data/
+.vite/

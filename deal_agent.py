@@ -297,11 +297,8 @@ class DealAgent:
         self.model = model
         self.client = OpenAI(api_key=api_key, base_url=base_url) if base_url else None
 
-    def run(self, user_message: str, accumulated_cart: dict | None = None, history: list | None = None, cart_confirm: bool = False) -> dict:
+    def run(self, user_message: str, accumulated_cart: dict | None = None, history: list | None = None) -> dict:
         parsed = parse_user_message(user_message)
-
-        # Items mentioned in this message (before accumulated merge)
-        user_items = list(parsed["cart_item_ids"])
 
         if accumulated_cart:
             existing_ids = set(parsed["cart_item_ids"])
@@ -401,14 +398,6 @@ class DealAgent:
             prompt = f"User: \"{user_message}\". Say exactly: \"I can help you save money. Tell me your user ID and cart items, ask about your loyalty tier, or name some items and I will find deals for you. What would you like?\""
         elif is_off_topic:
             prompt = f"User: \"{user_message}\". Say exactly: \"I am a deal agent. My task is to help you find the best deals and checkout savings. I cannot help with this.\" Do not add anything else."
-            suppress_cards = True
-        elif user_items and not cart_confirm:
-            item_details = [CATALOG[i] for i in user_items]
-            parts = ["%s ($%.2f)" % (it["name"], it["price"]) for it in item_details]
-            items_str = " + ".join(it["name"] for it in item_details)
-            total = sum(it["price"] for it in item_details)
-            detail = " + ".join(parts)
-            prompt = 'User: "%s". They listed cart items: %s. Total: $%.2f. Say exactly: "I see %s in your cart. Total $%.2f. Is that correct?" Do not add anything else.' % (user_message, detail, total, items_str, total)
             suppress_cards = True
         else:
             result_data = build_prompt(parsed, collected, user_message)

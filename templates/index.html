@@ -455,10 +455,10 @@
           <label>User</label>
           <select id="userSelect" class="select-styled">
             <option value="">— Guest —</option>
-            <option value="user_001">Alice (Gold)</option>
+            <option value="user_001">Alice (Platinum)</option>
             <option value="user_002">Bob (Platinum)</option>
             <option value="user_003">Charlie (Silver)</option>
-            <option value="user_004">Diana (Bronze)</option>
+            <option value="user_004">Diana (Silver)</option>
           </select>
         </div>
         <div class="select-group" style="margin-top:8px">
@@ -506,6 +506,7 @@
       </div>
       <div class="input-bar">
         <div class="input-wrap">
+          <label for="chatInput" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Chat input</label>
           <textarea id="chatInput" placeholder="Ask about deals, loyalty, or your cart..." rows="1" autofocus></textarea>
         </div>
         <button class="btn-send" id="sendBtn" onclick="sendMessage()">

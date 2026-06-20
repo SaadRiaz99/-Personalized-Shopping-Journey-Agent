@@ -36,7 +36,7 @@ _names = ["Alice","Bob","Charlie","Diana","Eve","Frank","Grace","Henry","Ivy","J
           "Aiden","Bella","Carter","Daisy","Eli","Faith","Gabe","Hazel","Ian","Jade","Kai","Luna","Milo","Nora","Owen","Piper","Rex","Sage","Theo","Violet","Wade","Xena","Yuki","Zara",
           "Adam","Beth","Cole","Drew","Elle","Finn","Gia","Hank","Iris","Jake","Kara","Liam","Maya","Nash","Olive","Paul","Raya","Seth","Tess","Uriel","Vera","Wyatt","Xia","Yves","Zion",
           "Aria","Blake","Cora","Duke","Eden","Finnick","Gemma","Hugo","Isla","Jude","Kira","Luke","Maeve","Nick","Opal","Pace","Romy","Shane","Tori","Ulric","Vega","Wren","Xiomara","Yosef","Zuri",
-          "Alec","Brie","Cade","Demi","Ewan","Faye","Gino","Hana","Ivan","Juno","Kurt","Lana","Mack","Nina","Ozzy","Pia","Rico","Suki","Troy","Una","Vic","Wylie","Xylo","Yara","Zeke"]
+          "Alec","Brie","Cade","Demi","Ewan","Faye","Gino","Hana","Ivan","Juno","Kurt","Lana","Mack","Nina","Ozzy","Pia","Rico","Suki","Troy","Una","Vic","Wylie","Xylo","Zoya","Zeke"]
 _tiers_order = []
 for t, c in _tier_config.items():
     _tiers_order.extend([t] * c["count"])
@@ -224,8 +224,8 @@ def compute_all_deals(coupons: list, bund: list, subtotal: float) -> dict:
     deals = []
     for c in coupons:
         if c["type"] == "free_shipping":
-            continue
-        if c["type"] == "percent_off":
+            deals.append({"name": c["code"], "savings": 0.0, "final": subtotal, "desc": "free shipping"})
+        elif c["type"] == "percent_off":
             sav = round(subtotal * c["value"] / 100, 2)
             deals.append({"name": c["code"], "savings": sav, "final": round(subtotal - sav, 2), "desc": f"{c['value']}% off"})
         elif c["type"] == "flat_off":
@@ -315,7 +315,7 @@ class DealAgent:
 
         tasks = []
         tasks.append(("promotions", lambda: query_promotions(subtotal or None)))
-        tasks.append(("bundles", lambda: optimize_bundles(item_ids or None)))
+        tasks.append(("bundles", lambda: optimize_bundles(item_ids)))
         if uid and not parsed["invalid_user_id"]:
             tasks.append(("loyalty", lambda: check_loyalty_tier(uid)))
             tasks.append(("coupons", lambda: apply_coupons(uid, subtotal)))
@@ -331,15 +331,15 @@ class DealAgent:
 
         off_topic_keywords = [
             "poem", "poetry", "weather", "temperature", "forecast", "rain", "sunny",
-            "code", "python", "javascript", "java", "rust", "cpp", "program",
-            "cooking", "recipe", "bake", "food", "dinner", "lunch", "breakfast",
+            "code", "python", "javascript", "java", "rust", "cpp",
+            "cooking", "recipe", "bake", "dinner", "lunch", "breakfast",
             "movie", "film", "song", "music", "album", "artist",
             "joke", "funny", "humor", "comedy",
-            "math", "physics", "chemistry", "biology", "history", "geography",
-            "sport", "game", "football", "soccer", "basketball", "tennis",
+            "math", "physics", "chemistry", "biology",
+            "football", "soccer", "basketball", "tennis",
             "travel", "hotel", "flight", "vacation", "trip",
-            "health", "doctor", "hospital", "medicine", "exercise", "workout",
-            "how to", "tutorial", "guide", "explain",
+            "doctor", "hospital", "medicine",
+            "how to", "tutorial", "guide",
             "hello", "hi", "hey", "how are you", "what is your name",
             "who made you", "who created you",
             "meaning of life", "philosophy", "religion",
@@ -355,11 +355,6 @@ class DealAgent:
             "salary", "job", "career", "resume", "interview",
             "stock", "investment", "crypto", "bitcoin",
             "fact", "did you know", "trivia", "random",
-            "why is", "how does", "what is the", "tell me about",
-            "compare", "difference between",
-            "recommend", "suggestion", "opinion",
-            "think", "believe", "feel about",
-            "will you", "can you", "could you",
         ]
         is_off_topic = not parsed["items"] and not is_loyalty_query and any(w in user_message.lower() for w in off_topic_keywords)
 

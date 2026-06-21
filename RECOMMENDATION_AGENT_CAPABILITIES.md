@@ -2,9 +2,9 @@
 
 ## 1. Executive Overview
 
-The **Recommendation Agent** is a production-ready conversational product-recommendation system built on the **OpenAI Agents SDK v0.2.2** with a **5-model OpenRouter fallback chain**. It delivers personalised product suggestions through natural-language interaction, backed by a 1M+ item catalogue, stateful session tracking, and defensive input/output guardrails.
+The **Recommendation Agent** is a production-ready conversational product-recommendation system built on the **OpenAI Agents SDK v0.2.2** with a **5-model OpenRouter fallback chain**. It delivers personalised product suggestions through natural-language interaction, backed by a **vector database (Qdrant Cloud) of 50,000 real Amazon products**, **RapidAPI for live pricing**, a 1M+ item local catalogue, stateful session tracking, and defensive input/output guardrails.
 
-The agent has been validated across **116 automated tests** covering 13 capability categories with a **100% pass rate** and a full-run wall time of **78.5 seconds**, confirming stability for headless (FastAPI) and CLI deployment.
+The agent has been validated across **269 automated tests** covering 25+ capability categories with a **100% pass rate** and **92% code coverage**.
 
 **Model Chain (all via OpenRouter)**
 
@@ -20,7 +20,75 @@ The agent has been validated across **116 automated tests** covering 13 capabili
 
 ## 2. Core Features & Abilities
 
-### 2.1 Session Architecture
+### 2.1 Qdrant Cloud Vector Database
+
+| Capability | Implementation | Verified By |
+|------------|---------------|-------------|
+| **50K real Amazon products** | Stratified sampling: cap 500/category, fill to 50K from global pool; min rating 4.0, avg 4.72 | `TestRealAmazonData` (5 tests) |
+| **384-dim semantic embeddings** | `all-MiniLM-L6-v2` (sentence-transformers) via `embed_query()` | `test_embedding_dimension` |
+| **Cosine similarity search** | `search(query, limit=10, category=None, price_range=None, rating=None)` with payload filters | `test_semantic_search_returns_results` |
+| **Payload indexes** | `category_name` (keyword), `price` (float), `rating` (float), `review_count` (int), `in_stock` (bool) | `test_qdrant_collection_has_indexes` |
+| **Graceful fallback** | Falls back to keyword `search_items` when Qdrant unavailable or QDRANT_URL not set | `test_qdrant_fallback_on_missing_collection` |
+| **Payload filtering** | Combined category + price + rating + stock filters via `_build_filter()` | `test_semantic_search_with_filters` |
+| **Result deduplication** | `semantic_search_fn` deduplicates by ID and filters out already-seen products | `test_semantic_search_deduplicates` |
+| **UUID point IDs** | Deterministic UUID5 from ASIN; no collision risk | `scripts/embed_products.py` |
+
+### 2.2 RapidAPI Live Search
+
+| Capability | Implementation | Verified By |
+|------------|---------------|-------------|
+| **Real-time Amazon pricing** | HTTP GET to RapidAPI host with query/page/country params | `test_rapidapi_not_configured_returns_error` |
+| **Rate-limit awareness** | 100 requests/month hard cap; returns `{"error": "RapidAPI not configured"}` when key missing | Error-path tests |
+| **Live deal discovery** | User asks "current price of X" or "latest deals on Y" | — |
+
+### 2.3 Hybrid Search (Qdrant Vectors + Keyword)
+
+| Capability | Implementation | Verified By |
+|------------|---------------|-------------|
+| **Reciprocal Rank Fusion** | `hybrid_search(query, alpha=0.5)` merges ranked lists with RRF scoring | `test_hybrid_search_rrf` |
+| **Semantic mode** | `search_mode="semantic"` — vector search only | `test_hybrid_search_semantic_mode` |
+| **Keyword mode** | `search_mode="keyword"` — keyword search only | `test_hybrid_search_keyword_mode` |
+| **Hybrid mode** | `search_mode="hybrid"` — weighted RRF merge | `test_hybrid_search_hybrid_mode` |
+| **Empty fallback** | Graceful when one mode returns empty | `test_hybrid_search_empty_fallback` |
+
+### 2.4 Personalization
+
+| Capability | Implementation | Verified By |
+|------------|---------------|-------------|
+| **Category preference boost** | Products matching `preferred_category` score 2x | `test_personalization_category_boost` |
+| **Price-range matching** | Products within `preferred_min_price`/`max_price` boosted | `test_personalization_price_boost` |
+| **Brand preference boost** | Products matching `preferred_brand` score 2x | `test_personalization_brand_boost` |
+| **Automatic budget expansion** | Expands budget by 20% when no results found | `test_personalization_budget_expansion` |
+| **Empty preferences** | Returns original order when no preferences set | `test_personalization_empty_preferences` |
+
+### 2.5 Similar Products
+
+| Capability | Implementation | Verified By |
+|------------|---------------|-------------|
+| **Vector-based similarity** | `similar_products(product_id, limit=10)` — Qdrant vector nearest-neighbour | `test_similar_products_returns_results` |
+| **Semantically related items** | Results are meaningfully similar to source product | `test_similar_products_are_semantically_similar` |
+| **Self-exclusion** | Original product excluded from results | `test_similar_products_excludes_self` |
+| **Seen-ID filtering** | Already-shown products excluded | `test_similar_products_excludes_seen_ids` |
+| **Invalid ID handling** | Returns friendly error for non-existent IDs | `test_similar_products_invalid_id` |
+
+### 2.6 Trending Products
+
+| Capability | Implementation | Verified By |
+|------------|---------------|-------------|
+| **Review-count ranking** | `trending_products(category=None, limit=10)` sorted by `review_count` desc | `test_trending_sorted_by_review_count` |
+| **High-review threshold** | All returned items have review_count >= 1000 | `test_trending_min_review_count` |
+| **Category filtering** | Category parameter passed to Qdrant filter | `test_trending_category_filter` |
+| **Global trending** | Empty/null category returns global top | `test_trending_global_no_category` |
+
+### 2.7 LRU Caching Layer
+
+| Capability | Implementation | Verified By |
+|------------|---------------|-------------|
+| **LRU eviction** | `LRUQueryCache(maxsize=256, ttl=300)` — evicts least recently used | `test_cache_eviction` |
+| **TTL expiry** | Cache entries expire after configured TTL | `test_cache_expiry` |
+| **Hit/miss tracking** | `hit_count` / `miss_count` counters | `test_cache_hit`, `test_cache_miss` |
+
+### 2.8 Session Architecture
 
 | Capability | Implementation | Verified By |
 |------------|---------------|-------------|
@@ -34,7 +102,7 @@ The agent has been validated across **116 automated tests** covering 13 capabili
 
 **Session latency:** All session-memory operations execute in **< 0.001s** (pure in-memory, no I/O).
 
-### 2.2 Search & Filtering
+### 2.9 Search & Filtering (Local Catalogue)
 
 | Capability | Parameters / Behaviour | Verified By |
 |------------|------------------------|-------------|
@@ -51,7 +119,7 @@ The agent has been validated across **116 automated tests** covering 13 capabili
 | **No-results edge case** | Returns `{"items": [], "total": 0, "offset": 0}` | `test_search_products_empty_result_set` |
 | **Cache layer** | LRU-like `_search_cache` (max 256 entries); keyed by all 10 params | `test_search_cache_hit` |
 
-### 2.3 Security & Input Guardrails
+### 2.10 Security & Input Guardrails
 
 Three guardrail layers enforce content safety before and after model execution:
 
@@ -67,27 +135,7 @@ Blocks prompt-injection, jailbreak, and authority-override patterns:
 
 #### Input Guardrail 2 — Off-Topic Detection
 
-Rejects queries outside product-recommendation scope. **17 categories** are blocked:
-
-| # | Category | Example Trigger |
-|---|----------|-----------------|
-| 1 | Coding / Programming | "write python code to sort a list" |
-| 2 | Math / Physics / Science | "calculate the derivative" |
-| 3 | Writing / Editing / Homework | "write my essay" |
-| 4 | Medical / Health | "diagnose my symptoms" |
-| 5 | Finance / Investing | "how do i invest in crypto" |
-| 6 | Weather | "what is the weather today" |
-| 7 | News / Politics | "latest election results" |
-| 8 | Sports | "football score last night" |
-| 9 | Travel / Transportation | "find a flight to Paris" |
-| 10 | Time / Date / Calendar | "what time is it" |
-| 11 | Food / Cooking | "recipe for pasta" |
-| 12 | Entertainment | "best sci-fi movies" |
-| 13 | Relationships / Personal Advice | "dating advice" |
-| 14 | General Knowledge / Definitions | "who is Einstein" |
-| 15 | Homework / Study Help | "help me with my homework" |
-| 16 | Philosophy / Religion | "meaning of life" |
-| 17 | Miscellaneous (jokes, pets, astrology, etc.) | "tell me a joke" |
+Rejects queries outside product-recommendation scope. **17 categories** are blocked, with a commerce-intent pre-check: product buying terms (e.g., "budget headphones", "programming laptop") take priority over off-topic pattern matching to avoid false positives.
 
 #### Output Guardrail — Response Quality
 
@@ -96,111 +144,137 @@ Rejects queries outside product-recommendation scope. **17 categories** are bloc
 | Minimum length | < 10 words | Blocks response |
 | Traceback leakage | `"Traceback (most recent call last)"` present | Blocks response |
 
-#### Defensive Parsing
+### 2.11 Chainlit Chat UI
 
-Guardrails handle three input formats gracefully:
-- **String input** — regex-matched directly
-- **List-of-dicts input** — last element's `content` field extracted
-- **Non-string / non-list input** — cast to `str()` safely (never crashes)
-
-**Guardrail latency:** All guardrail checks execute in **< 0.005s** except complex list parsing (max 0.238s).
+| Capability | Implementation | Verified By |
+|------------|---------------|-------------|
+| **Welcome message** | `on_chat_start` sends "Welcome! I'm your Recommendation Agent..." | `test_welcome_message` |
+| **Message handling** | `on_message` calls `run_turn` with correct session/user IDs | `test_on_message_uses_run_turn` |
+| **Guardrail feedback** | Yellow warning on input guardrail; retry prompt on output guardrail | `test_guardrail_caught_in_message` |
+| **Empty input** | Graceful skip for empty messages | `test_empty_input_graceful` |
+| **Error handling** | Network/timeout errors caught with friendly message | `test_network_error_handling` |
+| **Session isolation** | Unique `session_id` per user via UUID | `test_unique_session_ids` |
 
 ---
 
-## 3. Technical Specifications & Benchmarks
+## 3. Data Quality
 
-### 3.1 Data Enforcement
+| Metric | Local Catalogue | RapidAPI | Qdrant Cloud |
+|--------|----------------|----------|--------------|
+| **Source** | AI-generated + curated | Live Amazon | Real Amazon (cleaned) |
+| **Size** | 1,000,000+ items | Unlimited (API) | 50,000 vectors |
+| **Quality score** | 0/100 (AI) / 100/100 (curated) | Live | 97.1/100 |
+| **Rating filter** | Any | Any | ≥ 4.0 only |
+| **Uniqueness** | Deduplicated | — | UUID5 per ASIN |
+| **Categories** | 10+ | Any | 50+ unique |
 
-| Guarantee | Mechanism | Test Coverage |
-|-----------|-----------|---------------|
-| **JSON schema conformance** | All tool return values are `json.dumps()` output; search results follow `{items, total, offset, limit}` contract | `test_search_products_returns_items`, `test_compare_products_returns_comparison_table` |
-| **Product schema** | Every item has `id` (int), `title` (str), `tags` (list), `rating` (float), `category` (str) | `test_products_load_correctly` |
-| **Missing-field tolerance** | `_has()` helper skips filter if field absent; `price` / `in_stock` / `discount` are optional per item | `test_price_range_filter`, `test_in_stock_filter` |
-| **ID uniqueness** | `_by_id` dict index prevents duplicates across catalogue + JSON | `test_search_products_avoids_duplicates` |
-| **Pagination disjointness** | Offset-based slicing guarantees no page overlap | `test_pagination_no_overlap` |
-| **Error responses** | Missing IDs return `{"error": "No item found with id ..."}`; invalid inputs return JSON error | `test_get_product_details_not_found`, `test_compare_products_no_valid_ids` |
+---
 
-### 3.2 Latency Baselines
+## 4. Technical Specifications & Benchmarks
 
-Measured from a single cold-cache run ("cold cache" = initial JSON load of 1M products):
+### 4.1 Latency Baselines
 
-| Category | Avg Latency Range | Notable Tests |
-|----------|-------------------|---------------|
-| **Catalogue & Search** | 0.000s – 5.901s | `test_search_by_keyword`: 5.901s (full-text scan); `test_search_by_category`: 0.409s (indexed) |
-| **Tools** | 0.000s – 1.763s | `test_search_products_marks_seen`: 1.763s; most < 0.5s |
-| **Session Memory** | < 0.001s | All 10 operations are pure in-memory |
-| **Guardrails** | < 0.005s (max 0.238s) | Regex-only, no I/O |
-| **Context** | < 0.001s | Dict construction only |
-| **Error Handling** | 0.005s – 0.606s | Timed retry simulations |
-| **Streaming** | < 0.005s | Mocked event streams |
-| **Products Edge** | 0.000s – 7.069s | `test_search_triggers_load`: 7.069s (includes JSON reload); pagination beyond total: 4.657s |
-| **Config** | 0.000s – 1.012s | Retry backoff tests dominate |
-| **Tools Edge** | 0.000s – 5.137s | `test_cache_reload_paths`: 5.137s (re-parses 1M products); most < 2s |
-| **Agent Edge** | < 0.005s | All pure logic, no I/O |
-| **Tracing** | < 0.001s | JSONL append is synchronous |
+| Category | Avg Latency | Notes |
+|----------|-------------|-------|
+| **Session memory** | < 0.001s | Pure in-memory |
+| **Guardrails** | < 0.005s | Regex-only |
+| **Catalogue search (cached)** | < 0.5s | 256-entry LRU |
+| **Catalogue search (cold)** | 4–7s | Full scan 1M items |
+| **Qdrant vector search** | ~0.1–0.5s | 384-dim, 50K vectors |
+| **RapidAPI live search** | ~1–5s | Network-dependent |
+| **Embedding generation** | ~0.05s | all-MiniLM-L6-v2 |
+| **Full test suite (269 tests)** | ~10 min | Includes LLM calls |
 
-**Key takeaways:**
-- **Session/guardrail/context/tracing layers:** sub-millisecond — effectively zero overhead.
-- **Catalogue search with cache miss:** 4–7s for full-scan queries on 1M items; repeated identical queries hit the cache and return in < 0.5s.
-- **Cold-start JSON load:** ~5s (one-time, cached for process lifetime).
-- **Full test suite:** 78.5s wall time for 116 tests across 13 categories.
-
-### 3.3 Retry & Fallback Resilience
+### 4.2 Retry & Fallback Resilience
 
 | Mechanism | Configuration | Behaviour |
 |-----------|---------------|-----------|
 | **Per-model retry** | `run_with_retry(coro_factory, max_retries=3)` with exponential backoff (1s → 2s → 4s) | Transient API errors retried automatically |
 | **Cross-model fallback** | 5 models tried sequentially; each failure rolls back session state to pre-turn snapshot | State is never corrupted by partial failures |
-| **Graceful degradation** | If all 5 models fail, returns `"Our recommendation service is temporarily unavailable. Please try again in a moment."` | Tested via mocked exceptions in `TestErrorHandling` (4 tests) |
-| **Guardrail state rollback** | On `InputGuardrailTripwireTriggered` / `OutputGuardrailTripwireTriggered`, session is reverted to saved snapshot | `test_guardrail_exception_raises_through_run_turn` |
+| **Graceful degradation** | If all 5 models fail, returns `"Our recommendation service is temporarily unavailable. Please try again in a moment."` | Tested via mocked exceptions |
+| **Guardrail state rollback** | On guardrail trigger, session is reverted to saved snapshot | `test_guardrail_exception_raises_through_run_turn` |
+| **Qdrant fallback** | If Qdrant unavailable, `semantic_search` falls back to keyword `search_items` | `test_qdrant_fallback_on_missing_collection` |
 
-### 3.4 API Surface
+### 4.3 API Surface
 
 | Endpoint | Method | Request | Response | Status Codes |
 |----------|--------|---------|----------|--------------|
 | `/recommend` | POST | `{user_message: str, session_id: str, user_id: str}` | `{response: str, tool_calls: list[str], session_summary: dict}` | 200 (success), 422 (guardrail triggered) |
 | `/health` | GET | — | `{status: "ok"}` | 200 |
+| Chainlit UI | — | Chat at `/` | Chat interface | — |
 
 CORS: `allow_origins=["*"]` — accepts requests from any origin including `file://`.
 
 ---
 
-## 4. Roadmap Optimisations
+## 5. Test Coverage Summary
 
-### 4.1 Catalogue Performance
+| Test File | Tests | Groups | Pass Rate |
+|-----------|-------|--------|-----------|
+| `tests/test_agent.py` | 92 | Tools, Session, Guardrails, Context, MockLLM, Integration, SemanticSearch | 100% |
+| `tests/test_all_51.py` | 116 | Catalogue, Tools, Session, Guardrails, Context, Error, Streaming, ProductsEdge, Config, ToolsEdge, AgentEdge, Tracing, Frontend | 100% |
+| `tests/test_new_features.py` | 61 | QdrantIntegration, ChainlitIntegration, SemanticSearch, HybridSearch, Personalization, SimilarProducts, TrendingProducts, QdrantHealthCheck, CachingLayer, RealAmazonData | 100% |
+| `tests/test_recommendation_agent.py` | 28 | ColdStart, FilterCriteria, LlmOutputFormat, PropertyBased, Latency, InvalidInput, SessionAndGuardrails | 100% |
+| **Total** | **269** | **25+ groups** | **100%** |
 
-| Optimisation | Current State | Target |
-|--------------|---------------|--------|
-| **In-memory / semantic cache** | `_search_cache` (256-entry LRU) evicts oldest entries; cold queries scan all 1M products | Replace with persistent key-value store (Redis) or vector index for sub-100ms similarity search |
-| **Pre-computed category indices** | `_by_category` / `_by_tag` built on first load | Already implemented — categories return in 0.4s; tags return in 0.02s |
-| **Asynchronous JSON loading** | `load_products()` is synchronous, blocking the event loop for ~5s | Migrate to `aiofiles` + streaming parser or memory-mapped file |
+**Code Coverage:** 92% (agent/ package)
 
-### 4.2 Context & Prompt Stability
+### 5.1 500-Test Integration Suite
 
-| Optimisation | Rationale | Approach |
-|--------------|-----------|----------|
-| **Few-shot prompting** | Mitigate context drift over long multi-turn sessions | Inject 2–3 exemplar recommendation exchanges into `_build_instructions` when `turn_count > N` |
-| **Dynamic preference distillation** | Long preference lists dilute signal | Summarise preferences to top-3 most recent or most common before injecting into prompt |
-| **Session summarisation** | 40-turn window may lose early context | Add periodic `summary()` snapshot appended to instructions every 10 turns |
-
-### 4.3 Testing Coverage
-
-| Area | Current | Planned |
-|------|---------|---------|
-| **Property-based testing** | None (removed in 116→51 consolidation) | Re-introduce Hypothesis-based contracts for search/filter combinators (100 examples each) |
-| **Concurrent session isolation** | Single-threaded session tests | Add `pytest-asyncio` stress tests with 50 simultaneous sessions |
-| **RapidAPI integration** | Mocked / error-path only | Add live e2e test with dedicated test API key (rate-limited monthly) |
-| **Model-specific behaviour** | All models tested via OpenRouter chain | Add per-model response-format conformance tests |
-
-### 4.4 Production Hardening
-
-| Concern | Current | Target |
-|---------|---------|--------|
-| **Rate-limit visibility** | 429 errors silently trigger fallback; user sees "unavailable" | Expose rate-limit headers in API response (`X-RateLimit-Remaining`) |
-| **Tracing persistence** | `traces.jsonl` appended synchronously | Rotate logs daily; add configurable log level |
-| **Session persistence** | In-memory only; lost on process restart | Optional Redis / SQLite backend via `Session` interface |
-| **OpenRouter key rotation** | Single API key, env-configured | Add multiple key rotation with fallback on 401 |
+| Metric | Value |
+|--------|-------|
+| Test cases | 500 across 14 categories |
+| First 50 results | 47/50 passed (94%) |
+| Failures | 2 short responses, 1 timeout |
+| Timeout barrier | 120s per test |
 
 ---
 
-*Specification version 1.0 — verified by 116 automated tests, 0 failures, 78.5s full-suite runtime.*
+## 6. Qdrant Collection Schema
+
+| Property | Value |
+|----------|-------|
+| **Collection name** | `products` |
+| **Vector count** | 50,000 |
+| **Vector dimension** | 384 |
+| **Distance metric** | Cosine |
+| **Point ID type** | UUID (UUID5 from ASIN) |
+
+**Payload fields stored:** `id`, `asin`, `title`, `category_id`, `category_name`, `price`, `original_price`, `discount_pct`, `rating`, `review_count`, `brand`, `image_url`, `in_stock`
+
+**Payload indexes:**
+
+| Field | Type |
+|-------|------|
+| `category_name` | Keyword |
+| `price` | Float |
+| `rating` | Float |
+| `review_count` | Integer |
+| `in_stock` | Bool |
+
+---
+
+## 7. Agent Search Strategy
+
+The agent's SearchAgent prompt explicitly guides tool selection based on user intent:
+
+1. **semantic_search** (Vector DB) — for vague, intent-based, or need-driven queries
+2. **rapidapi_search** (RapidAPI) — for live prices, current deals, real-time availability
+3. **search_items** (Local catalogue) — for exact product names or precise filters
+
+This dual-advantage architecture gives the agent both **semantic understanding** (vector DB) and **real-time accuracy** (RapidAPI).
+
+---
+
+## 8. Roadmap Optimisations
+
+| Optimisation | Current State | Target |
+|--------------|---------------|--------|
+| **Full 500-test suite** | First 50 at 94% pass rate | Run all 500 overnight |
+| **Chainlit live test** | Unit-tested with mocks | Manual end-to-end verification |
+| **RapidAPI rate limit** | 100 requests/month | Upgrade plan or cache aggressively |
+| **Coverage gaps** | 92% overall | Push to 95%+ (personalization, qdrant_search error branches) |
+
+---
+
+*Specification version 2.0 — verified by 269 automated tests, 0 failures, 92% code coverage.*

@@ -491,9 +491,9 @@ class TestSemanticSearch:
             vectors_config=VectorParams(size=384, distance=Distance.COSINE),
         )
         samples = [
-            {"id": 1, "title": "Wireless Bluetooth Headphones", "category": "Electronics", "tags": ["audio", "wireless"], "rating": 4.5, "price": 79.99},
-            {"id": 2, "title": "Running Shoes Ultra Comfort", "category": "Sports", "tags": ["running", "comfort"], "rating": 4.7, "price": 129.99},
-            {"id": 3, "title": "Python Programming Guide", "category": "Book", "tags": ["programming", "education"], "rating": 4.8, "price": 39.99},
+            {"id": 1, "title": "Wireless Bluetooth Headphones", "category": "Electronics", "category_name": "Electronics", "tags": ["audio", "wireless"], "rating": 4.5, "price": 79.99},
+            {"id": 2, "title": "Running Shoes Ultra Comfort", "category": "Sports", "category_name": "Sports", "tags": ["running", "comfort"], "rating": 4.7, "price": 129.99},
+            {"id": 3, "title": "Python Programming Guide", "category": "Book", "category_name": "Book", "tags": ["programming", "education"], "rating": 4.8, "price": 39.99},
         ]
         points = []
         for s in samples:

@@ -224,14 +224,25 @@ def semantic_search_fn(
         results = None
 
     if results is not None:
-        ids = [r["id"] for r in results if r["id"] is not None]
+        session: InMemorySession = ctx.context.session
+        seen = session.seen_ids
+        deduped = []
+        seen_ids_added = set()
+        for r in results:
+            rid = r.get("id")
+            if rid is not None and rid in seen:
+                continue
+            if rid is not None and rid in seen_ids_added:
+                continue
+            deduped.append(r)
+            if rid is not None:
+                seen_ids_added.add(rid)
+        ids = [r["id"] for r in deduped if r["id"] is not None]
         if ids:
-            session: InMemorySession = ctx.context.session
             session.mark_seen(ids)
-        return json.dumps({"items": results, "total": len(results), "offset": 0})
+        return json.dumps({"items": deduped, "total": len(deduped), "offset": 0})
 
-    # Fallback to keyword search
-        logger.warning("Qdrant unavailable, falling back to keyword search for: %s", query)
+    logger.warning("Qdrant unavailable, falling back to keyword search for: %s", query)
     return search_items_fn(
         query=query,
         category=category,

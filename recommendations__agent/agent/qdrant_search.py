@@ -50,7 +50,7 @@ def _build_filter(
 ) -> Filter | None:
     conditions = []
     if category:
-        conditions.append(FieldCondition(key="category", match=MatchValue(value=category)))
+        conditions.append(FieldCondition(key="category_name", match=MatchValue(value=category)))
     if min_price is not None:
         conditions.append(FieldCondition(key="price", range=Range(gte=min_price)))
     if max_price is not None:
@@ -104,14 +104,16 @@ def search(
     for h in hits:
         p = h.payload
         results.append({
-            "id":       p.get("id"),
-            "title":    p.get("title", ""),
-            "category": p.get("category", ""),
-            "price":    p.get("price"),
-            "rating":   p.get("rating"),
-            "in_stock": p.get("in_stock"),
-            "discount": p.get("discount_pct"),
-            "tags":     [],
+            "id":           p.get("id"),
+            "title":        p.get("title", ""),
+            "category":     p.get("category_name", "") or p.get("category_id", ""),
+            "price":        p.get("price"),
+            "rating":       p.get("rating"),
+            "in_stock":     p.get("in_stock"),
+            "discount":     p.get("discount_pct"),
+            "review_count": p.get("review_count"),
+            "image_url":    p.get("image_url"),
+            "tags":         [],
         })
     return results
 

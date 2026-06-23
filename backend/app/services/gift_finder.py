@@ -107,8 +107,8 @@ def find_gifts(recipient: GiftRecipient) -> GiftFinderResult:
             scores[pid] = score
 
     scored_products = [
-        (p, scores[pid], match_reasons_map[pid])
-        for p in results if pid in scores
+        (p, scores[p["id"]], match_reasons_map[p["id"]])
+        for p in results if p["id"] in scores
     ]
     scored_products.sort(key=lambda x: x[1], reverse=True)
 

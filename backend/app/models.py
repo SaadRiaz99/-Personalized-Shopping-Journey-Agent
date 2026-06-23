@@ -343,7 +343,6 @@ class PriceAlertEvent(BaseModel):
 
 class UserRole(str, Enum):
     admin = "admin"
-    premium = "premium"
     user = "user"
 
 

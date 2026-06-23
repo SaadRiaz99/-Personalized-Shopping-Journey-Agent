@@ -154,7 +154,7 @@ async def get_current_user(
 class RoleChecker:
     def __init__(self, required_role: UserRole):
         self.required_role = required_role
-        self._role_order = {UserRole.admin: 3, UserRole.premium: 2, UserRole.user: 1}
+        self._role_order = {UserRole.admin: 2, UserRole.user: 1}
 
     async def __call__(self, current_user: dict = Depends(get_current_user)) -> dict:
         if self._role_order.get(UserRole(current_user["role"]), 0) < self._role_order[self.required_role]:
@@ -378,7 +378,6 @@ def seed_users():
     from app.database import create_user
     default_users = [
         ("admin", "admin@shoporch.com", "Admin@123", UserRole.admin),
-        ("premium_user", "premium@shoporch.com", "Premium@123", UserRole.premium),
         ("user1", "user1@shoporch.com", "User@1234", UserRole.user),
     ]
     with get_db() as conn:

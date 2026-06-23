@@ -36,7 +36,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(false)
   }
 
-  useEffect(() => { refreshUser() }, [])
+  useEffect(() => {
+    const token = localStorage.getItem('access_token')
+    if (!token) {
+      Promise.resolve().then(() => setLoading(false))
+      return
+    }
+    authMe()
+      .then(u => { setUser(u); setLoading(false) })
+      .catch(() => {
+        setUser(null)
+        localStorage.removeItem('access_token')
+        localStorage.removeItem('refresh_token')
+        localStorage.removeItem('user')
+        setLoading(false)
+      })
+  }, [])
 
   const login = async (body: LoginRequest) => {
     try {
@@ -81,6 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const ctx = useContext(AuthContext)
   if (!ctx) throw new Error('useAuth must be used within AuthProvider')

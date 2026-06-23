@@ -2,11 +2,12 @@ import { useState, useEffect, useRef } from 'react'
 import { runCollaboration } from '../services/api'
 import ProductCard from '../components/ProductCard'
 import { motion, AnimatePresence } from 'framer-motion'
+import type { CollaborationResult, Product } from '../types'
 
 export default function Dashboard() {
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState<any>(null)
+  const [result, setResult] = useState<CollaborationResult | null>(null)
   const [logs, setLogs] = useState<{ msg: string; type: string }[]>([])
   const logEndRef = useRef<HTMLDivElement>(null)
 
@@ -39,7 +40,7 @@ export default function Dashboard() {
         setResult(data)
         setLoading(false)
       }, 7000)
-    } catch (err) {
+    } catch {
       addLog('! System Error: Failed to reach Council.', 'danger')
       setLoading(false)
     }
@@ -152,7 +153,7 @@ export default function Dashboard() {
               className="grid"
               style={{ gap: '1.5rem' }}
             >
-              {result.products.map((p: any, i: number) => (
+              {result.products.map((p: Product, i: number) => (
                 <motion.div
                   key={p.id}
                   initial={{ opacity: 0, y: 20 }}

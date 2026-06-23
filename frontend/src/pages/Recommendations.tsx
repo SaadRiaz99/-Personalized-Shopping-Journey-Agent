@@ -10,7 +10,6 @@ export default function Recommendations() {
   const [refreshKey, setRefreshKey] = useState(0)
 
   useEffect(() => {
-    setLoading(true)
     getRecommendations()
       .then(setProducts)
       .finally(() => setLoading(false))

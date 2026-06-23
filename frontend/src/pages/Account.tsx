@@ -44,8 +44,20 @@ export default function Account() {
   }
 
   useEffect(() => {
-    if (tab === 'sessions') loadSessions()
-    if (tab === 'history') loadHistory()
+    if (tab === 'sessions') {
+      Promise.resolve().then(() => setSessionsLoading(true))
+      authGetSessions()
+        .then(res => setSessions(res.sessions))
+        .catch(() => {})
+        .finally(() => setSessionsLoading(false))
+    }
+    if (tab === 'history') {
+      Promise.resolve().then(() => setHistoryLoading(true))
+      authGetHistory()
+        .then(res => setHistory(res.entries))
+        .catch(() => {})
+        .finally(() => setHistoryLoading(false))
+    }
   }, [tab])
 
   const handleChangePassword = async () => {

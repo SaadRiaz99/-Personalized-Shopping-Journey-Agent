@@ -291,3 +291,12 @@ export interface PriceAlertEvent {
   triggered_at: string
   notified: boolean
 }
+
+export interface CollaborationResult {
+  collaboration_id: string
+  status: string
+  query: string
+  intent: Record<string, unknown>
+  products: Product[]
+  summary: string
+}

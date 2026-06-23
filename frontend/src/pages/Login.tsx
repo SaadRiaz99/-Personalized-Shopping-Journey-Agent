@@ -105,7 +105,7 @@ export default function Login() {
               <div className="form-group" style={{ marginBottom: '0.75rem' }}>
                 <label>Username</label>
                 <input className="input" value={username} onChange={e => setUsername(e.target.value)}
-                  placeholder="admin / premium_user / user1" autoFocus />
+                  placeholder="admin / user1" autoFocus />
               </div>
               <div className="form-group" style={{ marginBottom: '1rem' }}>
                 <label>Password</label>
@@ -126,8 +126,7 @@ export default function Login() {
               </p>
               <div style={{ marginTop: '1rem', padding: '0.75rem', background: 'rgba(99,102,241,0.08)', borderRadius: 8, fontSize: '0.75rem', color: 'var(--text-dim)' }}>
                 <strong>Demo accounts:</strong><br />
-                admin / Admin@123 — Full access<br />
-                premium_user / Premium@123 — Premium access<br />
+                admin / Admin@123 — Admin access<br />
                 user1 / User@1234 — Standard user
               </div>
             </motion.div>

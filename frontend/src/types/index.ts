@@ -169,7 +169,7 @@ export interface DiscountResult {
 }
 
 // Advanced Auth
-export type UserRole = 'admin' | 'premium' | 'user'
+export type UserRole = 'admin' | 'user'
 
 export interface AuthUser {
   id: string

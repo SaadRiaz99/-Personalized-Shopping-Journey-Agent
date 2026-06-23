@@ -139,8 +139,8 @@ export default function Account() {
               )}
             </p>
             <span className={`tag`} style={{
-              background: user.role === 'admin' ? 'rgba(239,68,68,0.15)' : user.role === 'premium' ? 'rgba(245,158,11,0.15)' : 'rgba(99,102,241,0.15)',
-              color: user.role === 'admin' ? '#ef4444' : user.role === 'premium' ? '#f59e0b' : '#818cf8',
+              background: user.role === 'admin' ? 'rgba(239,68,68,0.15)' : 'rgba(99,102,241,0.15)',
+              color: user.role === 'admin' ? '#ef4444' : '#818cf8',
               fontSize: '0.75rem',
             }}>
               {user.role}

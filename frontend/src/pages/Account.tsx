@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { useAuth } from '../contexts/AuthContext'
 import { authChangePassword, authEnable2FA, authDisable2FA, authGetHistory, authGetSessions, authRevokeSession, authVerifyEmail } from '../services/api'
@@ -24,28 +24,36 @@ export default function Account() {
 
   const [history, setHistory] = useState<LoginHistoryEntry[]>([])
   const [historyLoading, setHistoryLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const loadSessions = async () => {
     setSessionsLoading(true)
+    setError(null)
     try {
       const res = await authGetSessions()
       setSessions(res.sessions)
-    } catch { /* ignore */ }
+    } catch { setError('Failed to load sessions') }
     setSessionsLoading(false)
   }
 
   const loadHistory = async () => {
     setHistoryLoading(true)
+    setError(null)
     try {
       const res = await authGetHistory()
       setHistory(res.entries)
-    } catch { /* ignore */ }
+    } catch { setError('Failed to load login history') }
     setHistoryLoading(false)
   }
 
   useEffect(() => {
-    if (tab === 'sessions') loadSessions()
-    if (tab === 'history') loadHistory()
+    let cancelled = false
+    const load = async () => {
+      if (tab === 'sessions') await loadSessions()
+      if (tab === 'history') await loadHistory()
+    }
+    load()
+    return () => { cancelled = true }
   }, [tab])
 
   const handleChangePassword = async () => {
@@ -82,14 +90,14 @@ export default function Account() {
   const handleVerifyEmail = async () => {
     try {
       await authVerifyEmail()
-    } catch { /* ignore */ }
+    } catch { setError('Failed to send verification email') }
   }
 
   const handleRevokeSession = async (id: string) => {
     try {
       await authRevokeSession(id)
       loadSessions()
-    } catch { /* ignore */ }
+    } catch { setError('Failed to revoke session') }
   }
 
   if (!user) return null
@@ -103,15 +111,15 @@ export default function Account() {
           </motion.h1>
           <p className="page-subtitle">Manage your security & sessions</p>
         </div>
-        <button className="btn btn-danger" onClick={logout} style={{ height: 36 }}>
+        <button className="btn btn-danger" onClick={logout} style={{ height: 36 }} aria-label="Sign out of your account">
           Sign Out
         </button>
       </div>
 
       <div className="card" style={{ marginBottom: '1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div className="logo-icon-glow" style={{ width: 48, height: 48 }}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+          <div className="logo-icon-glow" style={{ width: 48, height: 48 }} aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" aria-hidden="true">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
             </svg>
           </div>

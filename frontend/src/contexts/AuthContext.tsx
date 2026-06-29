@@ -36,7 +36,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(false)
   }
 
-  useEffect(() => { refreshUser() }, [])
+  useEffect(() => {
+    let cancelled = false
+    refreshUser().then(() => { if (cancelled) { setUser(null); setLoading(false) } })
+    return () => { cancelled = true }
+  }, [])
 
   const login = async (body: LoginRequest) => {
     try {

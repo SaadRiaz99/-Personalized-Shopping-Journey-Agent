@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 export default function Dashboard() {
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState<any>(null)
+  const [result, setResult] = useState<Record<string, unknown> | null>(null)
   const [logs, setLogs] = useState<{ msg: string; type: string }[]>([])
   const logEndRef = useRef<HTMLDivElement>(null)
 
@@ -40,7 +40,7 @@ export default function Dashboard() {
         setLoading(false)
       }, 7000)
     } catch (err) {
-      addLog('! System Error: Failed to reach Council.', 'danger')
+      addLog(`! System Error: ${err instanceof Error ? err.message : 'Failed to reach Council.'}`, 'danger')
       setLoading(false)
     }
   }
@@ -83,6 +83,7 @@ export default function Dashboard() {
             onChange={e => setQuery(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleCollaboration()}
             style={{ flex: 1, minWidth: '280px', height: '56px', fontSize: '1.05rem', background: 'rgba(255,255,255,0.02)', borderRadius: '16px' }}
+            aria-label="Enter your shopping query"
           />
           <motion.button 
             whileHover={{ scale: 1.02 }}
@@ -152,7 +153,7 @@ export default function Dashboard() {
               className="grid"
               style={{ gap: '1.5rem' }}
             >
-              {result.products.map((p: any, i: number) => (
+              {(result.products as Record<string, unknown>[]).map((p, i: number) => (
                 <motion.div
                   key={p.id}
                   initial={{ opacity: 0, y: 20 }}

@@ -87,11 +87,11 @@ export default function Login() {
       background: 'radial-gradient(ellipse at top, #1a1a3e 0%, #0d0d1a 100%)', padding: '1rem',
     }}>
       <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}
-        className="card" style={{ width: '100%', maxWidth: 420, padding: '2rem' }}>
+        className="card" style={{ width: '100%', maxWidth: 420, padding: '2rem' }} role="region" aria-label="Login form">
 
         <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-          <div className="logo-icon-glow" style={{ width: 56, height: 56, margin: '0 auto 0.75rem' }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+          <div className="logo-icon-glow" style={{ width: 56, height: 56, margin: '0 auto 0.75rem' }} aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" aria-hidden="true">
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
             </svg>
           </div>
@@ -103,24 +103,25 @@ export default function Login() {
           {mode === 'login' && (
             <motion.div key="login" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <div className="form-group" style={{ marginBottom: '0.75rem' }}>
-                <label>Username</label>
-                <input className="input" value={username} onChange={e => setUsername(e.target.value)}
-                  placeholder="admin / premium_user / user1" autoFocus />
+                <label htmlFor="login-username">Username</label>
+                <input id="login-username" className="input" value={username} onChange={e => setUsername(e.target.value)}
+                  placeholder="admin / premium_user / user1" autoFocus aria-label="Username" />
               </div>
               <div className="form-group" style={{ marginBottom: '1rem' }}>
-                <label>Password</label>
-                <input className="input" type="password" value={password} onChange={e => setPassword(e.target.value)}
-                  placeholder="••••••••" onKeyDown={e => e.key === 'Enter' && handleLogin()} />
+                <label htmlFor="login-password">Password</label>
+                <input id="login-password" className="input" type="password" value={password} onChange={e => setPassword(e.target.value)}
+                  placeholder="Enter your password" onKeyDown={e => e.key === 'Enter' && handleLogin()} aria-label="Password" />
               </div>
-              {message && <div className={`alert alert-${message.type}`} style={{ marginBottom: '0.75rem' }}>{message.text}</div>}
+              {message && <div className={`alert alert-${message.type}`} role="alert" style={{ marginBottom: '0.75rem' }}>{message.text}</div>}
               <button className="btn btn-primary" onClick={handleLogin} disabled={submitting}
-                style={{ width: '100%', height: 40 }}>
+                style={{ width: '100%', height: 40 }} aria-label="Sign in">
                 {submitting ? 'Signing in...' : 'Sign In'}
               </button>
               <p style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.85rem', color: 'var(--text-dim)' }}>
                 Don't have an account?{' '}
                 <button className="btn" onClick={() => switchMode('register')}
-                  style={{ background: 'none', border: 'none', color: 'var(--primary)', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
+                  style={{ background: 'none', border: 'none', color: 'var(--primary)', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}
+                  aria-label="Register new account">
                   Register
                 </button>
               </p>
@@ -137,18 +138,18 @@ export default function Login() {
             <motion.div key="twofa" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <p style={{ fontSize: '0.9rem', marginBottom: '0.75rem' }}>Two-factor authentication</p>
               <div className="form-group" style={{ marginBottom: '1rem' }}>
-                <label>Authentication Code</label>
-                <input className="input" value={twofaCode} onChange={e => setTwofaCode(e.target.value)}
+                <label htmlFor="twofa-code">Authentication Code</label>
+                <input id="twofa-code" className="input" value={twofaCode} onChange={e => setTwofaCode(e.target.value)}
                   placeholder="000000" maxLength={6} autoFocus
-                  onKeyDown={e => e.key === 'Enter' && handleTwoFA()} />
+                  onKeyDown={e => e.key === 'Enter' && handleTwoFA()} aria-label="2FA code" />
               </div>
-              {message && <div className={`alert alert-${message.type}`} style={{ marginBottom: '0.75rem' }}>{message.text}</div>}
+              {message && <div className={`alert alert-${message.type}`} role="alert" style={{ marginBottom: '0.75rem' }}>{message.text}</div>}
               <button className="btn btn-primary" onClick={handleTwoFA} disabled={submitting}
-                style={{ width: '100%', height: 40 }}>
+                style={{ width: '100%', height: 40 }} aria-label="Verify 2FA code">
                 {submitting ? 'Verifying...' : 'Verify Code'}
               </button>
               <button className="btn" onClick={() => switchMode('login')}
-                style={{ width: '100%', marginTop: '0.5rem', background: 'transparent' }}>
+                style={{ width: '100%', marginTop: '0.5rem', background: 'transparent' }} aria-label="Back to login">
                 Back to login
               </button>
             </motion.div>
@@ -157,34 +158,35 @@ export default function Login() {
           {mode === 'register' && (
             <motion.div key="register" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <div className="form-group" style={{ marginBottom: '0.75rem' }}>
-                <label>Username</label>
-                <input className="input" value={username} onChange={e => setUsername(e.target.value)}
-                  placeholder="Choose a username (3-32 chars)" autoFocus />
+                <label htmlFor="reg-username">Username</label>
+                <input id="reg-username" className="input" value={username} onChange={e => setUsername(e.target.value)}
+                  placeholder="Choose a username (3-32 chars)" autoFocus aria-label="Choose username" />
               </div>
               <div className="form-group" style={{ marginBottom: '0.75rem' }}>
-                <label>Email</label>
-                <input className="input" type="email" value={email} onChange={e => setEmail(e.target.value)}
-                  placeholder="your@email.com" />
+                <label htmlFor="reg-email">Email</label>
+                <input id="reg-email" className="input" type="email" value={email} onChange={e => setEmail(e.target.value)}
+                  placeholder="your@email.com" aria-label="Email address" />
               </div>
               <div className="form-group" style={{ marginBottom: '0.75rem' }}>
-                <label>Password</label>
-                <input className="input" type="password" value={password} onChange={e => setPassword(e.target.value)}
-                  placeholder="Min 8 chars, upper, lower, digit, special" />
+                <label htmlFor="reg-password">Password</label>
+                <input id="reg-password" className="input" type="password" value={password} onChange={e => setPassword(e.target.value)}
+                  placeholder="Min 8 chars, upper, lower, digit, special" aria-label="Password" />
               </div>
               <div className="form-group" style={{ marginBottom: '1rem' }}>
-                <label>Confirm Password</label>
-                <input className="input" type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}
-                  placeholder="Re-enter password" onKeyDown={e => e.key === 'Enter' && handleRegister()} />
+                <label htmlFor="reg-confirm">Confirm Password</label>
+                <input id="reg-confirm" className="input" type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}
+                  placeholder="Re-enter password" onKeyDown={e => e.key === 'Enter' && handleRegister()} aria-label="Confirm password" />
               </div>
-              {message && <div className={`alert alert-${message.type}`} style={{ marginBottom: '0.75rem' }}>{message.text}</div>}
+              {message && <div className={`alert alert-${message.type}`} role="alert" style={{ marginBottom: '0.75rem' }}>{message.text}</div>}
               <button className="btn btn-primary" onClick={handleRegister} disabled={submitting}
-                style={{ width: '100%', height: 40 }}>
+                style={{ width: '100%', height: 40 }} aria-label="Create account">
                 {submitting ? 'Creating account...' : 'Create Account'}
               </button>
               <p style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.85rem', color: 'var(--text-dim)' }}>
                 Already have an account?{' '}
                 <button className="btn" onClick={() => switchMode('login')}
-                  style={{ background: 'none', border: 'none', color: 'var(--primary)', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
+                  style={{ background: 'none', border: 'none', color: 'var(--primary)', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}
+                  aria-label="Sign in instead">
                   Sign in
                 </button>
               </p>

@@ -26,14 +26,23 @@ export default function Account() {
   const [historyLoading, setHistoryLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const isMounted = useRef(true)
+
+  useEffect(() => {
+    isMounted.current = true
+    return () => {
+      isMounted.current = false
+    }
+  }, [])
+
   const loadSessions = async () => {
     setSessionsLoading(true)
     setError(null)
     try {
       const res = await authGetSessions()
-      setSessions(res.sessions)
-    } catch { setError('Failed to load sessions') }
-    setSessionsLoading(false)
+      if (isMounted.current) setSessions(res.sessions)
+    } catch { if (isMounted.current) setError('Failed to load sessions') }
+    if (isMounted.current) setSessionsLoading(false)
   }
 
   const loadHistory = async () => {
@@ -41,19 +50,17 @@ export default function Account() {
     setError(null)
     try {
       const res = await authGetHistory()
-      setHistory(res.entries)
-    } catch { setError('Failed to load login history') }
-    setHistoryLoading(false)
+      if (isMounted.current) setHistory(res.entries)
+    } catch { if (isMounted.current) setError('Failed to load login history') }
+    if (isMounted.current) setHistoryLoading(false)
   }
 
   useEffect(() => {
-    let cancelled = false
     const load = async () => {
       if (tab === 'sessions') await loadSessions()
       if (tab === 'history') await loadHistory()
     }
     load()
-    return () => { cancelled = true }
   }, [tab])
 
   const handleChangePassword = async () => {
@@ -116,6 +123,8 @@ export default function Account() {
         </button>
       </div>
 
+      {error && <div className="error-banner" role="alert">{error}</div>}
+
       <div className="card" style={{ marginBottom: '1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <div className="logo-icon-glow" style={{ width: 48, height: 48 }} aria-hidden="true">
@@ -135,8 +144,8 @@ export default function Account() {
               )}
             </p>
             <span className={`tag`} style={{
-              background: user.role === 'admin' ? 'rgba(239,68,68,0.15)' : user.role === 'premium' ? 'rgba(245,158,11,0.15)' : 'rgba(99,102,241,0.15)',
-              color: user.role === 'admin' ? '#ef4444' : user.role === 'premium' ? '#f59e0b' : '#818cf8',
+              background: user.role === 'admin' ? 'rgba(239,68,68,0.15)' : 'rgba(99,102,241,0.15)',
+              color: user.role === 'admin' ? '#ef4444' : '#818cf8',
               fontSize: '0.75rem',
             }}>
               {user.role}

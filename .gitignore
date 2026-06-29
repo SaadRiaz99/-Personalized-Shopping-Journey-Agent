@@ -1,25 +1,23 @@
-
-__pycache__/
-.env
-
-# Node.js
-node_modules/
-dist/
-.env
-
 # Python
 __pycache__/
 *.py[cod]
 *$py.class
 venv/
 .venv/
-.env
-err.log
-out.log
-*_err.log
-*_out.log
+.pytest_cache/
+*.coverage
+*.jsonl
+.python-version
+uv.lock
 
-# IDEs
+# Environment
+.env
+
+# Node.js
+node_modules/
+dist/
+
+# IDE
 .vscode/
 .idea/
 
@@ -27,15 +25,14 @@ out.log
 .DS_Store
 Thumbs.db
 
-
+# Database files (generated at runtime)
 backend/agent_store.db
+backend/data/
 
-# Generated artifacts
-*.coverage
-*.jsonl
-.python-version
-uv.lock
-node_modules/
+# Logs
+*.log
+err.log
+out.log
 
 # Embedded repos
 -Personalized-Shopping-Journey-Agent/

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { getPreferences, updatePreferences } from '../services/api'
 import type { UserPreferences } from '../types'
 

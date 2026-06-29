@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { getProducts } from '../services/api'
 import ProductCard from '../components/ProductCard'
 import type { Product } from '../types'

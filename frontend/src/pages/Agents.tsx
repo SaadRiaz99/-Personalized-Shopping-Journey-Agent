@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { getAgents, createAgent, deleteAgent, runAgent, decodeIntent } from '../services/api'
 import type { Agent, QueryIntent } from '../types'
 

@@ -18,28 +18,42 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   const refreshUser = async () => {
+    await loadUser(() => false)
+  }
+
+  const loadUser = async (isCancelled: () => boolean) => {
     const token = localStorage.getItem('access_token')
     if (!token) {
-      setUser(null)
-      setLoading(false)
+      if (!isCancelled()) {
+        setUser(null)
+        setLoading(false)
+      }
       return
     }
     try {
       const u = await authMe()
-      setUser(u)
+      if (!isCancelled()) {
+        setUser(u)
+      }
     } catch {
-      setUser(null)
-      localStorage.removeItem('access_token')
-      localStorage.removeItem('refresh_token')
-      localStorage.removeItem('user')
+      if (!isCancelled()) {
+        setUser(null)
+        localStorage.removeItem('access_token')
+        localStorage.removeItem('refresh_token')
+        localStorage.removeItem('user')
+      }
     }
-    setLoading(false)
+    if (!isCancelled()) {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
     let cancelled = false
-    refreshUser().then(() => { if (cancelled) { setUser(null); setLoading(false) } })
-    return () => { cancelled = true }
+    loadUser(() => cancelled)
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   const login = async (body: LoginRequest) => {

@@ -120,13 +120,16 @@ Open http://localhost:5173 and login with the default admin credentials.
 │   │   ├── database.py # SQLite operations
 │   │   ├── auth.py     # JWT authentication
 │   │   └── main.py     # App entry point
-│   └── tests/          # Test suites
-├── frontend/           # React application
+│   └── tests/          # 563-test agent suite
+├── frontend/           # React + TypeScript application
 │   └── src/
 │       ├── components/ # Reusable UI components
 │       ├── pages/      # Route pages
 │       ├── services/   # API client
 │       └── contexts/   # React contexts
 ├── shared/             # Shared module (product catalog)
+├── docs/               # Documentation & test reports
+│   ├── agent_reports/  # Per-agent test case results
+│   └── *.md            # Project reports and deployment guide
 └── docker-compose.yml  # Deployment config
 ```

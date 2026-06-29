@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { getCrossSell, addToWishlist } from '../services/api'
-import type { CrossSellResult, CrossSellItem, Product } from '../types'
+import type { CrossSellResult, CrossSellItem, CatalogProduct } from '../types'
 import { catalogSearch } from '../services/api'
 
 const TYPE_COLORS: Record<string, string> = {
@@ -18,8 +18,8 @@ const TYPE_ICONS: Record<string, string> = {
 
 export default function CrossSell() {
   const [searchQuery, setSearchQuery] = useState('')
-  const [searchResults, setSearchResults] = useState<Product[]>([])
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const [searchResults, setSearchResults] = useState<CatalogProduct[]>([])
+  const [selectedProduct, setSelectedProduct] = useState<CatalogProduct | null>(null)
   const [result, setResult] = useState<CrossSellResult | null>(null)
   const [loading, setLoading] = useState(false)
   const [searchLoading, setSearchLoading] = useState(false)
@@ -31,7 +31,7 @@ export default function CrossSell() {
     setError(null)
     try {
       const res = await catalogSearch({ query: searchQuery, page_size: 8 })
-      setSearchResults(res.products as Product[])
+      setSearchResults(res.products)
     } catch {
       setError('Search failed. Please try again.')
       setSearchResults([])
@@ -39,13 +39,13 @@ export default function CrossSell() {
     setSearchLoading(false)
   }
 
-  const handleSelectProduct = async (product: Product) => {
+  const handleSelectProduct = async (product: CatalogProduct) => {
     setSelectedProduct(product)
     setLoading(true)
     setResult(null)
     setError(null)
     try {
-      const res = await getCrossSell(product.id as number)
+      const res = await getCrossSell(product.id)
       setResult(res)
     } catch {
       setError('Failed to load cross-sell recommendations.')
@@ -101,11 +101,11 @@ export default function CrossSell() {
         {searchResults.length > 0 && (
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '0.75rem' }} role="list" aria-label="Search results">
             {searchResults.map(p => (
-              <button key={p.id as number} onClick={() => handleSelectProduct(p)}
+              <button key={p.id} onClick={() => handleSelectProduct(p)}
                 className={`btn ${selectedProduct?.id === p.id ? 'btn-primary' : ''}`}
                 style={{ fontSize: '0.8rem', padding: '6px 12px' }}
-                aria-label={`Select ${p.name as string}`}>
-                {p.name as string} — ${(p.price as number).toFixed(2)}
+                aria-label={`Select ${p.name}`}>
+                {p.name} — ${p.price.toFixed(2)}
               </button>
             ))}
           </div>

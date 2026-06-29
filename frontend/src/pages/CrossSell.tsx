@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { getCrossSell, addToWishlist } from '../services/api'
-import type { CrossSellResult, CrossSellItem } from '../types'
+import type { CrossSellResult, CrossSellItem, Product } from '../types'
 import { catalogSearch } from '../services/api'
 
 const TYPE_COLORS: Record<string, string> = {
@@ -18,35 +18,44 @@ const TYPE_ICONS: Record<string, string> = {
 
 export default function CrossSell() {
   const [searchQuery, setSearchQuery] = useState('')
-  const [searchResults, setSearchResults] = useState<Record<string, unknown>[]>([])
-  const [selectedProduct, setSelectedProduct] = useState<Record<string, unknown> | null>(null)
+  const [searchResults, setSearchResults] = useState<Product[]>([])
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [result, setResult] = useState<CrossSellResult | null>(null)
   const [loading, setLoading] = useState(false)
   const [searchLoading, setSearchLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) return
     setSearchLoading(true)
+    setError(null)
     try {
       const res = await catalogSearch({ query: searchQuery, page_size: 8 })
-      setSearchResults(res.products as unknown as Record<string, unknown>[])
-    } catch { setSearchResults([]) }
+      setSearchResults(res.products as Product[])
+    } catch {
+      setError('Search failed. Please try again.')
+      setSearchResults([])
+    }
     setSearchLoading(false)
   }
 
-  const handleSelectProduct = async (product: Record<string, unknown>) => {
+  const handleSelectProduct = async (product: Product) => {
     setSelectedProduct(product)
     setLoading(true)
     setResult(null)
+    setError(null)
     try {
       const res = await getCrossSell(product.id as number)
       setResult(res)
-    } catch { setResult(null) }
+    } catch {
+      setError('Failed to load cross-sell recommendations.')
+      setResult(null)
+    }
     setLoading(false)
   }
 
   const handleSave = async (item: CrossSellItem) => {
-    const p = item.product as Record<string, unknown>
+    const p = item.product
     try {
       await addToWishlist({
         product_id: p.id as number,
@@ -56,7 +65,9 @@ export default function CrossSell() {
         product_image: (p.image_url as string) || null,
         note: `Cross-sell: ${item.type} for ${selectedProduct?.name as string}`,
       })
-    } catch { /* ignore */ }
+    } catch {
+      setError('Failed to save to wishlist.')
+    }
   }
 
   return (
@@ -70,27 +81,30 @@ export default function CrossSell() {
         </div>
       </div>
 
+      {error && <div className="error-banner" role="alert">{error}</div>}
+
       <div className="card" style={{ marginBottom: '1.5rem' }}>
         <p className="section-title" style={{ marginBottom: '0.75rem' }}>Find Products to Cross-sell</p>
         <div className="form-row">
           <div className="form-group" style={{ flex: 1 }}>
-            <label>Search Products</label>
-            <input className="input" value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+            <label htmlFor="crossell-search">Search Products</label>
+            <input id="crossell-search" className="input" value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSearch()}
-              placeholder="e.g. headphones, shoes, camera..." />
+              placeholder="e.g. headphones, shoes, camera..." aria-label="Search products" />
           </div>
           <button className="btn btn-primary" onClick={handleSearch} disabled={searchLoading}
-            style={{ height: 36, marginTop: 22 }}>
-            {searchLoading ? 'Searching...' : '🔍 Search'}
+            style={{ height: 36, marginTop: 22 }} aria-label="Search">
+            {searchLoading ? 'Searching...' : 'Search'}
           </button>
         </div>
 
         {searchResults.length > 0 && (
-          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '0.75rem' }}>
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '0.75rem' }} role="list" aria-label="Search results">
             {searchResults.map(p => (
               <button key={p.id as number} onClick={() => handleSelectProduct(p)}
                 className={`btn ${selectedProduct?.id === p.id ? 'btn-primary' : ''}`}
-                style={{ fontSize: '0.8rem', padding: '6px 12px' }}>
+                style={{ fontSize: '0.8rem', padding: '6px 12px' }}
+                aria-label={`Select ${p.name as string}`}>
                 {p.name as string} — ${(p.price as number).toFixed(2)}
               </button>
             ))}
@@ -99,7 +113,7 @@ export default function CrossSell() {
       </div>
 
       {loading && (
-        <div className="card" style={{ textAlign: 'center', padding: '2rem' }}>
+        <div className="card" style={{ textAlign: 'center', padding: '2rem' }} role="status">
           <p style={{ color: 'var(--text-dim)' }}>Analyzing product for cross-sell opportunities...</p>
         </div>
       )}
@@ -134,7 +148,7 @@ export default function CrossSell() {
                       </span>
                     </div>
                     {items.map((item, i) => {
-                      const p = item.product as Record<string, unknown>
+                      const p = item.product
                       return (
                         <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
                           className="card animate-in" style={{
@@ -160,7 +174,8 @@ export default function CrossSell() {
                               {(item.match_score * 100).toFixed(0)}%
                             </span>
                             <button className="btn" onClick={() => handleSave(item)}
-                              style={{ height: 28, fontSize: '0.75rem', padding: '0 10px' }}>
+                              style={{ height: 28, fontSize: '0.75rem', padding: '0 10px' }}
+                              aria-label={`Save ${p.name as string} to wishlist`}>
                               ♡ Save
                             </button>
                           </div>
@@ -177,8 +192,8 @@ export default function CrossSell() {
 
       {!selectedProduct && !loading && (
         <div className="empty-state" style={{ padding: '4rem 2rem' }}>
-          <div className="logo-icon-glow" style={{ width: '64px', height: '64px', margin: '0 auto 1.5rem', opacity: 0.4 }}>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+          <div className="logo-icon-glow" style={{ width: '64px', height: '64px', margin: '0 auto 1.5rem', opacity: 0.4 }} aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" aria-hidden="true">
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
             </svg>
           </div>

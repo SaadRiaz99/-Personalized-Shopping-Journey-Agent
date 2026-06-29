@@ -16,10 +16,12 @@ export default function GiftFinder() {
   const [gender, setGender] = useState('')
   const [result, setResult] = useState<GiftFinderResult | null>(null)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleFind = async () => {
     setLoading(true)
     setResult(null)
+    setError(null)
     try {
       const recipient: GiftRecipient = {
         occasion: occasion || 'Just Because',
@@ -32,6 +34,7 @@ export default function GiftFinder() {
       const res = await findGifts(recipient)
       setResult(res)
     } catch {
+      setError('Failed to find gifts. Please try again.')
       setResult(null)
     }
     setLoading(false)
@@ -48,7 +51,7 @@ export default function GiftFinder() {
         product_image: (p.image_url as string) || null,
         note: `Gift idea — ${result?.recipient.occasion} for ${result?.recipient.relationship}`,
       })
-    } catch { /* ignore */ }
+    } catch { setError('Failed to save to wishlist.') }
   }
 
   return (
@@ -62,26 +65,28 @@ export default function GiftFinder() {
         </div>
       </div>
 
+      {error && <div className="error-banner" role="alert">{error}</div>}
+
       <div className="card" style={{ marginBottom: '1.5rem' }}>
         <p className="section-title" style={{ marginBottom: '0.75rem' }}>Tell us about the recipient</p>
         <div className="form-row">
           <div className="form-group" style={{ flex: 1 }}>
-            <label>Occasion</label>
-            <select className="input" value={occasion} onChange={e => setOccasion(e.target.value)}>
+            <label htmlFor="gift-occasion">Occasion</label>
+            <select id="gift-occasion" className="input" value={occasion} onChange={e => setOccasion(e.target.value)} aria-label="Select occasion">
               <option value="">Select occasion...</option>
               {OCCASIONS.map(o => <option key={o} value={o}>{o}</option>)}
             </select>
           </div>
           <div className="form-group" style={{ flex: 1 }}>
-            <label>Relationship</label>
-            <select className="input" value={relationship} onChange={e => setRelationship(e.target.value)}>
+            <label htmlFor="gift-relationship">Relationship</label>
+            <select id="gift-relationship" className="input" value={relationship} onChange={e => setRelationship(e.target.value)} aria-label="Select relationship">
               <option value="">Select relationship...</option>
               {RELATIONSHIPS.map(r => <option key={r} value={r}>{r}</option>)}
             </select>
           </div>
           <div className="form-group" style={{ flex: 1 }}>
-            <label>Age Group</label>
-            <select className="input" value={ageGroup} onChange={e => setAgeGroup(e.target.value)}>
+            <label htmlFor="gift-age">Age Group</label>
+            <select id="gift-age" className="input" value={ageGroup} onChange={e => setAgeGroup(e.target.value)} aria-label="Select age group">
               <option value="">Select age group...</option>
               {AGE_GROUPS.map(a => <option key={a} value={a}>{a}</option>)}
             </select>
@@ -89,18 +94,18 @@ export default function GiftFinder() {
         </div>
         <div className="form-row" style={{ marginTop: '0.5rem' }}>
           <div className="form-group" style={{ flex: 2 }}>
-            <label>Interests (comma-separated)</label>
-            <input className="input" value={interests} onChange={e => setInterests(e.target.value)}
-              placeholder="e.g. music, cooking, hiking, gaming" />
+            <label htmlFor="gift-interests">Interests (comma-separated)</label>
+            <input id="gift-interests" className="input" value={interests} onChange={e => setInterests(e.target.value)}
+              placeholder="e.g. music, cooking, hiking, gaming" aria-label="Interests" />
           </div>
           <div className="form-group" style={{ flex: 1 }}>
-            <label>Budget ($)</label>
-            <input className="input" type="number" min="0" step="1" value={budget}
-              onChange={e => setBudget(e.target.value)} placeholder="e.g. 50" />
+            <label htmlFor="gift-budget">Budget ($)</label>
+            <input id="gift-budget" className="input" type="number" min="0" step="1" value={budget}
+              onChange={e => setBudget(e.target.value)} placeholder="e.g. 50" aria-label="Budget" />
           </div>
           <div className="form-group" style={{ flex: 1 }}>
-            <label>Gender Preference</label>
-            <select className="input" value={gender} onChange={e => setGender(e.target.value)}>
+            <label htmlFor="gift-gender">Gender Preference</label>
+            <select id="gift-gender" className="input" value={gender} onChange={e => setGender(e.target.value)} aria-label="Select gender preference">
               <option value="">Prefer not to say</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
@@ -108,10 +113,16 @@ export default function GiftFinder() {
           </div>
         </div>
         <button className="btn btn-primary" onClick={handleFind} disabled={loading}
-          style={{ marginTop: '0.75rem', width: '100%', height: 40 }}>
-          {loading ? 'Finding Gifts...' : '🎁 Find Perfect Gifts'}
+          style={{ marginTop: '0.75rem', width: '100%', height: 40 }} aria-label="Find gifts">
+          {loading ? 'Finding Gifts...' : 'Find Perfect Gifts'}
         </button>
       </div>
+
+      {loading && (
+        <div className="card" style={{ textAlign: 'center', padding: '2rem' }} role="status">
+          <p style={{ color: 'var(--text-dim)' }}>Searching for gift ideas...</p>
+        </div>
+      )}
 
       {result && (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="card" style={{ marginBottom: '1.5rem', borderLeft: '4px solid var(--primary)' }}>
@@ -168,8 +179,9 @@ export default function GiftFinder() {
                     Score: {(rec.relevance_score * 100).toFixed(0)}%
                   </span>
                   <button className="btn" onClick={() => handleSaveToWishlist(rec)}
-                    style={{ height: 28, fontSize: '0.75rem', padding: '0 10px' }}>
-                    ♡ Save
+                    style={{ height: 28, fontSize: '0.75rem', padding: '0 10px' }}
+                    aria-label={`Save ${p.name as string} to wishlist`}>
+                    Save
                   </button>
                 </div>
               </motion.div>

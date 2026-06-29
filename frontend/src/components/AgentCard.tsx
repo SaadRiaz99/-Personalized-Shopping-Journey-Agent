@@ -21,8 +21,10 @@ export default function AgentCard({ agent, onRun, onDelete }: Props) {
         <span
           className="status"
           style={{ background: `${statusColors[agent.status]}20`, color: statusColors[agent.status] }}
+          role="status"
+          aria-label={`Status: ${agent.status}`}
         >
-          <span className="status-dot" style={{ background: statusColors[agent.status] }} />
+          <span className="status-dot" style={{ background: statusColors[agent.status] }} aria-hidden="true" />
           {agent.status}
         </span>
       </div>
@@ -32,11 +34,12 @@ export default function AgentCard({ agent, onRun, onDelete }: Props) {
           className="btn btn-primary"
           onClick={() => onRun(agent.id)}
           disabled={agent.status === 'running'}
+          aria-label={`Run agent ${agent.name}`}
         >
-          ▶ Run
+          Run
         </button>
-        <button className="btn btn-danger" onClick={() => onDelete(agent.id)}>
-          ✕ Delete
+        <button className="btn btn-danger" onClick={() => onDelete(agent.id)} aria-label={`Delete agent ${agent.name}`}>
+          Delete
         </button>
       </div>
     </div>

@@ -7,12 +7,18 @@ import ProductCard from '../components/ProductCard'
 export default function Recommendations() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [refreshKey, setRefreshKey] = useState(0)
 
   useEffect(() => {
+    let cancelled = false
+    setLoading(true)
+    setError(null)
     getRecommendations()
-      .then(setProducts)
-      .finally(() => setLoading(false))
+      .then(data => { if (!cancelled) setProducts(data) })
+      .catch(() => { if (!cancelled) setError('Failed to load recommendations') })
+      .finally(() => { if (!cancelled) setLoading(false) })
+    return () => { cancelled = true }
   }, [refreshKey])
 
   return (
@@ -35,15 +41,20 @@ export default function Recommendations() {
           onClick={() => setRefreshKey(k => k + 1)}
           disabled={loading}
           style={{ height: 36 }}
+          aria-label="Refresh recommendations"
         >
           {loading ? 'Refreshing...' : '↻ Refresh'}
         </button>
       </div>
 
+      {error && <div className="error-banner" role="alert">{error}</div>}
+
       {loading ? (
         <div
           className="grid"
           style={{ gap: '1.5rem' }}
+          role="status"
+          aria-label="Loading recommendations"
         >
           {[1, 2, 3, 4, 5, 6].map(i => (
             <div
@@ -56,6 +67,7 @@ export default function Recommendations() {
                 backgroundSize: '200% 100%',
                 animation: 'shimmer 2s infinite',
               }}
+              aria-hidden="true"
             />
           ))}
         </div>
@@ -69,6 +81,7 @@ export default function Recommendations() {
               margin: '0 auto 1.5rem',
               opacity: 0.4,
             }}
+            aria-hidden="true"
           >
             <svg
               width="28"
@@ -77,6 +90,7 @@ export default function Recommendations() {
               fill="none"
               stroke="white"
               strokeWidth="2"
+              aria-hidden="true"
             >
               <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
             </svg>

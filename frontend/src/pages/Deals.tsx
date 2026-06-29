@@ -22,6 +22,7 @@ export default function Deals() {
   const [result, setResult] = useState<DealResult | null>(null)
   const [promotions, setPromotions] = useState<Promotion[] | null>(null)
   const [showPromos, setShowPromos] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const addItem = (p: typeof SAMPLE_PRODUCTS[0]) => {
     setCartItems(prev => {
@@ -49,6 +50,7 @@ export default function Deals() {
     if (cartItems.length === 0) return
     setLoading(true)
     setResult(null)
+    setError(null)
     try {
       const res = await optimizeCart({
         user_id: userId,
@@ -58,6 +60,7 @@ export default function Deals() {
       })
       setResult(res)
     } catch {
+      setError('Failed to optimize cart. Please try again.')
       setResult(null)
     }
     setLoading(false)
@@ -65,11 +68,12 @@ export default function Deals() {
 
   const handleShowPromos = async () => {
     if (promotions) { setShowPromos(!showPromos); return }
+    setError(null)
     try {
       const res = await getPromotions()
       setPromotions(res)
       setShowPromos(true)
-    } catch { /* ignore */ }
+    } catch { setError('Failed to load promotions') }
   }
 
   return (
@@ -79,10 +83,12 @@ export default function Deals() {
           <h1 className="page-title">DealAgent</h1>
           <p className="page-subtitle">Maximize savings with smart discount stacking</p>
         </div>
-        <button className="btn" onClick={handleShowPromos} style={{ height: 36 }}>
-          {showPromos ? 'Hide Promotions' : '📋 View Active Promotions'}
+        <button className="btn" onClick={handleShowPromos} style={{ height: 36 }} aria-label={showPromos ? 'Hide promotions' : 'View active promotions'}>
+          {showPromos ? 'Hide Promotions' : 'View Active Promotions'}
         </button>
       </div>
+
+      {error && <div className="error-banner" role="alert">{error}</div>}
 
       {showPromos && promotions && (
         <div className="card" style={{ marginBottom: '1.5rem' }}>
@@ -93,7 +99,7 @@ export default function Deals() {
                 background: p.stackable ? '#1a3a2a' : '#3a1a2a',
                 color: p.stackable ? '#2bd47c' : '#ef5566',
                 padding: '4px 10px', borderRadius: 6, fontSize: '0.8rem',
-              }}>
+              }} aria-label={`${p.name}: ${p.value}${p.type === 'percentage' || p.type === 'category_markdown' ? '%' : '$'}`}>
                 {p.stackable ? '↕' : '⊘'} {p.name} {p.value}{p.type === 'percentage' || p.type === 'category_markdown' ? '%' : '$'}
                 {p.min_purchase ? ` (min $${p.min_purchase})` : ''}
               </span>
@@ -106,20 +112,20 @@ export default function Deals() {
         <p className="section-title" style={{ marginBottom: '0.75rem' }}>Session Config</p>
         <div className="form-row">
           <div className="form-group" style={{ flex: 1 }}>
-            <label>User ID</label>
-            <input className="input" value={userId} onChange={e => setUserId(e.target.value)} />
+            <label htmlFor="deal-userid">User ID</label>
+            <input id="deal-userid" className="input" value={userId} onChange={e => setUserId(e.target.value)} aria-label="User ID" />
           </div>
           <div className="form-group" style={{ flex: 1 }}>
-            <label>Loyalty Tier</label>
-            <select className="input" value={tier} onChange={e => setTier(Number(e.target.value))}>
+            <label htmlFor="deal-tier">Loyalty Tier</label>
+            <select id="deal-tier" className="input" value={tier} onChange={e => setTier(Number(e.target.value))} aria-label="Loyalty tier">
               {TIERS.map((t, i) => <option key={t} value={i}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>)}
             </select>
           </div>
           <div className="form-group" style={{ flex: 1 }}>
-            <label>Budget (optional)</label>
-            <input className="input" type="number" min="0" step="0.01"
+            <label htmlFor="deal-budget">Budget (optional)</label>
+            <input id="deal-budget" className="input" type="number" min="0" step="0.01"
               value={budget} onChange={e => setBudget(e.target.value)}
-              placeholder="e.g. 500" />
+              placeholder="e.g. 500" aria-label="Budget" />
           </div>
         </div>
       </div>
@@ -131,7 +137,8 @@ export default function Deals() {
             {SAMPLE_PRODUCTS.map(p => (
               <div key={p.product_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.85rem' }}>
                 <span>{p.name} — <strong>${p.price}</strong></span>
-                <button className="btn" onClick={() => addItem(p)} style={{ height: 28, fontSize: '0.8rem', padding: '0 10px' }}>
+                <button className="btn" onClick={() => addItem(p)} style={{ height: 28, fontSize: '0.8rem', padding: '0 10px' }}
+                  aria-label={`Add ${p.name} to cart`}>
                   + Add
                 </button>
               </div>
@@ -150,7 +157,8 @@ export default function Deals() {
               {cartItems.map(item => (
                 <div key={item.product_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.85rem' }}>
                   <span>{item.name} x{item.quantity} — <strong>${(item.price * item.quantity).toFixed(2)}</strong></span>
-                  <button className="btn btn-danger" onClick={() => removeItem(item.product_id)} style={{ height: 24, fontSize: '0.75rem', padding: '0 8px' }}>
+                  <button className="btn btn-danger" onClick={() => removeItem(item.product_id)} style={{ height: 24, fontSize: '0.75rem', padding: '0 8px' }}
+                    aria-label={`Remove ${item.name}`}>
                     ✕
                   </button>
                 </div>
@@ -164,11 +172,17 @@ export default function Deals() {
           )}
           <button className="btn btn-primary" onClick={handleOptimize}
             disabled={cartItems.length === 0 || loading}
-            style={{ marginTop: '0.75rem', width: '100%' }}>
-            {loading ? 'Analyzing...' : '🚀 Optimize My Cart'}
+            style={{ marginTop: '0.75rem', width: '100%' }} aria-label="Optimize cart">
+            {loading ? 'Analyzing...' : 'Optimize My Cart'}
           </button>
         </div>
       </div>
+
+      {loading && !result && (
+        <div className="card" style={{ textAlign: 'center', padding: '2rem' }} role="status">
+          <p style={{ color: 'var(--text-dim)' }}>Analyzing your cart for the best deals...</p>
+        </div>
+      )}
 
       {result && (
         <div className="card animate-in" style={{ borderLeft: '4px solid #2bd47c' }}>

@@ -21,7 +21,7 @@ function Sparkline({ data, width = 120, height = 32 }: { data: { price: number }
   const points = prices.map((p, i) => `${i * stepX},${height - ((p - min) / range) * (height - 4) - 2}`).join(' ')
   const trend = prices[prices.length - 1] >= prices[0]
   return (
-    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
+    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} aria-hidden="true">
       <polyline points={points} fill="none" stroke={trend ? '#10b981' : '#ef5566'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       {prices.map((p, i) => (
         <circle key={i} cx={i * stepX} cy={height - ((p - min) / range) * (height - 4) - 2} r="2" fill={trend ? '#10b981' : '#ef5566'} opacity={i === prices.length - 1 ? 1 : 0.3} />
@@ -47,6 +47,7 @@ function PriceTag({ price, original }: { price: number; original?: number }) {
 export default function PriceMatch() {
   const [products, setProducts] = useState<PriceMatchProduct[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [checking, setChecking] = useState<string | null>(null)
   const [results, setResults] = useState<Record<string, DiscountResult>>({})
   const [applying, setApplying] = useState<string | null>(null)
@@ -56,25 +57,38 @@ export default function PriceMatch() {
   const userId = 'web_user_001'
 
   useEffect(() => {
-    getPriceMatchProducts().then(data => { setProducts(data); setLoading(false) }).catch(() => setLoading(false))
-    getPriceAlerts(3).then(setAlerts).catch(() => {})
+    let cancelled = false
+    getPriceMatchProducts()
+      .then(data => { if (!cancelled) setProducts(data) })
+      .catch(() => { if (!cancelled) setError('Failed to load price match products') })
+      .finally(() => { if (!cancelled) setLoading(false) })
+    getPriceAlerts(3)
+      .then(data => { if (!cancelled) setAlerts(data) })
+      .catch(() => {})
+    return () => { cancelled = true }
   }, [])
 
   const handleCheck = async (p: PriceMatchProduct) => {
     setChecking(p.id)
+    setError(null)
     try {
       const res = await checkPriceMatch(p.id, p.sku, p.store_price, userId)
       if (res.discount) setResults(prev => ({ ...prev, [p.id]: res.discount }))
-    } catch { /* ignore */ }
+    } catch {
+      setError('Price check failed. Please try again.')
+    }
     setChecking(null)
   }
 
   const handleApply = async (discountId: string, productId: string) => {
     setApplying(discountId)
+    setError(null)
     try {
       const updated = await applyDiscount(discountId)
       setResults(prev => ({ ...prev, [productId]: updated }))
-    } catch { /* ignore */ }
+    } catch {
+      setError('Failed to apply discount. Please try again.')
+    }
     setApplying(null)
   }
 
@@ -90,8 +104,8 @@ export default function PriceMatch() {
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           {alerts.length > 0 && (
-            <button className="btn" onClick={() => setShowAlerts(!showAlerts)} style={{ height: 36, position: 'relative' }}>
-              <span>🔔</span> Alerts
+            <button className="btn" onClick={() => setShowAlerts(!showAlerts)} style={{ height: 36, position: 'relative' }} aria-label={`${showAlerts ? 'Hide' : 'Show'} price drop alerts`}>
+              <span aria-hidden="true">🔔</span> Alerts
               <span style={{ position: 'absolute', top: -4, right: -4, background: '#ef5566', color: '#fff', borderRadius: '50%', width: 18, height: 18, fontSize: '0.65rem', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>
                 {alerts.length}
               </span>
@@ -100,9 +114,11 @@ export default function PriceMatch() {
         </div>
       </div>
 
+      {error && <div className="error-banner" role="alert">{error}</div>}
+
       <AnimatePresence>
         {showAlerts && alerts.length > 0 && (
-          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="card" style={{ marginBottom: '1.5rem', overflow: 'hidden', borderLeft: '4px solid #f59e0b' }}>
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="card" style={{ marginBottom: '1.5rem', overflow: 'hidden', borderLeft: '4px solid #f59e0b' }} role="alert">
             <p className="section-title" style={{ marginBottom: '0.5rem' }}>📉 Price Drop Alerts</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               {alerts.map(a => a.alerts.slice(0, 2).map((alert, i) => (
@@ -138,9 +154,9 @@ export default function PriceMatch() {
       )}
 
       {loading ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '1rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '1rem' }} role="status" aria-label="Loading price match products">
           {[1, 2, 3, 4].map(i => (
-            <div key={i} className="card animate-in" style={{ height: 260, background: 'linear-gradient(135deg, var(--surface2) 25%, var(--surface) 50%, var(--surface2) 75%)', backgroundSize: '200% 100%', animation: 'shimmer 2s infinite' }} />
+            <div key={i} className="card animate-in" style={{ height: 260, background: 'linear-gradient(135deg, var(--surface2) 25%, var(--surface) 50%, var(--surface2) 75%)', backgroundSize: '200% 100%', animation: 'shimmer 2s infinite' }} aria-hidden="true" />
           ))}
         </div>
       ) : (
@@ -162,6 +178,7 @@ export default function PriceMatch() {
                 }}
                 onClick={() => setSelected(isSelected ? null : p.id)}
                 layout
+                role="region" aria-label={`Price match for ${p.name}`}
               >
                 <div className="card-header">
                   <div>
@@ -169,7 +186,9 @@ export default function PriceMatch() {
                     <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>{p.category}</span>
                   </div>
                   <div style={{ display: 'flex', gap: 4 }}>
-                    <span style={{ color: '#f59e0b', fontSize: '0.8rem' }}>{'★'.repeat(Math.round(p.rating))}</span>
+                    <span style={{ color: '#f59e0b', fontSize: '0.8rem' }} aria-label={`${p.rating} out of 5`}>
+                      <span aria-hidden="true">{'★'.repeat(Math.round(p.rating))}</span>
+                    </span>
                     <span style={{ color: '#6b7280', fontSize: '0.75rem' }}>{p.rating}</span>
                   </div>
                 </div>
@@ -205,11 +224,11 @@ export default function PriceMatch() {
 
                 <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
                   {!result ? (
-                    <button className="btn btn-primary" onClick={e => { e.stopPropagation(); handleCheck(p) }} disabled={checking === p.id} style={{ flex: 1, height: 32, fontSize: '0.8rem' }}>
+                    <button className="btn btn-primary" onClick={e => { e.stopPropagation(); handleCheck(p) }} disabled={checking === p.id} style={{ flex: 1, height: 32, fontSize: '0.8rem' }} aria-label={`Check price for ${p.name}`}>
                       {checking === p.id ? <><span className="status-dot" style={{ animation: 'pulse-dot 1.5s infinite' }} /> Scanning...</> : '🔍 Check Price'}
                     </button>
                   ) : result.status === 'approved' ? (
-                    <button className="btn btn-success" onClick={e => { e.stopPropagation(); handleApply(result.id, p.id) }} disabled={applying === result.id} style={{ flex: 1, height: 32, fontSize: '0.8rem' }}>
+                    <button className="btn btn-success" onClick={e => { e.stopPropagation(); handleApply(result.id, p.id) }} disabled={applying === result.id} style={{ flex: 1, height: 32, fontSize: '0.8rem' }} aria-label={`Apply discount of $${result.discount_amount.toFixed(2)}`}>
                       {applying === result.id ? 'Applying...' : `✅ Apply -$${result.discount_amount.toFixed(2)}`}
                     </button>
                   ) : result.status === 'applied' ? (

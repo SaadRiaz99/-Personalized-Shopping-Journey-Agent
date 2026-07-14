@@ -34,5 +34,8 @@ backend/data/
 err.log
 out.log
 
+# Test reports (belong on Report branch)
+agent_reports/
+
 # Embedded repos
 -Personalized-Shopping-Journey-Agent/

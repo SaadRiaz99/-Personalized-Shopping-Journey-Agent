@@ -14,8 +14,7 @@ export default function Products() {
 
   useEffect(() => {
     let cancelled = false
-    setLoading(true)
-    setError(null)
+    setLoading(true); setError(null)
     getProducts({ category: category || undefined, search: search || undefined })
       .then(data => { if (!cancelled) setProducts(data) })
       .catch(() => { if (!cancelled) setError('Failed to load products') })
@@ -35,21 +34,13 @@ export default function Products() {
       <div className="filters-bar">
         <div className="form-group" style={{ flex: 1, minWidth: 200 }}>
           <label htmlFor="product-search">Search</label>
-          <input
-            id="product-search"
-            className="input"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            placeholder="Search products..."
-            aria-label="Search products"
-          />
+          <input id="product-search" className="input" value={search} onChange={e => setSearch(e.target.value)}
+            placeholder="Search products..." />
         </div>
         <div className="form-group" style={{ minWidth: 160 }}>
           <label htmlFor="product-category">Category</label>
-          <select id="product-category" className="input" value={category} onChange={e => setCategory(e.target.value)} aria-label="Filter by category">
-            {categories.map(c => (
-              <option key={c} value={c}>{c || 'All Categories'}</option>
-            ))}
+          <select id="product-category" className="input" value={category} onChange={e => setCategory(e.target.value)}>
+            {categories.map(c => <option key={c} value={c}>{c || 'All Categories'}</option>)}
           </select>
         </div>
       </div>
@@ -58,9 +49,7 @@ export default function Products() {
 
       {loading ? (
         <div className="grid">
-          {[1,2,3,4,5,6].map(i => (
-            <div key={i} className="skeleton-card" aria-hidden="true" />
-          ))}
+          {[1,2,3,4,5,6].map(i => <div key={i} className="skeleton-card" aria-hidden="true" />)}
         </div>
       ) : (
         <div className="grid" role="list" aria-label="Product grid">
@@ -69,7 +58,9 @@ export default function Products() {
       )}
       {!loading && products.length === 0 && !error && (
         <div className="empty-state">
-          <div className="empty-icon" aria-hidden="true">✦</div>
+          <div className="empty-icon" aria-hidden="true">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.3"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+          </div>
           <p>No products found matching your filters.</p>
         </div>
       )}

@@ -412,3 +412,70 @@ class UserSession(BaseModel):
     created_at: str
     last_activity: str
     is_active: bool = True
+
+
+# ── Budget Tracker Models ─────────────────────────────────────
+
+class BudgetPeriod(str, Enum):
+    daily = "daily"
+    weekly = "weekly"
+    monthly = "monthly"
+
+
+class BudgetEntry(BaseModel):
+    id: str
+    user_id: str
+    product_id: str
+    product_name: str
+    category: str
+    amount: float
+    quantity: int = 1
+    timestamp: str = ""
+    note: Optional[str] = None
+
+
+class BudgetLimit(BaseModel):
+    id: str
+    user_id: str
+    period: BudgetPeriod
+    limit_amount: float
+    category: Optional[str] = None
+    created_at: str = ""
+    updated_at: str = ""
+
+
+class BudgetCheckRequest(BaseModel):
+    user_id: str
+    product_id: str
+    product_name: str
+    category: str
+    amount: float
+    quantity: int = 1
+
+
+class BudgetCheckResult(BaseModel):
+    within_budget: bool
+    current_spending: float
+    limit: float
+    remaining: float
+    message: str
+    alerts: list[str] = []
+
+
+class SpendingSummary(BaseModel):
+    user_id: str
+    period: BudgetPeriod
+    total_spent: float
+    entry_count: int
+    category_breakdown: dict[str, float] = {}
+    daily_average: float = 0.0
+    limits: list[BudgetLimit] = []
+    alerts: list[str] = []
+
+
+class BudgetAlternative(BaseModel):
+    product: dict
+    original_price: float
+    alternative_price: float
+    savings: float
+    reason: str

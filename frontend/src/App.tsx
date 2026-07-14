@@ -14,6 +14,7 @@ import Products from './pages/Products'
 import Recommendations from './pages/Recommendations'
 import Preferences from './pages/Preferences'
 import Account from './pages/Account'
+import BudgetTracker from './pages/BudgetTracker'
 
 export default function App() {
   return (
@@ -33,6 +34,7 @@ export default function App() {
               <Route path="products" element={<Products />} />
               <Route path="recommendations" element={<Recommendations />} />
               <Route path="preferences" element={<Preferences />} />
+              <Route path="budget" element={<BudgetTracker />} />
               <Route path="account" element={<Account />} />
             </Route>
           </Route>

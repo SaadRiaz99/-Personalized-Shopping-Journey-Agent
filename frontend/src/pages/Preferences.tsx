@@ -5,21 +5,14 @@ import type { UserPreferences } from '../types'
 const allCategories = ['Electronics', 'Sports', 'Home', 'Fashion']
 
 export default function Preferences() {
-  const [prefs, setPrefs] = useState<UserPreferences>({
-    categories: [],
-    price_min: 0,
-    price_max: 10000,
-    brands: [],
-    budget: 1000,
-  })
+  const [prefs, setPrefs] = useState<UserPreferences>({ categories: [], price_min: 0, price_max: 10000, brands: [], budget: 1000 })
   const [saved, setSaved] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     let cancelled = false
-    setLoading(true)
-    setError(null)
+    setLoading(true); setError(null)
     getPreferences()
       .then(data => { if (!cancelled) setPrefs(data) })
       .catch(() => { if (!cancelled) setError('Failed to load preferences') })
@@ -28,21 +21,13 @@ export default function Preferences() {
   }, [])
 
   const toggleCategory = (cat: string) => {
-    setPrefs(p => ({
-      ...p,
-      categories: p.categories.includes(cat)
-        ? p.categories.filter(c => c !== cat)
-        : [...p.categories, cat],
-    }))
+    setPrefs(p => ({ ...p, categories: p.categories.includes(cat) ? p.categories.filter(c => c !== cat) : [...p.categories, cat] }))
   }
 
   const handleSave = async () => {
     setError(null)
-    try {
-      await updatePreferences(prefs)
-      setSaved(true)
-      setTimeout(() => setSaved(false), 2000)
-    } catch { setError('Failed to save preferences') }
+    try { await updatePreferences(prefs); setSaved(true); setTimeout(() => setSaved(false), 2000) }
+    catch { setError('Failed to save preferences') }
   }
 
   if (loading) {
@@ -55,7 +40,8 @@ export default function Preferences() {
           </div>
         </div>
         <div className="card" style={{ textAlign: 'center', padding: '3rem' }} role="status">
-          <p style={{ color: 'var(--text-dim)' }}>Loading preferences...</p>
+          <span className="spinner" style={{ margin: '0 auto', display: 'block' }} />
+          <p style={{ color: 'var(--text-dim)', marginTop: '0.75rem' }}>Loading preferences...</p>
         </div>
       </div>
     )
@@ -78,12 +64,7 @@ export default function Preferences() {
           <div className="checkbox-grid">
             {allCategories.map(cat => (
               <label key={cat}>
-                <input
-                  type="checkbox"
-                  checked={prefs.categories.includes(cat)}
-                  onChange={() => toggleCategory(cat)}
-                  aria-label={`Category: ${cat}`}
-                />
+                <input type="checkbox" checked={prefs.categories.includes(cat)} onChange={() => toggleCategory(cat)} />
                 {cat}
               </label>
             ))}
@@ -93,54 +74,36 @@ export default function Preferences() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
           <div className="form-group">
             <label htmlFor="pref-min-price">Min Price ($)</label>
-            <input
-              id="pref-min-price"
-              className="input"
-              type="number"
-              value={prefs.price_min}
-              onChange={e => setPrefs(p => ({ ...p, price_min: +e.target.value }))}
-              aria-label="Minimum price"
-            />
+            <input id="pref-min-price" className="input" type="number" value={prefs.price_min}
+              onChange={e => setPrefs(p => ({ ...p, price_min: +e.target.value }))} />
           </div>
           <div className="form-group">
             <label htmlFor="pref-max-price">Max Price ($)</label>
-            <input
-              id="pref-max-price"
-              className="input"
-              type="number"
-              value={prefs.price_max}
-              onChange={e => setPrefs(p => ({ ...p, price_max: +e.target.value }))}
-              aria-label="Maximum price"
-            />
+            <input id="pref-max-price" className="input" type="number" value={prefs.price_max}
+              onChange={e => setPrefs(p => ({ ...p, price_max: +e.target.value }))} />
           </div>
         </div>
 
         <div className="form-group">
           <label htmlFor="pref-budget">Budget ($)</label>
-          <input
-            id="pref-budget"
-            className="input"
-            type="number"
-            value={prefs.budget}
-            onChange={e => setPrefs(p => ({ ...p, budget: +e.target.value }))}
-            aria-label="Budget"
-          />
+          <input id="pref-budget" className="input" type="number" value={prefs.budget}
+            onChange={e => setPrefs(p => ({ ...p, budget: +e.target.value }))} />
         </div>
 
         <div className="form-group">
           <label htmlFor="pref-brands">Preferred Brands</label>
-          <input
-            id="pref-brands"
-            className="input"
-            value={prefs.brands.join(', ')}
+          <input id="pref-brands" className="input" value={prefs.brands.join(', ')}
             onChange={e => setPrefs(p => ({ ...p, brands: e.target.value.split(',').map(b => b.trim()).filter(Boolean) }))}
-            placeholder="e.g. Nike, Apple, Samsung"
-            aria-label="Preferred brands (comma separated)"
-          />
+            placeholder="e.g. Nike, Apple, Samsung" />
         </div>
 
-        <button className="btn btn-primary" onClick={handleSave} aria-label="Save preferences">
-          {saved ? 'Saved' : 'Save Preferences'}
+        <button className="btn btn-primary" onClick={handleSave} style={{ width: '100%', height: 42 }}>
+          {saved ? (
+            <span style={{ display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Saved
+            </span>
+          ) : 'Save Preferences'}
         </button>
       </div>
 

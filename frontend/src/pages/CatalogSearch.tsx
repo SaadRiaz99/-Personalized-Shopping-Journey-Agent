@@ -24,24 +24,16 @@ export default function CatalogSearch() {
   }, [])
 
   const search = async (p?: number) => {
-    setLoading(true)
-    setSelectedProduct(null)
-    setError(null)
+    setLoading(true); setSelectedProduct(null); setError(null)
     try {
       const res = await catalogSearch({
-        query: query || undefined,
-        category: category || undefined,
+        query: query || undefined, category: category || undefined,
         max_price: maxPrice ? parseFloat(maxPrice) : undefined,
         min_rating: minRating ? parseFloat(minRating) : undefined,
-        sort_by: sortBy,
-        page: p ?? page,
-        page_size: 12,
+        sort_by: sortBy, page: p ?? page, page_size: 12,
       })
-      setResult(res)
-      setPage(p ?? page)
-    } catch {
-      setError('Search failed. Please try again.')
-    }
+      setResult(res); setPage(p ?? page)
+    } catch { setError('Search failed. Please try again.') }
     setLoading(false)
   }
 
@@ -52,9 +44,9 @@ export default function CatalogSearch() {
   }
 
   const stockColor = (p: CatalogProduct) => {
-    if (p.stock === 0) return '#ef5566'
-    if (p.stock < 10) return '#f59e0b'
-    return '#2bd47c'
+    if (p.stock === 0) return 'var(--danger)'
+    if (p.stock < 10) return 'var(--warning)'
+    return 'var(--success)'
   }
 
   return (
@@ -77,7 +69,7 @@ export default function CatalogSearch() {
           </div>
           <div className="form-group" style={{ flex: 1 }}>
             <label htmlFor="cat-category">Category</label>
-            <select id="cat-category" className="input" value={category} onChange={e => setCategory(e.target.value)} aria-label="Filter by category">
+            <select id="cat-category" className="input" value={category} onChange={e => setCategory(e.target.value)}>
               <option value="">All Categories</option>
               {categories.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
@@ -85,11 +77,11 @@ export default function CatalogSearch() {
           <div className="form-group" style={{ flex: 1 }}>
             <label htmlFor="cat-maxprice">Max Price</label>
             <input id="cat-maxprice" className="input" type="number" min="0" value={maxPrice}
-              onChange={e => setMaxPrice(e.target.value)} placeholder="e.g. 100" aria-label="Maximum price" />
+              onChange={e => setMaxPrice(e.target.value)} placeholder="e.g. 100" />
           </div>
           <div className="form-group" style={{ flex: 1 }}>
             <label htmlFor="cat-rating">Min Rating</label>
-            <select id="cat-rating" className="input" value={minRating} onChange={e => setMinRating(e.target.value)} aria-label="Minimum rating">
+            <select id="cat-rating" className="input" value={minRating} onChange={e => setMinRating(e.target.value)}>
               <option value="">Any</option>
               <option value="3">3+</option>
               <option value="3.5">3.5+</option>
@@ -99,7 +91,7 @@ export default function CatalogSearch() {
           </div>
           <div className="form-group" style={{ flex: 1 }}>
             <label htmlFor="cat-sort">Sort By</label>
-            <select id="cat-sort" className="input" value={sortBy} onChange={e => setSortBy(e.target.value)} aria-label="Sort results by">
+            <select id="cat-sort" className="input" value={sortBy} onChange={e => setSortBy(e.target.value)}>
               <option value="relevance">Relevance</option>
               <option value="price_asc">Price: Low-High</option>
               <option value="price_desc">Price: High-Low</option>
@@ -107,56 +99,51 @@ export default function CatalogSearch() {
               <option value="name">Name</option>
             </select>
           </div>
-          <button className="btn btn-primary" onClick={() => search(1)}
-            disabled={loading} style={{ height: 36, alignSelf: 'flex-end' }} aria-label="Search">
-            {loading ? 'Searching...' : 'Search'}
+          <button className="btn btn-primary" onClick={() => search(1)} disabled={loading}
+            style={{ height: 38, alignSelf: 'flex-end' }}>
+            {loading ? <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><span className="spinner" /> Searching...</span> : 'Search'}
           </button>
         </div>
       </div>
 
       <div style={{ display: 'flex', gap: '1.5rem' }}>
-        <div style={{ flex: selectedProduct ? 1.5 : 1 }}>
+        <div style={{ flex: selectedProduct ? 1.5 : 1, minWidth: 0 }}>
           {result && (
-            <p style={{ color: '#a0aec0', fontSize: '0.85rem', marginBottom: '0.75rem' }} role="status">
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginBottom: '1rem' }} role="status">
               {result.total} product{result.total !== 1 ? 's' : ''} found
-              {result.query && <> for "<strong>{result.query}</strong>"</>}
+              {result.query && <> for "<strong style={{ color: 'var(--text)' }}>{result.query}</strong>"</>}
             </p>
           )}
 
           {loading ? (
-            <div className="card" style={{ textAlign: 'center', padding: '3rem' }} role="status">
-              <p style={{ color: 'var(--text-dim)' }}>Searching catalog...</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '0.75rem' }}>
+              {[1,2,3,4,5,6].map(i => <div key={i} className="skeleton-card" style={{ height: 160 }} />)}
             </div>
           ) : (
-            <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
-              {result?.products.map(p => (
-                <div key={p.id} className="card animate-in" style={{ cursor: 'pointer' }}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '0.75rem' }}>
+              {result?.products.map((p) => (
+                <div key={p.id} className="card animate-in" style={{ cursor: 'pointer', padding: '1rem' }}
                   onClick={() => setSelectedProduct(selectedProduct?.id === p.id ? null : p)}
                   role="button" tabIndex={0} aria-label={`${p.name}, $${p.price.toFixed(2)}`}
-                  onKeyDown={e => e.key === 'Enter' && setSelectedProduct(selectedProduct?.id === p.id ? null : p)}>
-                  <div className="card-header">
-                    <h4 style={{ fontSize: '0.9rem' }}>{p.name}</h4>
-                  </div>
-                  <div style={{ fontSize: '0.85rem', color: '#a0aec0', marginBottom: '0.25rem' }}>
-                    {p.category}
-                  </div>
-                  <div style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '0.25rem' }}>
-                    ${p.price.toFixed(2)}
-                  </div>
-                  <div style={{ fontSize: '0.85rem' }}>
-                    <span style={{ color: '#f59e0b' }} aria-label={`${p.rating} out of 5 stars`}>
-                      <span aria-hidden="true">{'★'.repeat(Math.round(p.rating))}{'☆'.repeat(5 - Math.round(p.rating))}</span>
+                  onKeyDown={e => e.key === 'Enter' && setSelectedProduct(selectedProduct?.id === p.id ? null : p)}
+                >
+                  <div style={{ height: 3, borderRadius: 2, background: `linear-gradient(90deg, ${stockColor(p)}, transparent)`, marginBottom: '0.5rem', opacity: 0.6 }} />
+                  <h4 style={{ fontSize: '0.85rem', marginBottom: '0.35rem', lineHeight: 1.3 }}>{p.name}</h4>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginBottom: '0.35rem' }}>{p.category}</div>
+                  <div style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text)', marginBottom: '0.25rem' }}>${p.price.toFixed(2)}</div>
+                  <div style={{ fontSize: '0.8rem' }}>
+                    <span style={{ color: 'var(--warning)' }}>
+                      <span aria-hidden="true">{'\u2605'.repeat(Math.round(p.rating))}{'\u2606'.repeat(5 - Math.round(p.rating))}</span>
                     </span>
-                    <span style={{ color: '#6b7280', marginLeft: 4 }}>{p.rating}/5</span>
+                    <span style={{ color: 'var(--text-dim)', marginLeft: 4 }}>{p.rating}/5</span>
                   </div>
-                  <div style={{ fontSize: '0.8rem', marginTop: '0.25rem', color: stockColor(p) }}>
+                  <div style={{ fontSize: '0.75rem', marginTop: '0.35rem', color: stockColor(p), fontWeight: 600 }}>
                     {stockLabel(p)}
                   </div>
                 </div>
               ))}
               {result && result.products.length === 0 && (
                 <div className="empty-state" style={{ gridColumn: '1 / -1' }}>
-                  <div className="empty-icon" aria-hidden="true">✦</div>
                   <p>No products found. Try adjusting your filters.</p>
                 </div>
               )}
@@ -164,41 +151,41 @@ export default function CatalogSearch() {
           )}
 
           {result && result.total_pages > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '1.5rem' }}>
-              <button className="btn" disabled={page <= 1} onClick={() => search(page - 1)}
-                style={{ height: 32, fontSize: '0.85rem' }} aria-label="Previous page">← Prev</button>
-              <span style={{ color: '#a0aec0', alignSelf: 'center', fontSize: '0.85rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '1.5rem', alignItems: 'center' }}>
+              <button className="btn btn-ghost" disabled={page <= 1} onClick={() => search(page - 1)}
+                style={{ height: 34, fontSize: '0.82rem' }}>{"\u2190"} Prev</button>
+              <span style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>
                 Page {page} of {result.total_pages}
               </span>
-              <button className="btn" disabled={page >= result.total_pages} onClick={() => search(page + 1)}
-                style={{ height: 32, fontSize: '0.85rem' }} aria-label="Next page">Next →</button>
+              <button className="btn btn-ghost" disabled={page >= result.total_pages} onClick={() => search(page + 1)}
+                style={{ height: 34, fontSize: '0.82rem' }}>Next {"\u2192"}</button>
             </div>
           )}
         </div>
 
         {selectedProduct && (
-          <div className="card animate-in" style={{ flex: 1, height: 'fit-content', position: 'sticky', top: '1rem' }} role="complementary" aria-label="Product details">
+          <div className="card animate-in" style={{ flex: 1, height: 'fit-content', position: 'sticky', top: '1rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
               <p className="section-title" style={{ margin: 0 }}>Product Details</p>
-              <button className="btn" onClick={() => setSelectedProduct(null)}
-                style={{ height: 28, width: 28, padding: 0, fontSize: '0.85rem' }} aria-label="Close product details">✕</button>
+              <button className="btn btn-ghost" onClick={() => setSelectedProduct(null)}
+                style={{ height: 28, width: 28, padding: 0, fontSize: '0.85rem' }}>{"\u2715"}</button>
             </div>
-            <h2 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>{selectedProduct.name}</h2>
-            <div style={{ display: 'flex', gap: '1rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
-              <span className="tag" style={{ background: '#1a3a2a', color: '#2bd47c', padding: '4px 10px', borderRadius: 6, fontSize: '0.8rem' }}>
+            <h2 style={{ fontSize: '1.05rem', marginBottom: '0.5rem' }}>{selectedProduct.name}</h2>
+            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
+              <span className="tag" style={{ background: 'var(--success-glow)', color: 'var(--success)', border: '1px solid rgba(16,185,129,0.15)' }}>
                 {selectedProduct.category}
               </span>
-              <span style={{ fontSize: '1.3rem', fontWeight: 700 }}>${selectedProduct.price.toFixed(2)}</span>
-              <span style={{ color: '#f59e0b', fontSize: '0.9rem' }}>
-                <span aria-hidden="true">{'★'.repeat(Math.round(selectedProduct.rating))}{'☆'.repeat(5 - Math.round(selectedProduct.rating))}</span>
-                <span style={{ color: '#6b7280', marginLeft: 4 }}>{selectedProduct.rating}/5</span>
+              <span style={{ fontSize: '1.2rem', fontWeight: 800 }}>${selectedProduct.price.toFixed(2)}</span>
+              <span style={{ color: 'var(--warning)', fontSize: '0.85rem' }}>
+                <span aria-hidden="true">{'\u2605'.repeat(Math.round(selectedProduct.rating))}{'\u2606'.repeat(5 - Math.round(selectedProduct.rating))}</span>
+                <span style={{ color: 'var(--text-dim)', marginLeft: 4 }}>{selectedProduct.rating}/5</span>
               </span>
             </div>
-            <p style={{ color: '#a0aec0', fontSize: '0.9rem', marginBottom: '0.75rem' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '0.75rem', lineHeight: 1.5 }}>
               {selectedProduct.description}
             </p>
-            <div style={{ fontSize: '0.85rem', color: stockColor(selectedProduct) }}>
-              {stockLabel(selectedProduct)} · ID: #{selectedProduct.id}
+            <div style={{ fontSize: '0.8rem', color: stockColor(selectedProduct), fontWeight: 600 }}>
+              {stockLabel(selectedProduct)} &middot; ID: #{selectedProduct.id}
             </div>
           </div>
         )}

@@ -7,6 +7,8 @@ from typing import Optional
 from app.models import (
     Agent,
     AuthUser,
+    BudgetEntry,
+    BudgetLimit,
     Discount,
     DiscountStack,
     AppliedDiscount,
@@ -146,6 +148,28 @@ def init_db():
                 created_at TEXT NOT NULL,
                 last_activity TEXT NOT NULL,
                 is_active INTEGER NOT NULL DEFAULT 1
+            );
+
+            CREATE TABLE IF NOT EXISTS budget_entries (
+                id TEXT PRIMARY KEY,
+                user_id TEXT NOT NULL,
+                product_id TEXT NOT NULL,
+                product_name TEXT NOT NULL,
+                category TEXT NOT NULL,
+                amount REAL NOT NULL,
+                quantity INTEGER NOT NULL DEFAULT 1,
+                timestamp TEXT NOT NULL,
+                note TEXT
+            );
+
+            CREATE TABLE IF NOT EXISTS budget_limits (
+                id TEXT PRIMARY KEY,
+                user_id TEXT NOT NULL,
+                period TEXT NOT NULL,
+                limit_amount REAL NOT NULL,
+                category TEXT,
+                created_at TEXT NOT NULL,
+                updated_at TEXT NOT NULL
             );
         """)
 
@@ -580,3 +604,79 @@ def deactivate_all_user_sessions(conn, user_id: str) -> None:
     conn.execute(
         "UPDATE user_sessions SET is_active = 0 WHERE user_id = ?", (user_id,)
     )
+
+
+# ── Budget Entry CRUD ─────────────────────────────────────────
+
+def create_budget_entry(conn, entry: BudgetEntry) -> None:
+    conn.execute(
+        "INSERT INTO budget_entries (id, user_id, product_id, product_name, category, amount, quantity, timestamp, note) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        (entry.id, entry.user_id, entry.product_id, entry.product_name,
+         entry.category, entry.amount, entry.quantity, entry.timestamp,
+         entry.note),
+    )
+
+
+def get_budget_entries(conn, user_id: str, since: Optional[str] = None) -> list[BudgetEntry]:
+    if since:
+        rows = conn.execute(
+            "SELECT * FROM budget_entries WHERE user_id = ? AND timestamp >= ? ORDER BY timestamp DESC",
+            (user_id, since),
+        ).fetchall()
+    else:
+        rows = conn.execute(
+            "SELECT * FROM budget_entries WHERE user_id = ? ORDER BY timestamp DESC",
+            (user_id,),
+        ).fetchall()
+    return [
+        BudgetEntry(
+            id=r["id"], user_id=r["user_id"],
+            product_id=r["product_id"], product_name=r["product_name"],
+            category=r["category"], amount=r["amount"],
+            quantity=r["quantity"], timestamp=r["timestamp"],
+            note=r["note"],
+        )
+        for r in rows
+    ]
+
+
+def delete_budget_entry(conn, entry_id: str) -> bool:
+    cursor = conn.execute("DELETE FROM budget_entries WHERE id = ?", (entry_id,))
+    return cursor.rowcount > 0
+
+
+# ── Budget Limit CRUD ──────────────────────────────────────────
+
+def create_budget_limit(conn, limit: BudgetLimit) -> None:
+    conn.execute(
+        "INSERT INTO budget_limits (id, user_id, period, limit_amount, category, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        (limit.id, limit.user_id, limit.period.value, limit.limit_amount,
+         limit.category, limit.created_at, limit.updated_at),
+    )
+
+
+def get_budget_limits(conn, user_id: str) -> list[BudgetLimit]:
+    rows = conn.execute(
+        "SELECT * FROM budget_limits WHERE user_id = ?", (user_id,)
+    ).fetchall()
+    return [
+        BudgetLimit(
+            id=r["id"], user_id=r["user_id"],
+            period=r["period"], limit_amount=r["limit_amount"],
+            category=r["category"],
+            created_at=r["created_at"], updated_at=r["updated_at"],
+        )
+        for r in rows
+    ]
+
+
+def update_budget_limit(conn, limit: BudgetLimit) -> None:
+    conn.execute(
+        "UPDATE budget_limits SET limit_amount=?, category=?, updated_at=? WHERE id=?",
+        (limit.limit_amount, limit.category, limit.updated_at, limit.id),
+    )
+
+
+def delete_budget_limit(conn, limit_id: str) -> bool:
+    cursor = conn.execute("DELETE FROM budget_limits WHERE id = ?", (limit_id,))
+    return cursor.rowcount > 0

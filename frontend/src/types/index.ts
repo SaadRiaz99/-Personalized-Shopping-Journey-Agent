@@ -300,3 +300,55 @@ export interface CollaborationResult {
   products: Product[]
   summary: string
 }
+
+// Budget Tracker
+export interface BudgetEntry {
+  id: string
+  user_id: string
+  product_id: string
+  product_name: string
+  category: string
+  amount: number
+  quantity: number
+  timestamp: string
+  note: string | null
+}
+
+export interface BudgetLimit {
+  id: string
+  user_id: string
+  period: 'daily' | 'weekly' | 'monthly'
+  limit_amount: number
+  category: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface BudgetCheckRequest {
+  user_id: string
+  product_id: string
+  product_name: string
+  category: string
+  amount: number
+  quantity?: number
+}
+
+export interface BudgetCheckResult {
+  within_budget: boolean
+  current_spending: number
+  limit: number
+  remaining: number
+  message: string
+  alerts: string[]
+}
+
+export interface SpendingSummary {
+  user_id: string
+  period: 'daily' | 'weekly' | 'monthly'
+  total_spent: number
+  entry_count: number
+  category_breakdown: Record<string, number>
+  daily_average: number
+  limits: BudgetLimit[]
+  alerts: string[]
+}

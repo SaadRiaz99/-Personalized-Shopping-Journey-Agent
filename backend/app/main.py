@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import init_db
 from app.auth import seed_users
-from app.routes import agents, auth, catalog, deals, intent, preferences, price_match, privacy, products, recommendations, ws, gift_finder, cross_sell, wishlist
+from app.routes import agents, auth, catalog, deals, intent, preferences, price_match, privacy, products, recommendations, ws, gift_finder, cross_sell, wishlist, budget
 
 load_dotenv(dotenv_path=Path(__file__).parents[2] / ".env")
 
@@ -39,6 +39,7 @@ app.include_router(ws.router)
 app.include_router(gift_finder.router)
 app.include_router(cross_sell.router)
 app.include_router(wishlist.router)
+app.include_router(budget.router)
 
 
 @app.get("/api/health")

@@ -1,20 +1,10 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { getCrossSell, addToWishlist } from '../services/api'
+import { getCrossSell, addToWishlist, catalogSearch } from '../services/api'
 import type { CrossSellResult, CrossSellItem, CatalogProduct } from '../types'
-import { catalogSearch } from '../services/api'
 
-const TYPE_COLORS: Record<string, string> = {
-  complementary: '#818cf8',
-  upsell: '#f59e0b',
-  accessory: '#2bd47c',
-}
-
-const TYPE_ICONS: Record<string, string> = {
-  complementary: '↔',
-  upsell: '↑',
-  accessory: '◇',
-}
+const TYPE_COLORS: Record<string, string> = { complementary: 'var(--primary)', upsell: 'var(--warning)', accessory: 'var(--success)' }
+const TYPE_ICONS: Record<string, string> = { complementary: '\u2194', upsell: '\u2191', accessory: '\u25C7' }
 
 export default function CrossSell() {
   const [searchQuery, setSearchQuery] = useState('')
@@ -27,30 +17,16 @@ export default function CrossSell() {
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) return
-    setSearchLoading(true)
-    setError(null)
-    try {
-      const res = await catalogSearch({ query: searchQuery, page_size: 8 })
-      setSearchResults(res.products)
-    } catch {
-      setError('Search failed. Please try again.')
-      setSearchResults([])
-    }
+    setSearchLoading(true); setError(null)
+    try { const res = await catalogSearch({ query: searchQuery, page_size: 8 }); setSearchResults(res.products) }
+    catch { setError('Search failed.'); setSearchResults([]) }
     setSearchLoading(false)
   }
 
   const handleSelectProduct = async (product: CatalogProduct) => {
-    setSelectedProduct(product)
-    setLoading(true)
-    setResult(null)
-    setError(null)
-    try {
-      const res = await getCrossSell(product.id)
-      setResult(res)
-    } catch {
-      setError('Failed to load cross-sell recommendations.')
-      setResult(null)
-    }
+    setSelectedProduct(product); setLoading(true); setResult(null); setError(null)
+    try { setResult(await getCrossSell(product.id)) }
+    catch { setError('Failed to load cross-sell recommendations.'); setResult(null) }
     setLoading(false)
   }
 
@@ -58,25 +34,18 @@ export default function CrossSell() {
     const p = item.product
     try {
       await addToWishlist({
-        product_id: p.id as number,
-        product_name: p.name as string,
-        product_price: p.price as number,
-        product_category: p.category as string,
-        product_image: (p.image_url as string) || null,
+        product_id: p.id as number, product_name: p.name as string, product_price: p.price as number,
+        product_category: p.category as string, product_image: (p.image_url as string) || null,
         note: `Cross-sell: ${item.type} for ${selectedProduct?.name as string}`,
       })
-    } catch {
-      setError('Failed to save to wishlist.')
-    }
+    } catch { setError('Failed to save to wishlist.') }
   }
 
   return (
     <div>
       <div className="page-header">
         <div className="page-header-left">
-          <motion.h1 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="page-title">
-            Cross-sell & Upsell
-          </motion.h1>
+          <motion.h1 initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="page-title">Cross-sell & Upsell</motion.h1>
           <p className="page-subtitle">Discover complementary products and premium upgrades</p>
         </div>
       </div>
@@ -90,22 +59,20 @@ export default function CrossSell() {
             <label htmlFor="crossell-search">Search Products</label>
             <input id="crossell-search" className="input" value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSearch()}
-              placeholder="e.g. headphones, shoes, camera..." aria-label="Search products" />
+              placeholder="e.g. headphones, shoes, camera..." />
           </div>
           <button className="btn btn-primary" onClick={handleSearch} disabled={searchLoading}
-            style={{ height: 36, marginTop: 22 }} aria-label="Search">
-            {searchLoading ? 'Searching...' : 'Search'}
+            style={{ height: 38, marginTop: 22 }}>
+            {searchLoading ? <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><span className="spinner" /> Searching...</span> : 'Search'}
           </button>
         </div>
-
         {searchResults.length > 0 && (
-          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '0.75rem' }} role="list" aria-label="Search results">
+          <div style={{ display: 'flex', gap: '0.35rem', flexWrap: 'wrap', marginTop: '0.75rem' }} role="list">
             {searchResults.map(p => (
               <button key={p.id} onClick={() => handleSelectProduct(p)}
-                className={`btn ${selectedProduct?.id === p.id ? 'btn-primary' : ''}`}
-                style={{ fontSize: '0.8rem', padding: '6px 12px' }}
-                aria-label={`Select ${p.name}`}>
-                {p.name} — ${p.price.toFixed(2)}
+                className={`btn ${selectedProduct?.id === p.id ? 'btn-primary' : 'btn-ghost'}`}
+                style={{ fontSize: '0.78rem', padding: '6px 12px' }}>
+                {p.name} {"\u2014"} ${p.price.toFixed(2)}
               </button>
             ))}
           </div>
@@ -113,24 +80,25 @@ export default function CrossSell() {
       </div>
 
       {loading && (
-        <div className="card" style={{ textAlign: 'center', padding: '2rem' }} role="status">
-          <p style={{ color: 'var(--text-dim)' }}>Analyzing product for cross-sell opportunities...</p>
+        <div className="card" style={{ textAlign: 'center', padding: '2.5rem' }} role="status">
+          <span className="spinner" style={{ margin: '0 auto', display: 'block' }} />
+          <p style={{ color: 'var(--text-dim)', marginTop: '0.75rem' }}>Analyzing product for cross-sell opportunities...</p>
         </div>
       )}
 
       {result && !loading && (
         <>
-          <div className="card" style={{ marginBottom: '1.5rem', borderLeft: '4px solid var(--primary)' }}>
+          <div className="card" style={{ marginBottom: '1.5rem', borderLeft: '3px solid var(--primary)' }}>
             <p className="section-title" style={{ marginBottom: '0.25rem' }}>Cross-sell Agent Report</p>
-            <p style={{ fontSize: '0.9rem', color: 'var(--text-dim)' }}>
-              Based on <strong>{result.source_product.name as string}</strong> (${(result.source_product.price as number).toFixed(2)})
-              — found {result.recommendations.length} recommendations
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+              Based on <strong style={{ color: 'var(--text)' }}>{result.source_product.name as string}</strong> (${(result.source_product.price as number).toFixed(2)})
+              {"\u2014"} found {result.recommendations.length} recommendations
             </p>
           </div>
 
           {result.recommendations.length === 0 ? (
             <div className="empty-state" style={{ padding: '3rem' }}>
-              <p>No cross-sell recommendations found for this product. Try a different product.</p>
+              <p>No cross-sell recommendations found. Try a different product.</p>
             </div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -139,45 +107,32 @@ export default function CrossSell() {
                 if (items.length === 0) return null
                 return (
                   <div key={type}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                      <span className="status-pill" style={{
-                        background: `${TYPE_COLORS[type]}15`,
-                        color: TYPE_COLORS[type],
-                      }}>
-                        {TYPE_ICONS[type]} {type.charAt(0).toUpperCase() + type.slice(1)} ({items.length})
-                      </span>
-                    </div>
+                    <span className="status-pill" style={{
+                      background: `${TYPE_COLORS[type]}12`, color: TYPE_COLORS[type],
+                      border: `1px solid ${TYPE_COLORS[type]}25`, marginBottom: '0.5rem',
+                    }}>
+                      {TYPE_ICONS[type]} {type.charAt(0).toUpperCase() + type.slice(1)} ({items.length})
+                    </span>
                     {items.map((item, i) => {
                       const p = item.product
                       return (
-                        <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
+                        <motion.div key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
                           className="card animate-in" style={{
-                            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                            marginBottom: '0.4rem', borderLeft: `3px solid ${TYPE_COLORS[type]}`,
+                            flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                            marginTop: '0.4rem', borderLeft: `3px solid ${TYPE_COLORS[type]}`,
+                            padding: '0.85rem 1rem',
                           }}>
                           <div style={{ flex: 1 }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                              <strong style={{ fontSize: '0.95rem' }}>{p.name as string}</strong>
-                              <span className="tag" style={{ background: '#2d3748', color: type === 'upsell' ? '#f59e0b' : 'var(--text)', fontSize: '0.7rem' }}>
-                                ${(p.price as number).toFixed(2)}
-                              </span>
-                              <span className="tag" style={{ background: '#2d3748', color: '#a0aec0', fontSize: '0.7rem' }}>
-                                {p.category as string}
-                              </span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                              <strong style={{ fontSize: '0.9rem' }}>{p.name as string}</strong>
+                              <span className="tag" style={{ background: 'var(--primary-glow)', color: 'var(--primary)' }}>${(p.price as number).toFixed(2)}</span>
+                              <span className="tag">{p.category as string}</span>
                             </div>
-                            <p style={{ fontSize: '0.8rem', color: 'var(--text-dim)', margin: '0.15rem 0' }}>
-                              {item.reason}
-                            </p>
+                            <p style={{ fontSize: '0.78rem', color: 'var(--text-dim)', margin: '0.25rem 0 0' }}>{item.reason}</p>
                           </div>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
-                            <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>
-                              {(item.match_score * 100).toFixed(0)}%
-                            </span>
-                            <button className="btn" onClick={() => handleSave(item)}
-                              style={{ height: 28, fontSize: '0.75rem', padding: '0 10px' }}
-                              aria-label={`Save ${p.name as string} to wishlist`}>
-                              ♡ Save
-                            </button>
+                            <span style={{ fontSize: '0.72rem', color: 'var(--text-dim)', fontWeight: 700 }}>{(item.match_score * 100).toFixed(0)}%</span>
+                            <button className="btn btn-ghost" onClick={() => handleSave(item)} style={{ height: 28, fontSize: '0.72rem', padding: '0 10px' }}>Save</button>
                           </div>
                         </motion.div>
                       )
@@ -192,13 +147,13 @@ export default function CrossSell() {
 
       {!selectedProduct && !loading && (
         <div className="empty-state" style={{ padding: '4rem 2rem' }}>
-          <div className="logo-icon-glow" style={{ width: '64px', height: '64px', margin: '0 auto 1.5rem', opacity: 0.4 }} aria-hidden="true">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" aria-hidden="true">
+          <div className="logo-icon-glow" style={{ width: 60, height: 60, margin: '0 auto 1.25rem', opacity: 0.4 }} aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
             </svg>
           </div>
-          <h3 style={{ color: 'var(--text-muted)' }}>No product selected</h3>
-          <p style={{ maxWidth: '400px', margin: '0.75rem auto', color: 'var(--text-dim)', fontSize: '0.9rem' }}>
+          <h3 style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>No product selected</h3>
+          <p style={{ maxWidth: 380, margin: '0.75rem auto', color: 'var(--text-dim)', fontSize: '0.9rem' }}>
             Search for a product above to see complementary items, accessories, and premium upgrades.
           </p>
         </div>

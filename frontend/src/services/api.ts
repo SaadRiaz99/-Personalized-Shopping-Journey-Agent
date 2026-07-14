@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { Agent, Product, QueryIntent, UserPreferences, Task, CatalogSearchResult, CatalogProduct, Promotion, DealSessionRequest, DealResult, PriceMatchProduct, PriceCheckResponse, PriceHistoryPoint, PriceDropAlert, DiscountResult, GiftRecipient, GiftFinderResult, CrossSellResult, WishlistItem, PriceAlertEvent, LoginRequest, RegisterRequest, TokenResponse, LoginHistoryEntry, UserSession, AuthUser } from '../types'
+import type { Agent, Product, QueryIntent, UserPreferences, Task, CatalogSearchResult, CatalogProduct, Promotion, DealSessionRequest, DealResult, PriceMatchProduct, PriceCheckResponse, PriceHistoryPoint, PriceDropAlert, DiscountResult, GiftRecipient, GiftFinderResult, CrossSellResult, WishlistItem, PriceAlertEvent, LoginRequest, RegisterRequest, TokenResponse, LoginHistoryEntry, UserSession, AuthUser, BudgetEntry, BudgetLimit, BudgetCheckRequest, BudgetCheckResult, SpendingSummary } from '../types'
 
 const api = axios.create({ baseURL: 'http://localhost:8000/api' })
 
@@ -189,6 +189,32 @@ export const getPriceAlertsHistory = (userId?: string) =>
   api.get<{ alerts: PriceAlertEvent[]; total: number }>('/wishlist/alerts', {
     headers: userId ? { 'x-user-id': userId } : undefined,
   }).then(r => r.data)
+
+// ── Budget Tracker ──────────────────────────────────────────
+
+export const trackBudgetEntry = (body: { user_id: string; product_id: string; product_name: string; category: string; amount: number; quantity?: number; note?: string }) =>
+  api.post<BudgetEntry>('/budget/track', body).then(r => r.data)
+
+export const getBudgetSummary = (userId: string, period: string = 'monthly') =>
+  api.get<SpendingSummary>(`/budget/summary/${userId}`, { params: { period } }).then(r => r.data)
+
+export const checkBudget = (body: BudgetCheckRequest) =>
+  api.post<BudgetCheckResult>('/budget/check', body).then(r => r.data)
+
+export const setBudgetLimit = (body: { user_id: string; period: string; limit_amount: number; category?: string }) =>
+  api.post<BudgetLimit>('/budget/set-limit', body).then(r => r.data)
+
+export const getBudgetLimits = (userId: string) =>
+  api.get<BudgetLimit[]>(`/budget/limits/${userId}`).then(r => r.data)
+
+export const getBudgetEntries = (userId: string, period?: string) =>
+  api.get<BudgetEntry[]>(`/budget/entries/${userId}`, { params: period ? { period } : undefined }).then(r => r.data)
+
+export const deleteBudgetEntry = (entryId: string) =>
+  api.delete(`/budget/entries/${entryId}`)
+
+export const deleteBudgetLimit = (limitId: string) =>
+  api.delete(`/budget/limits/${limitId}`)
 
 const WS_BASE = window.location.host.includes('localhost') ? 'localhost:8000' : window.location.host
 const WS_PROTO = window.location.protocol === 'https:' ? 'wss' : 'ws'

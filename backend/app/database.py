@@ -1,4 +1,5 @@
 import json
+import os
 import sqlite3
 from contextlib import contextmanager
 from pathlib import Path
@@ -20,7 +21,7 @@ from app.models import (
     WishlistItem,
 )
 
-DB_PATH = Path(__file__).parents[1] / "agent_store.db"
+DB_PATH = Path(os.environ.get("AGENT_DB_PATH", str(Path(__file__).parents[1] / "agent_store.db")))
 
 
 @contextmanager

@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: personalized-shopping-agent
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile.free
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: GUARDRAIL_ENABLED
+        value: "true"

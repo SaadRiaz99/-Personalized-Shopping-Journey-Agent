@@ -1,7 +1,7 @@
 import axios from 'axios'
 import type { Agent, Product, QueryIntent, UserPreferences, Task, CatalogSearchResult, CatalogProduct, Promotion, DealSessionRequest, DealResult, PriceMatchProduct, PriceCheckResponse, PriceHistoryPoint, PriceDropAlert, DiscountResult, GiftRecipient, GiftFinderResult, CrossSellResult, WishlistItem, PriceAlertEvent, LoginRequest, RegisterRequest, TokenResponse, LoginHistoryEntry, UserSession, AuthUser, BudgetEntry, BudgetLimit, BudgetCheckRequest, BudgetCheckResult, SpendingSummary } from '../types'
 
-const api = axios.create({ baseURL: 'http://localhost:8000/api' })
+const api = axios.create({ baseURL: '/api' })
 
 // Auth interceptor: attach access token and handle refresh
 api.interceptors.request.use(config => {
@@ -21,7 +21,7 @@ api.interceptors.response.use(
       const refreshToken = localStorage.getItem('refresh_token')
       if (refreshToken) {
         try {
-          const res = await axios.post('http://localhost:8000/api/auth/refresh', {
+          const res = await axios.post('/api/auth/refresh', {
             refresh_token: refreshToken,
           })
           const data = res.data as TokenResponse

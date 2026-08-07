@@ -1,8 +1,10 @@
+import os
 from pathlib import Path
 
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from app.database import init_db
 from app.auth import seed_users
 from app.routes import agents, auth, catalog, deals, intent, preferences, price_match, privacy, products, recommendations, ws, gift_finder, cross_sell, wishlist, budget
@@ -19,7 +21,7 @@ def on_startup():
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=os.environ.get("CORS_ORIGINS", "http://localhost:5173").split(","),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -54,3 +56,18 @@ async def verify_token_endpoint(token: str):
     if payload is None:
         return {"valid": False}
     return {"valid": True, "username": payload.get("username"), "user_id": payload.get("sub")}
+
+
+DIST_DIR = Path(__file__).parent / "dist"
+
+
+@app.get("/{full_path:path}", include_in_schema=False)
+async def spa_fallback(full_path: str):
+    if DIST_DIR.is_dir() and full_path.startswith(("api/", "ws/")):
+        raise HTTPException(status_code=404, detail="Not found")
+    if not DIST_DIR.is_dir():
+        raise HTTPException(status_code=404, detail="Not found")
+    candidate = (DIST_DIR / full_path).resolve()
+    if full_path and candidate.is_file() and str(candidate).startswith(str(DIST_DIR.resolve())):
+        return FileResponse(candidate)
+    return FileResponse(DIST_DIR / "index.html")

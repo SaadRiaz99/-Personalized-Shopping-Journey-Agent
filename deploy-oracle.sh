@@ -259,12 +259,14 @@ echo ""
 
 # ── Step 10: Firewall Configuration ─────────────────────────
 echo -e "${CYAN}[Step 10/11]${NC} Configuring firewall..."
-sudo systemctl enable firewalld
-sudo systemctl start firewalld
-sudo firewall-cmd --permanent --add-service=http
-sudo firewall-cmd --permanent --add-service=https
-sudo firewall-cmd --permanent --add-port=80/tcp
-sudo firewall-cmd --reload
+sudo systemctl enable firewalld || true
+sudo systemctl start firewalld || true
+sudo firewall-cmd --permanent --add-service=ssh || true
+sudo firewall-cmd --permanent --add-service=http || true
+sudo firewall-cmd --permanent --add-service=https || true
+sudo firewall-cmd --permanent --add-port=80/tcp || true
+sudo firewall-cmd --permanent --add-port=22/tcp || true
+sudo firewall-cmd --reload || true
 
 echo -e "${GREEN}✓ Step 10 complete${NC}"
 echo ""

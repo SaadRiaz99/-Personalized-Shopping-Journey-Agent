@@ -133,3 +133,8 @@ Open http://localhost:5173 and login with the default admin credentials.
 │   └── *.md            # Project reports and deployment guide
 └── docker-compose.yml  # Deployment config
 ```
+
+## Oracle Cloud Deployment
+
+For Oracle Cloud Always Free deployment instructions, see [HANDOFF_README.md](file:///E:/Work/Smit/Agent/Personalized-Shopping-Agent/HANDOFF_README.md) and [DEPLOYMENT_GUIDE.md](file:///E:/Work/Smit/Agent/Personalized-Shopping-Agent/DEPLOYMENT_GUIDE.md).
+

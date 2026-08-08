@@ -27,14 +27,14 @@ VM_IP=$(curl -s ifconfig.me || curl -s ipinfo.io/ip)
 PROJECT_DIR="/home/opc/Personalized-Shopping-Agent"
 
 # ── Step 1: System Update & Packages ────────────────────────
-echo -e "${CYAN}[Step 1/11]${NC} System update and package installation..."
+echo -e "${CYAN}[Step 1/10]${NC} System update and package installation..."
 sudo dnf update -y
 sudo dnf install -y python3.12 python3.12-pip python3.12-devel \
     gcc gcc-c++ make nginx git curl wget openssl \
     firewalld python3-pip
 
 # Install Node.js 18.x
-echo -e "${CYAN}[Step 1/11]${NC} Installing Node.js..."
+echo -e "${CYAN}[Step 1/10]${NC} Installing Node.js..."
 if ! command -v node &> /dev/null; then
     curl -fsSL https://rpm.nodesource.com/setup_18.x | sudo bash -
     sudo dnf install -y nodejs
@@ -47,7 +47,7 @@ echo -e "${GREEN}✓ Step 1 complete${NC}"
 echo ""
 
 # ── Step 2: Clone Repository ─────────────────────────────────
-echo -e "${CYAN}[Step 2/11]${NC} Cloning repository..."
+echo -e "${CYAN}[Step 2/10]${NC} Cloning repository..."
 cd /home/opc
 if [ ! -d "Personalized-Shopping-Agent" ]; then
     git clone https://github.com/SaadRiaz99/Personalized-Shopping-Agent.git
@@ -61,7 +61,7 @@ echo -e "${GREEN}✓ Step 2 complete${NC}"
 echo ""
 
 # ── Step 3: Backend Setup ────────────────────────────────────
-echo -e "${CYAN}[Step 3/11]${NC} Setting up Python virtual environment..."
+echo -e "${CYAN}[Step 3/10]${NC} Setting up Python virtual environment..."
 cd $PROJECT_DIR/backend
 
 if [ ! -d ".venv" ]; then
@@ -76,7 +76,7 @@ echo -e "${GREEN}✓ Step 3 complete${NC}"
 echo ""
 
 # ── Step 4: Frontend Build ──────────────────────────────────
-echo -e "${CYAN}[Step 4/11]${NC} Building frontend..."
+echo -e "${CYAN}[Step 4/10]${NC} Building frontend..."
 cd $PROJECT_DIR/frontend
 
 npm install
@@ -90,15 +90,29 @@ echo -e "${GREEN}✓ Step 4 complete${NC}"
 echo ""
 
 # ── Step 5: Environment Configuration ───────────────────────
-echo -e "${CYAN}[Step 5/11]${NC} Configuring environment..."
+echo -e "${CYAN}[Step 5/10]${NC} Configuring environment..."
 cd $PROJECT_DIR
 
 JWT_SECRET=$(openssl rand -hex 32)
 
+# Prompt for Gemini API key
+echo ""
+echo -e "${YELLOW}╔══════════════════════════════════════════════════════════════╗${NC}"
+echo -e "${YELLOW}║  Google Gemini API Key Required                             ║${NC}"
+echo -e "${YELLOW}║  Get your FREE key at: https://aistudio.google.com         ║${NC}"
+echo -e "${YELLOW}╚══════════════════════════════════════════════════════════════╝${NC}"
+echo ""
+read -p "Enter your Gemini API key: " GEMINI_API_KEY
+
+if [ -z "$GEMINI_API_KEY" ]; then
+    echo -e "${RED}No API key provided. Using rule-based fallback (LLM features disabled).${NC}"
+    GEMINI_API_KEY=""
+fi
+
 cat > .env << EOF
-LLM_API_KEY=ollama-integration
-LLM_ENDPOINT=http://localhost:11434/v1/chat/completions
-LLM_MODEL=llama3.2:latest
+LLM_API_KEY=$GEMINI_API_KEY
+LLM_ENDPOINT=https://generativelanguage.googleapis.com/v1beta/openai/chat/completions
+LLM_MODEL=gemini-2.0-flash
 GUARDRAIL_ENABLED=true
 JWT_SECRET=$JWT_SECRET
 DATABASE_URL=/home/opc/Personalized-Shopping-Agent/backend/agent_store.db
@@ -112,7 +126,7 @@ echo -e "${GREEN}✓ Step 5 complete${NC}"
 echo ""
 
 # ── Step 6: Database Initialization ─────────────────────────
-echo -e "${CYAN}[Step 6/11]${NC} Initializing database..."
+echo -e "${CYAN}[Step 6/10]${NC} Initializing database..."
 cd $PROJECT_DIR/backend
 source .venv/bin/activate
 
@@ -122,27 +136,8 @@ python -c "from app.auth import seed_users; seed_users()"
 echo -e "${GREEN}✓ Step 6 complete${NC}"
 echo ""
 
-# ── Step 7: Install & Configure Ollama ─────────────────────
-echo -e "${CYAN}[Step 7/11]${NC} Installing Ollama..."
-if ! command -v ollama &> /dev/null; then
-    curl -fsSL https://ollama.com/install.sh | sh
-fi
-
-# Start ollama temporarily to pull model
-ollama serve &
-OLLAMA_PID=$!
-sleep 5
-
-echo "Pulling llama3.2 model (may take a few minutes)..."
-ollama pull llama3.2:latest
-
-kill $OLLAMA_PID 2>/dev/null || true
-
-echo -e "${GREEN}✓ Step 7 complete${NC}"
-echo ""
-
-# ── Step 8: Nginx Configuration ─────────────────────────────
-echo -e "${CYAN}[Step 8/11]${NC} Configuring Nginx..."
+# ── Step 7: Nginx Configuration ─────────────────────────────
+echo -e "${CYAN}[Step 7/10]${NC} Configuring Nginx..."
 
 sudo bash -c "cat > /etc/nginx/conf.d/shopping-agent.conf << 'NGINX_EOF'
 server {
@@ -201,11 +196,11 @@ sudo nginx -t
 sudo systemctl enable nginx
 sudo systemctl restart nginx
 
-echo -e "${GREEN}✓ Step 8 complete${NC}"
+echo -e "${GREEN}✓ Step 7 complete${NC}"
 echo ""
 
-# ── Step 9: Systemd Services ────────────────────────────────
-echo -e "${CYAN}[Step 9/11]${NC} Creating systemd services..."
+# ── Step 8: Systemd Services ────────────────────────────────
+echo -e "${CYAN}[Step 8/10]${NC} Creating systemd services..."
 
 # Backend service
 sudo bash -c "cat > /etc/systemd/system/shopping-agent.service << 'SERVICE_EOF'
@@ -227,38 +222,16 @@ RestartSec=10
 WantedBy=multi-user.target
 SERVICE_EOF"
 
-# Ollama service
-sudo bash -c "cat > /etc/systemd/system/ollama.service << 'OLLAMA_EOF'
-[Unit]
-Description=Ollama LLM Service
-After=network.target
-
-[Service]
-Type=simple
-User=opc
-ExecStart=/usr/local/bin/ollama serve
-Restart=always
-RestartSec=10
-Environment=HOME=/home/opc
-
-[Install]
-WantedBy=multi-user.target
-OLLAMA_EOF"
-
 sudo systemctl daemon-reload
 sudo systemctl enable shopping-agent
-sudo systemctl enable ollama
-sudo systemctl start ollama
-
-sleep 3
 
 sudo systemctl start shopping-agent
 
-echo -e "${GREEN}✓ Step 9 complete${NC}"
+echo -e "${GREEN}✓ Step 8 complete${NC}"
 echo ""
 
-# ── Step 10: Firewall Configuration ─────────────────────────
-echo -e "${CYAN}[Step 10/11]${NC} Configuring firewall..."
+# ── Step 9: Firewall Configuration ─────────────────────────
+echo -e "${CYAN}[Step 9/10]${NC} Configuring firewall..."
 sudo systemctl enable firewalld || true
 sudo systemctl start firewalld || true
 sudo firewall-cmd --permanent --add-service=ssh || true
@@ -268,11 +241,11 @@ sudo firewall-cmd --permanent --add-port=80/tcp || true
 sudo firewall-cmd --permanent --add-port=22/tcp || true
 sudo firewall-cmd --reload || true
 
-echo -e "${GREEN}✓ Step 10 complete${NC}"
+echo -e "${GREEN}✓ Step 9 complete${NC}"
 echo ""
 
-# ── Step 11: Health Check & Final Report ─────────────────────
-echo -e "${CYAN}[Step 11/11]${NC} Running health checks..."
+# ── Step 10: Health Check & Final Report ─────────────────────
+echo -e "${CYAN}[Step 10/10]${NC} Running health checks..."
 sleep 5
 
 echo ""
@@ -299,15 +272,6 @@ else
     echo -e "${RED}✗ Nginx routing failed${NC}"
 fi
 
-# Test ollama
-echo -e "${CYAN}Testing Ollama...${NC}"
-OLLAMA_STATUS=$(systemctl is-active ollama)
-if [ "$OLLAMA_STATUS" = "active" ]; then
-    echo -e "${GREEN}✓ Ollama is running${NC}"
-else
-    echo -e "${RED}✗ Ollama not running${NC}"
-fi
-
 echo ""
 echo "╔══════════════════════════════════════════════════════════════╗"
 echo "║                    ACCESS YOUR APP                         ║"
@@ -319,15 +283,15 @@ echo "║  Default Login Credentials:                                ║"
 echo "║    Admin:  admin / Admin@123                               ║"
 echo "║    User:   user1 / User@1234                               ║"
 echo "║                                                            ║"
+echo "║  LLM: Google Gemini (gemini-2.0-flash) - Free Tier         ║"
+echo "║                                                            ║"
 echo "╠══════════════════════════════════════════════════════════════╣"
 echo "║                    USEFUL COMMANDS                         ║"
 echo "╠══════════════════════════════════════════════════════════════╣"
 echo "║                                                            ║"
 echo "║  Check backend:   sudo systemctl status shopping-agent     ║"
-echo "║  Check Ollama:    sudo systemctl status ollama             ║"
 echo "║  Restart backend: sudo systemctl restart shopping-agent    ║"
 echo "║  Backend logs:    sudo journalctl -u shopping-agent -f     ║"
-echo "║  Ollama logs:     sudo journalctl -u ollama -f             ║"
 echo "║                                                            ║"
 echo "║  Update: cd ~/Personalized-Shopping-Agent                  ║"
 echo "║          git pull && sudo systemctl restart shopping-agent ║"

@@ -18,5 +18,11 @@ export default defineConfig([
     languageOptions: {
       globals: globals.browser,
     },
+    rules: {
+      // Data-loading effects intentionally set loading state before requests.
+      'react-hooks/set-state-in-effect': 'off',
+      // AuthContext exports both its provider and its consumer hook.
+      'react-refresh/only-export-components': 'off',
+    },
   },
 ])

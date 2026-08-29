@@ -1,4 +1,5 @@
 import hashlib
+import hmac
 import os
 import re
 import secrets
@@ -10,6 +11,8 @@ from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import JWTError, jwt
 from pydantic import BaseModel
+from pwdlib import PasswordHash
+import pyotp
 
 from app.database import (
     get_db,
@@ -26,7 +29,12 @@ from app.database import (
 )
 from app.models import AuthUser, LoginHistoryEntry, UserSession, UserRole
 
-SECRET_KEY = os.getenv("JWT_SECRET_KEY", "dev-secret-key-change-in-production")
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development").lower()
+SECRET_KEY = os.getenv("JWT_SECRET_KEY", "")
+if not SECRET_KEY:
+    if ENVIRONMENT == "production":
+        raise RuntimeError("JWT_SECRET_KEY is required in production")
+    SECRET_KEY = "dev-secret-key-change-in-production"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", "15"))
 REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("JWT_REFRESH_EXPIRE_DAYS", "7"))
@@ -34,19 +42,24 @@ MAX_FAILED_LOGIN_ATTEMPTS = 5
 LOCKOUT_DURATION_MINUTES = 15
 
 security = HTTPBearer(auto_error=False)
+password_hash = PasswordHash.recommended()
 
 # ── Password Helpers ────────────────────────────────────────
 
 def _hash_password(password: str) -> str:
-    salt = secrets.token_hex(16)
-    h = hashlib.sha256((salt + password).encode()).hexdigest()
-    return f"{salt}:{h}"
+    return password_hash.hash(password)
 
 
 def _verify_password(password: str, hashed: str) -> bool:
+    if hashed.startswith("$argon2"):
+        try:
+            return password_hash.verify(password, hashed)
+        except Exception:
+            return False
+    # Legacy verification supports a safe migration on the next successful login.
     try:
         salt, h = hashed.split(":", 1)
-        return hashlib.sha256((salt + password).encode()).hexdigest() == h
+        return hmac.compare_digest(hashlib.sha256((salt + password).encode()).hexdigest(), h)
     except ValueError:
         return False
 
@@ -171,16 +184,15 @@ require_role = RoleChecker
 # ── 2FA Simulation ──────────────────────────────────────────
 
 def generate_2fa_secret() -> str:
-    return secrets.token_hex(16)
+    return pyotp.random_base32()
 
 
 def verify_2fa_code(secret: str, code: str) -> bool:
-    expected = hashlib.sha256(secret.encode()).hexdigest()[:6]
-    return code == expected
+    return bool(secret and pyotp.TOTP(secret).verify(code, valid_window=1))
 
 
 def generate_2fa_code(secret: str) -> str:
-    return hashlib.sha256(secret.encode()).hexdigest()[:6]
+    return pyotp.TOTP(secret).now()
 
 
 # ── Account Lockout ─────────────────────────────────────────
@@ -258,6 +270,9 @@ async def perform_login(
                 detail = f"Invalid username or password ({remaining} attempt{'s' if remaining != 1 else ''} remaining)"
             raise HTTPException(status_code=401, detail=detail)
 
+        if not user.hashed_password.startswith("$argon2"):
+            user.hashed_password = _hash_password(password)
+
         if user.twofa_enabled:
             if not twofa_code:
                 db_create_login_history(conn, LoginHistoryEntry(
@@ -334,6 +349,8 @@ async def refresh_access_token(refresh_token: str) -> dict:
         session = get_session_by_refresh_hash(conn, token_hash)
         if session is None:
             raise HTTPException(status_code=401, detail="Session not found or expired")
+        if session.user_id != user_id:
+            raise HTTPException(status_code=401, detail="Session does not belong to token subject")
 
         user = get_user_by_id(conn, user_id)
         if user is None or user.disabled:
@@ -375,6 +392,8 @@ async def refresh_access_token(refresh_token: str) -> dict:
 # ── Seed Default Users ──────────────────────────────────────
 
 def seed_users():
+    if os.getenv("SEED_DEMO_USERS", "false").lower() != "true":
+        return
     from app.database import create_user
     default_users = [
         ("admin", "admin@shoporch.com", "Admin@123", UserRole.admin),

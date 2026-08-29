@@ -1,6 +1,5 @@
-from fastapi import APIRouter, HTTPException, Header
+from fastapi import APIRouter, HTTPException, Depends
 from datetime import datetime
-from typing import Optional
 import uuid
 
 from app.database import (
@@ -14,23 +13,22 @@ from app.database import (
     list_price_alerts as db_list_alerts,
 )
 from app.models import WishlistItem, PriceAlertEvent
+from app.auth import get_current_user
 
 router = APIRouter(prefix="/api/wishlist", tags=["wishlist"])
 
 
-def _user_id(x_user_id: Optional[str] = Header(None)) -> str:
-    return x_user_id or "default"
-
-
 @router.get("")
-async def get_wishlist(user_id: str = Header("default")):
+async def get_wishlist(current_user: dict = Depends(get_current_user)):
+    user_id = current_user["id"]
     with get_db() as conn:
         items = db_get_wishlist(conn, user_id)
     return {"items": [i.model_dump() for i in items], "total": len(items)}
 
 
 @router.post("", status_code=201)
-async def add_to_wishlist(body: dict, user_id: str = Header("default")):
+async def add_to_wishlist(body: dict, current_user: dict = Depends(get_current_user)):
+    user_id = current_user["id"]
     required = ["product_id", "product_name", "product_price", "product_category"]
     for r in required:
         if r not in body:
@@ -53,18 +51,21 @@ async def add_to_wishlist(body: dict, user_id: str = Header("default")):
 
 
 @router.delete("/{item_id}")
-async def remove_from_wishlist(item_id: str):
+async def remove_from_wishlist(item_id: str, current_user: dict = Depends(get_current_user)):
     with get_db() as conn:
+        item = db_get_wishlist_item(conn, item_id)
+        if not item or item.user_id != current_user["id"]:
+            raise HTTPException(404, "Wishlist item not found")
         if not db_delete_wishlist(conn, item_id):
             raise HTTPException(404, "Wishlist item not found")
     return {"status": "deleted"}
 
 
 @router.patch("/{item_id}")
-async def update_wishlist_item(item_id: str, body: dict):
+async def update_wishlist_item(item_id: str, body: dict, current_user: dict = Depends(get_current_user)):
     with get_db() as conn:
         existing = db_get_wishlist_item(conn, item_id)
-        if not existing:
+        if not existing or existing.user_id != current_user["id"]:
             raise HTTPException(404, "Wishlist item not found")
         if "note" in body:
             existing.note = body["note"]
@@ -75,7 +76,8 @@ async def update_wishlist_item(item_id: str, body: dict):
 
 
 @router.post("/alerts/check")
-async def check_price_alerts(user_id: str = Header("default")):
+async def check_price_alerts(current_user: dict = Depends(get_current_user)):
+    user_id = current_user["id"]
     from shared.products import ALL_PRODUCTS
     triggered = []
     with get_db() as conn:
@@ -100,7 +102,8 @@ async def check_price_alerts(user_id: str = Header("default")):
 
 
 @router.get("/alerts")
-async def get_price_alerts(user_id: str = Header("default")):
+async def get_price_alerts(current_user: dict = Depends(get_current_user)):
+    user_id = current_user["id"]
     with get_db() as conn:
         alerts = db_list_alerts(conn, user_id)
     return {"alerts": [a.model_dump() for a in alerts], "total": len(alerts)}

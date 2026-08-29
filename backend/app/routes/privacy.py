@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Optional
 
@@ -11,6 +11,7 @@ from app.models import (
 )
 from app.services.privacy_guardrail import privacy_guardrail
 from app.services.safety_guardrail import check_safety
+from app.auth import get_current_user
 
 router = APIRouter(prefix="/api/privacy", tags=["privacy"])
 
@@ -64,13 +65,14 @@ async def check_safety_route(body: SanitizeRequest):
     return result
 
 
-@router.get("/profile/{user_id}", response_model=UserPrivacyProfile)
-async def get_profile(user_id: str):
-    return privacy_guardrail.get_or_create_profile(user_id)
+@router.get("/profile", response_model=UserPrivacyProfile)
+async def get_profile(current_user: dict = Depends(get_current_user)):
+    return privacy_guardrail.get_or_create_profile(current_user["id"])
 
 
-@router.put("/profile/{user_id}", response_model=UserPrivacyProfile)
-async def update_profile(user_id: str, body: UpdateProfileRequest):
+@router.put("/profile", response_model=UserPrivacyProfile)
+async def update_profile(body: UpdateProfileRequest, current_user: dict = Depends(get_current_user)):
+    user_id = current_user["id"]
     profile = privacy_guardrail.get_or_create_profile(user_id)
     if body.privacy_level is not None:
         profile.privacy_level = body.privacy_level
@@ -84,8 +86,9 @@ async def update_profile(user_id: str, body: UpdateProfileRequest):
     return profile
 
 
-@router.put("/consent/{user_id}", response_model=UserPrivacyProfile)
-async def update_consent(user_id: str, body: ConsentUpdateRequest):
+@router.put("/consent", response_model=UserPrivacyProfile)
+async def update_consent(body: ConsentUpdateRequest, current_user: dict = Depends(get_current_user)):
+    user_id = current_user["id"]
     profile = privacy_guardrail.update_consent(user_id, body.consents)
     if not profile:
         raise HTTPException(404, "User profile not found")
@@ -109,8 +112,9 @@ async def check_output(body: OutputCheckRequest):
     return await privacy_guardrail.check_output(body.recommendations, body.user_id)
 
 
-@router.post("/forget/{user_id}", response_model=ForgetResponse)
-async def forget_user(user_id: str):
+@router.post("/forget", response_model=ForgetResponse)
+async def forget_user(current_user: dict = Depends(get_current_user)):
+    user_id = current_user["id"]
     await privacy_guardrail.forget_user(user_id)
     return ForgetResponse(
         status="ok",
@@ -118,8 +122,9 @@ async def forget_user(user_id: str):
     )
 
 
-@router.post("/opt-out/{user_id}", response_model=OptOutResponse)
-async def opt_out_of_sale(user_id: str):
+@router.post("/opt-out", response_model=OptOutResponse)
+async def opt_out_of_sale(current_user: dict = Depends(get_current_user)):
+    user_id = current_user["id"]
     profile = privacy_guardrail.opt_out_of_sale(user_id)
     if not profile:
         raise HTTPException(404, "User profile not found")
@@ -129,8 +134,9 @@ async def opt_out_of_sale(user_id: str):
     )
 
 
-@router.get("/export/{user_id}", response_model=ExportResponse)
-async def export_data(user_id: str):
+@router.get("/export", response_model=ExportResponse)
+async def export_data(current_user: dict = Depends(get_current_user)):
+    user_id = current_user["id"]
     data = privacy_guardrail.export_profile(user_id)
     if not data:
         return ExportResponse(status="no_data", data=None)

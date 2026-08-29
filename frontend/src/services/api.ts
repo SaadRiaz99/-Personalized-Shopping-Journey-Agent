@@ -160,7 +160,7 @@ export const authVerifyEmail = () =>
   api.post<{ message: string }>('/auth/verify-email/confirm').then(r => r.data)
 
 export const authEnable2FA = () =>
-  api.post<{ message: string; secret: string; demo_code: string }>('/auth/2fa/enable').then(r => r.data)
+  api.post<{ message: string; secret: string; otpauth_uri: string }>('/auth/2fa/enable').then(r => r.data)
 
 export const authDisable2FA = () =>
   api.post<{ message: string }>('/auth/2fa/disable').then(r => r.data)
@@ -195,8 +195,8 @@ export const getPriceAlertsHistory = (userId?: string) =>
 export const trackBudgetEntry = (body: { user_id: string; product_id: string; product_name: string; category: string; amount: number; quantity?: number; note?: string }) =>
   api.post<BudgetEntry>('/budget/track', body).then(r => r.data)
 
-export const getBudgetSummary = (userId: string, period: string = 'monthly') =>
-  api.get<SpendingSummary>(`/budget/summary/${userId}`, { params: { period } }).then(r => r.data)
+export const getBudgetSummary = (_userId: string, period: string = 'monthly') =>
+  api.get<SpendingSummary>('/budget/summary', { params: { period } }).then(r => r.data)
 
 export const checkBudget = (body: BudgetCheckRequest) =>
   api.post<BudgetCheckResult>('/budget/check', body).then(r => r.data)
@@ -204,11 +204,13 @@ export const checkBudget = (body: BudgetCheckRequest) =>
 export const setBudgetLimit = (body: { user_id: string; period: string; limit_amount: number; category?: string }) =>
   api.post<BudgetLimit>('/budget/set-limit', body).then(r => r.data)
 
-export const getBudgetLimits = (userId: string) =>
-  api.get<BudgetLimit[]>(`/budget/limits/${userId}`).then(r => r.data)
+export const getBudgetLimits = (_userId: string) => {
+  void _userId
+  return api.get<BudgetLimit[]>('/budget/limits').then(r => r.data)
+}
 
-export const getBudgetEntries = (userId: string, period?: string) =>
-  api.get<BudgetEntry[]>(`/budget/entries/${userId}`, { params: period ? { period } : undefined }).then(r => r.data)
+export const getBudgetEntries = (_userId: string, period?: string) =>
+  api.get<BudgetEntry[]>('/budget/entries', { params: period ? { period } : undefined }).then(r => r.data)
 
 export const deleteBudgetEntry = (entryId: string) =>
   api.delete(`/budget/entries/${entryId}`)

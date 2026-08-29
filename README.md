@@ -79,7 +79,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173 and login with the default admin credentials.
+Open http://localhost:5173 and register a user. Demo accounts are disabled by default. For local-only demos, explicitly set `SEED_DEMO_USERS=true`; never enable this in production.
 
 ## Environment Variables
 
@@ -88,8 +88,10 @@ Open http://localhost:5173 and login with the default admin credentials.
 | `LLM_API_KEY` | API key for LLM provider (OpenAI-compatible) |
 | `LLM_ENDPOINT` | LLM API endpoint URL |
 | `LLM_MODEL` | Model name (default: gpt-4o-mini) |
-| `JWT_SECRET` | Secret for JWT token signing |
-| `DATABASE_URL` | SQLite database path |
+| `ENVIRONMENT` | Use `production` in deployed environments |
+| `JWT_SECRET_KEY` | Random JWT signing secret; required in production |
+| `SEED_DEMO_USERS` | Opt-in local demo accounts; keep `false` in production |
+| `AGENT_DB_PATH` | SQLite database path for local development |
 
 ## API Routes
 
@@ -138,3 +140,26 @@ Open http://localhost:5173 and login with the default admin credentials.
 
 For Oracle Cloud Always Free deployment instructions, see [HANDOFF_README.md](file:///E:/Work/Smit/Agent/Personalized-Shopping-Agent/HANDOFF_README.md) and [DEPLOYMENT_GUIDE.md](file:///E:/Work/Smit/Agent/Personalized-Shopping-Agent/DEPLOYMENT_GUIDE.md).
 
+## Code Review and Security Status
+
+The August 2026 repository review covered backend routes and services, authentication, database access, frontend API integration, tests, Docker images, and deployment configuration.
+
+Implemented remediations:
+
+- Removed committed Oracle SSH key files from the current repository version and added private-key patterns to `.gitignore`.
+- Replaced SHA-256 password storage with Argon2id while retaining legacy-hash verification for login-time migration.
+- Made `JWT_SECRET_KEY` mandatory in production and configured Render to generate it securely.
+- Disabled predictable demo users by default.
+- Replaced deterministic demo 2FA codes with standard TOTP authenticator codes.
+- Added authenticated ownership checks for sessions, budgets, privacy profiles, and wishlist records.
+- Removed the endpoint that accepted JWTs in URL query parameters.
+- Added the missing backend test dependencies and tightened frontend quality configuration.
+
+Important operator action: the previously committed SSH private key remains present in older Git history. Revoke/replace that key in Oracle Cloud, then purge it from repository history with `git filter-repo` before treating the repository as secure.
+
+Production follow-ups:
+
+- Use PostgreSQL or another persistent managed database instead of container-local SQLite.
+- Move refresh tokens to Secure, HttpOnly, SameSite cookies.
+- Add API rate limiting, structured security logging, and continuous dependency scanning.
+- Require a successful TOTP confirmation code before finalizing 2FA enrollment.

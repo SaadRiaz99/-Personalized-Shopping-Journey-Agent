@@ -7,5 +7,11 @@ services:
     healthCheckPath: /api/health
     autoDeploy: true
     envVars:
+      - key: ENVIRONMENT
+        value: "production"
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: SEED_DEMO_USERS
+        value: "false"
       - key: GUARDRAIL_ENABLED
         value: "true"

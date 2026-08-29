@@ -252,11 +252,15 @@ class BudgetTracker:
         with get_db() as conn:
             return db_get_limits(conn, user_id)
 
-    def delete_limit(self, limit_id: str) -> bool:
+    def delete_limit(self, limit_id: str, user_id: str) -> bool:
+        if limit_id not in {item.id for item in self.get_limits(user_id)}:
+            return False
         with get_db() as conn:
             return db_delete_limit(conn, limit_id)
 
-    def delete_entry(self, entry_id: str) -> bool:
+    def delete_entry(self, entry_id: str, user_id: str) -> bool:
+        if entry_id not in {item.id for item in self.get_entries(user_id)}:
+            return False
         with get_db() as conn:
             return db_delete_entry(conn, entry_id)
 

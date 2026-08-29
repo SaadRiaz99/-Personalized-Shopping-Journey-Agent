@@ -12,6 +12,10 @@ uv.lock
 
 # Environment
 .env
+*.key
+*.pem
+*.p12
+*.pfx
 
 # Node.js
 node_modules/

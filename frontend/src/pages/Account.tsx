@@ -56,7 +56,7 @@ export default function Account() {
     setTwofaLoading(true); setTwofaMsg(null)
     try {
       if (user?.twofa_enabled) { await authDisable2FA(); setTwofaMsg('2FA disabled'); setTwofaSecret(null) }
-      else { const res = await authEnable2FA(); setTwofaMsg('2FA enabled'); setTwofaSecret(res.demo_code) }
+      else { const res = await authEnable2FA(); setTwofaMsg(res.message); setTwofaSecret(res.secret) }
     } catch (err: unknown) { setTwofaMsg((err as { response?: { data?: { detail?: string } } })?.response?.data?.detail || 'Failed') }
     setTwofaLoading(false)
   }
@@ -166,8 +166,8 @@ export default function Account() {
             </p>
             {twofaSecret && (
               <div style={{ padding: '1rem', background: 'var(--success-glow)', borderRadius: 'var(--radius-sm)', marginBottom: '0.75rem', border: '1px solid rgba(16,185,129,0.15)' }}>
-                <strong style={{ fontSize: '0.82rem' }}>Demo code:</strong> <code style={{ fontSize: '1.2rem', letterSpacing: '0.2em', color: 'var(--success)' }}>{twofaSecret}</code>
-                <p style={{ color: 'var(--text-dim)', marginTop: '0.25rem', fontSize: '0.72rem' }}>In production this would be in your authenticator app.</p>
+                <strong style={{ fontSize: '0.82rem' }}>Authenticator setup key:</strong> <code style={{ fontSize: '0.9rem', color: 'var(--success)', wordBreak: 'break-all' }}>{twofaSecret}</code>
+                <p style={{ color: 'var(--text-dim)', marginTop: '0.25rem', fontSize: '0.72rem' }}>Add this key to Google Authenticator, Authy, or another TOTP app. It will only be shown now.</p>
               </div>
             )}
             {twofaMsg && !twofaSecret && <div className={twofaMsg.includes('enabled') ? 'alert alert-success' : 'alert alert-info'} style={{ marginBottom: '0.5rem' }}>{twofaMsg}</div>}

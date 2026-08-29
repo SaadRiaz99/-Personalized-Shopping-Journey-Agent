@@ -49,15 +49,6 @@ async def health():
     return {"status": "ok"}
 
 
-@app.get("/api/auth/verify")
-async def verify_token_endpoint(token: str):
-    from app.auth import verify_token
-    payload = verify_token(token, "access")
-    if payload is None:
-        return {"valid": False}
-    return {"valid": True, "username": payload.get("username"), "user_id": payload.get("sub")}
-
-
 DIST_DIR = Path(__file__).parent / "dist"
 
 

@@ -9,7 +9,6 @@ from app.auth import (
     RoleChecker,
     _hash_password,
     generate_2fa_secret,
-    generate_2fa_code,
     get_current_user,
     perform_login,
     refresh_access_token,
@@ -142,7 +141,6 @@ async def confirm_email(current_user: dict = Depends(get_current_user)):
 @router.post("/2fa/enable")
 async def enable_2fa(current_user: dict = Depends(get_current_user)):
     secret = generate_2fa_secret()
-    code = generate_2fa_code(secret)
     with get_db() as conn:
         user = get_user_by_id(conn, current_user["id"])
         if user is None:
@@ -151,10 +149,9 @@ async def enable_2fa(current_user: dict = Depends(get_current_user)):
         user.twofa_enabled = True
         db_update_user(conn, user)
     return {
-        "message": "2FA enabled",
+        "message": "2FA enabled. Add this setup key to your authenticator app.",
         "secret": secret,
-        "demo_code": code,
-        "note": "In production, the code would be delivered via authenticator app.",
+        "otpauth_uri": f"otpauth://totp/ShopOrch:{user.username}?secret={secret}&issuer=ShopOrch",
     }
 
 
@@ -199,6 +196,9 @@ async def get_sessions(current_user: dict = Depends(get_current_user)):
 @router.delete("/sessions/{session_id}")
 async def revoke_session(session_id: str, current_user: dict = Depends(get_current_user)):
     with get_db() as conn:
+        owned_ids = {s.id for s in db_get_user_sessions(conn, current_user["id"])}
+        if session_id not in owned_ids:
+            raise HTTPException(status_code=404, detail="Session not found")
         if not db_deactivate_session(conn, session_id):
             raise HTTPException(status_code=404, detail="Session not found")
     return {"message": "Session revoked"}

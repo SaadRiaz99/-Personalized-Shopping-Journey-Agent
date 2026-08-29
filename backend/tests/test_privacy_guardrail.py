@@ -150,9 +150,8 @@ class TestGDPRActions:
     @pytest.mark.asyncio
     async def test_forget_user_deletes_profile(self, service):
         service.get_or_create_profile("user1")
-        assert "user1" in service._profiles
         await service.forget_user("user1")
-        assert "user1" not in service._profiles
+        assert service.export_profile("user1") is None
 
     @pytest.mark.asyncio
     async def test_forget_nonexistent_user(self, service):
@@ -174,9 +173,10 @@ class TestCCPAActions:
     def test_opt_out_of_sale(self, service):
         profile = service.get_or_create_profile("user1")
         assert profile.opted_out_of_sale is False
-        service.opt_out_of_sale("user1")
-        assert profile.opted_out_of_sale is True
-        assert profile.consents.third_party_sharing is False
+        updated = service.opt_out_of_sale("user1")
+        assert updated is not None
+        assert updated.opted_out_of_sale is True
+        assert updated.consents.third_party_sharing is False
 
     def test_opt_out_nonexistent_user(self, service):
         result = service.opt_out_of_sale("nonexistent")
@@ -206,7 +206,7 @@ class TestProfileManagement:
     def test_get_or_create_returns_existing(self, service):
         p1 = service.get_or_create_profile("user1")
         p2 = service.get_or_create_profile("user1")
-        assert p1 is p2
+        assert p1 == p2
 
     def test_update_profile(self, service):
         new_profile = UserPrivacyProfile(

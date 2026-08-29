@@ -83,6 +83,8 @@ export default function BudgetTracker() {
     setLoading(false)
   }
 
+  // loadAll is intentionally re-run only when the selected user or period changes.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { loadAll() }, [userId, period])
 
   const handleSetLimit = async () => {

@@ -117,12 +117,12 @@ class TestBudgetEntrySuite:
             user_id="test_del_user", product_id="pd1",
             product_name="To Delete", category="Home", amount=10.0,
         )
-        result = budget_tracker.delete_entry(entry.id)
+        result = budget_tracker.delete_entry(entry.id, "test_del_user")
         assert result is True
         self._record("delete_existing_entry", True)
 
     def test_delete_nonexistent_entry(self):
-        result = budget_tracker.delete_entry("nonexistent_id")
+        result = budget_tracker.delete_entry("nonexistent_id", "test_del_user")
         assert result is False
         self._record("delete_nonexistent_entry", True)
 
@@ -200,12 +200,12 @@ class TestBudgetLimitSuite:
 
     def test_delete_existing_limit(self):
         limit = budget_tracker.set_limit("test_dl_user", BudgetPeriod.monthly, 300.0)
-        result = budget_tracker.delete_limit(limit.id)
+        result = budget_tracker.delete_limit(limit.id, "test_dl_user")
         assert result is True
         self._record("delete_existing_limit", True)
 
     def test_delete_nonexistent_limit(self):
-        result = budget_tracker.delete_limit("nonexistent_limit_id")
+        result = budget_tracker.delete_limit("nonexistent_limit_id", "test_dl_user")
         assert result is False
         self._record("delete_nonexistent_limit", True)
 
